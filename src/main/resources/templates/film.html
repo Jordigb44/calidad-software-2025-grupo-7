@@ -1,0 +1,116 @@
+{{>header}}
+
+
+<div class="ui container" id="filmDetail">
+    <div class="ui grid film-detail-container">
+        <div class="one wide column"></div>
+        <div class="four wide column">
+            <img class="ui image rounded" src="/films/{{ film.id }}/poster">
+        </div>
+        <div class="ten wide column">
+            <h1 class="ui inverted header dividing">
+                <span id="film-title">{{ film.title }}</span> (<span id="film-releaseYear">{{ film.releaseYear }}</span>)
+                <div class="ui large label">
+                    <i class="film icon"></i> {{ film.ageRating }}
+                </div>
+            </h1>
+            <h4 class="ui inverted header">
+                <p id="film-synopsis" class="inverted-text">
+                    {{ film.synopsis }}
+                </p>
+                <div class="action-buttons">
+                    <button id="remove-film" class="ui button orange-block"
+                        onclick="location.href='/films/{{film.id}}/delete'"><i class="trash icon"></i>Remove</button>
+                    <button id="edit-film" class="ui button orange-block"
+                        onclick="location.href='/films/{{film.id}}/edit'"><i class="edit icon"></i>Edit</button>
+                    <button id="all-films" class="ui button orange-block" onclick="location.href='/'"><i
+                            class="film icon"></i>All Films</button>
+                    {{#isInFavorites}}
+                    <form class="form-button" action="/films/{{ film.id }}/removeFavorite" method="post">
+                        <button id="remove-film-to-fav" class="ui button orange-block"><i class="trash icon
+                            "></i>Remove from favorite</button>
+                    </form>
+                    {{/isInFavorites}}
+                    {{^isInFavorites}}
+                    <form class="form-button" action="/films/{{ film.id }}/addFavorite" method="post">
+                        <button id="add-film-to-fav" class="ui button orange-block"><i class="favorite icon"></i>Add to
+                            favorite</button>
+                    </form>
+                    {{/isInFavorites}}
+                </div>
+                <div>
+                    Users who added to favorites:
+                    {{#film.usersThatLiked}}
+                    <span class="ui basic label">{{ name }}</span>
+                    {{/film.usersThatLiked}}
+                    {{^film.usersThatLiked}}
+                    None
+                    {{/film.usersThatLiked}}
+                </div>
+        </div>
+
+        <div class="one wide column"></div>
+        <div class="one wide column"></div>
+        <div class="fourteen wide column">
+
+            <div class="ui segment secondary">
+                <h3 class="ui dividing header">Add a Review</h3>
+                <form action="/films/{{ film.id }}/reviews" class="ui reply form" method="post" accept-charset="UTF-8">
+                    <div class="field">
+                        <label>Score</label>
+                        <input type="number" value="0" name="score" max="10" min="0" step="1">
+                    </div>
+                    <div class="field">
+                        <label>Review</label>
+                        <textarea id="review-textarea" class="review-comment" name="text"></textarea>
+                    </div>
+                    <button class="ui blue labeled submit icon button" type="submit" id="add-review">
+                        <i class="icon edit"></i> Add Review
+                    </button>
+                </form>
+            </div>
+
+            <div class="ui segment container">
+
+                <!-- COMMENTS -->
+
+                <div id="reviews" class="ui comments">
+                    {{#film.reviews}}
+                    <div class="comment">
+                        <div class="content">
+
+                            <form action="/films/{{ film.id }}/reviews/{{ id }}/remove" id="review-delete-form-{{id}}" class="delete-icon" method="post" >
+                                <!-- <input type="submit" value="Remove review" /> -->
+                                <i class="close icon"
+                                    onclick="document.getElementById('review-delete-form-{{id}}').submit()"></i>
+                            </form>
+
+                            <a class="avatar">
+                                <div class="ui huge label green score">
+                                    {{ score }}
+                                </div>
+                            </a>
+                            <a class="author">{{ user.name }}</a>
+                            <div class="metadata">
+                                <div class="date">{{ created_at }}</div>
+                            </div>
+                            <div class="text">
+                                {{{ text }}}
+                            </div>
+
+                        </div>
+                    </div>
+                    {{/film.reviews}}
+
+                    {{^film.reviews}}
+                    <p>No reviews yet.</p>
+                    {{/film.reviews}}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{>footer}}

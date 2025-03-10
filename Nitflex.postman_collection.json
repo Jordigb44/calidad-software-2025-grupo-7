@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "fadc89fa-d84b-426f-be93-7095e5701121",
+		"name": "Nitflex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "371566",
+		"_collection_link": "https://www.postman.com/lively-shadow-710110/workspace/cs/collection/371566-fadc89fa-d84b-426f-be93-7095e5701121?action=share&source=collection_link&creator=371566"
+	},
+	"item": [
+		{
+			"name": "GET /api/films/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/films/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /api/films/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/films/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/films/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Deadpool & Wolverine\",\n    \"synopsis\": \"La Autoridad de Variación Temporal (AVT) ofrece a Deadpool un lugar en el Universo cinematográfico de Marvel, pero en su lugar recluta a una variante de Lobezno para salvar su universo de la extinción.\",\n    \"releaseYear\": 2024,\n    \"ageRating\": \"+18\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/films/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /api/films/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Oppenheimer\",\n    \"synopsis\": \"Película sobre el físico J. Robert Oppenheimer y su papel como desarrollador de la bomba atómica. Basada en el libro 'American Prometheus: The Triumph and Tragedy of J. Robert Oppenheimer' de Kai Bird y Martin J. Sherwin.\",\n    \"releaseYear\": 2023,\n    \"ageRating\": \"+16\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/films/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /api/films/:id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/films/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/films/1/reviews/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"Muy mala\",\n    \"score\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/films/1/reviews/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						"1",
+						"reviews",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /api/films/1/reviews/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/films/1/reviews/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"films",
+						"1",
+						"reviews",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

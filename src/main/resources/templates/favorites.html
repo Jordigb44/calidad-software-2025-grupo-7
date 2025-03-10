@@ -1,0 +1,32 @@
+{{>header}}
+
+<div class="ui segment container">
+
+    <h1 class="ui header">My favorites films</h1>
+
+    <div class="ui grid">
+        {{#films}}
+        <div class="four wide column film ">
+            <img class="ui image poster" src="/films/{{id}}/poster">
+            <span class="film-details">
+				<a class="film-title" href="/films/{{id}}">{{title}}</a>
+				<br>
+				<span class="year">{{releaseYear}}</span>
+            </span>
+        </div>
+        {{/films}}
+
+        {{^films}}
+        <div class="twelve wide column centered">
+            <div class="ui placeholder basic segment">
+                <div class="ui icon header">
+                    <i class="film icon"></i>
+                    There are not films yet.
+                </div>
+            </div>
+        </div>
+        {{/films}}
+    </div>
+</div>
+
+{{>footer}}

@@ -1,0 +1,34 @@
+{{>header}}
+
+<div class="ui segment container">
+
+  <h1 class="ui header">All films</h1>
+
+  <div class="ui grid">
+    {{#films}}
+    <div class="four wide column film ">
+      <div class="ui card">
+        <div class="image">
+          <img src="/films/{{id}}/poster">
+        </div>
+        <div class="content">
+          <a class="header film-title" href="/films/{{id}}">{{title}}</a>
+          <div class="meta">
+            <span class="date">Released in {{releaseYear}}</span>
+          </div>
+        </div>
+        <div class="extra content">
+          <a>
+            <i class="user icon"></i>
+            {{ usersThatLiked.size }}
+          </a>
+        </div>
+      </div>
+    </div>
+    {{/films}}
+  </div>
+
+  <button id="create-film" class="ui button orange-block" onclick="location.href='/films/new'">New film</button>
+</div>
+
+{{>footer}}

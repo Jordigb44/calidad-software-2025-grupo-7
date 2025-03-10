@@ -1,0 +1,6 @@
+<select class="ui dropdown" name="ageRating">
+    <option value="">No selected</option>
+    {{#ageRatings}}
+        <option value="{{description}}" {{#selected}}selected{{/selected}}>{{description}}</option>
+    {{/ageRatings}}
+</select>

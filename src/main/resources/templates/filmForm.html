@@ -1,0 +1,48 @@
+{{>header}}
+<div id="new-film" class="ui segment container">
+
+    <!-- Error message -->
+    {{#error}}
+    <div class="ui error message">
+        <i class="close icon"></i>
+        <div class="header">
+            There were some errors with your submission:
+        </div>
+        <ul id="error-list" class="list">
+            {{#errors}}
+            <li>{{ . }}</li>
+            {{/errors}}
+        </ul>
+    </div>
+    {{/error}}
+
+    <form action="{{action}}" method="post" class="ui form" enctype="multipart/form-data">
+        {{#film.id}}<input type="hidden" name="id" value="{{film.id}}" />{{/film.id}}
+        <h2>Film form</h2>
+        <div class="field">
+            <label>Title </label>
+            <input name="title" placeholder="A title" value="{{film.title}}" />
+        </div>
+        <div class="field">
+            <label>Year</label>
+            <input name="releaseYear" type="number" placeholder="A year" value="{{film.releaseYear}}" />
+        </div>
+        <div class="field">
+            <label>Poster </label>
+            <input name="imageField" type="file" />
+        </div>
+        <div class="field">
+            <label>Synopsis </label>
+            <textarea name="synopsis" placeholder="A synopsis of film">{{film.synopsis}}</textarea>
+        </div>
+        <div class="field">
+            <label>Age Rating</label>
+            {{>ageRatingPartial}}
+        </div>
+        <p>
+            <button class="ui button" onclick="location.href='/'; return false;">Cancel</button>
+            <input class="ui button orange" type="submit" id="Save" value="Save" />
+        </p>
+    </form>
+</div>
+{{>footer}}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Main</title>
+    <base href=".">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css" </head>
+
+    <!-- 3. Display the application -->
+
+<body>
+    <div>
+        <div class="ui grid">
+
+            <div class="row" id="logo-img">
+
+                <img class="ui image" onclick="location.href='/'" src="/images/logo.png">
+
+                {{#currentUserName}}
+                <div id="favorites-btn" class="ui labeled button" onclick="location.href='/users/favorites'">
+                    <div class="ui orange-block button">
+                        <i class="favorite icon"></i>
+                        {{ currentUserName }}'s Favorites
+                    </div>
+                    <a class="ui basic red left pointing label">
+                        {{ favoritesNum }}
+                    </a>
+                </div>
+                {{/currentUserName}}
+
+            </div>

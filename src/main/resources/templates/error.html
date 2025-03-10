@@ -1,0 +1,22 @@
+{{>header}}
+
+<div class="ui compact segment container">
+    {{#error}}
+    <div class="ui negative message">
+        <div class="header" id="message">
+            {{ message }}
+        </div>
+    </div>
+    {{/error}} {{^error}}
+    <div class="ui positive message">
+        <div class="header" id="message">
+            {{ message }}
+        </div>
+    </div>
+    {{/error}}
+
+    <button id="all-films" class="ui button orange-block" onclick="location.href='/'"><i class="film icon"></i>All Films</button>
+</div>
+
+{{>footer}}
+
