@@ -22,6 +22,7 @@ import es.codeurjc.web.nitflex.utils.ImageUtils;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class FilmService {
 
 	private FilmRepository filmRepository;
@@ -86,7 +87,6 @@ public class FilmService {
 		return this.update(filmId, film, null);
 	}
 
-	@Transactional
 	public FilmDTO update(long filmId, FilmSimpleDTO film, MultipartFile imageField) {
 		Film toUpdateFilm = filmRepository.findById(filmId)
 				.orElseThrow(() -> new FilmNotFoundException(filmId));
@@ -101,7 +101,6 @@ public class FilmService {
 		return filmMapper.toDTO(filmRepository.save(toUpdateFilm));
 	}
 
-	@Transactional
 	public void delete(long id) {
 		Film film = filmRepository.findById(id)
 				.orElseThrow(() -> new FilmNotFoundException(id));
