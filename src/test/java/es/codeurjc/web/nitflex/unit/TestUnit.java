@@ -25,7 +25,7 @@ import es.codeurjc.web.nitflex.service.FilmService;
 import es.codeurjc.web.nitflex.utils.ImageUtils;
 
 public class TestUnit {
-    
+    // Here we set up the simulations
     @Mock
     private FilmRepository filmRepository;  
 
@@ -33,13 +33,14 @@ public class TestUnit {
     private UserRepository userRepository; 
 
     @Mock
-    private FilmMapper filmMapper; 
+    private FilmMapper filmMapper;
 
     @Mock
     private ImageUtils imageUtils;
 
     private FilmService filmService;
 
+    // Here we initialize the simulations
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -47,8 +48,7 @@ public class TestUnit {
     }
 
     @Test
-    @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService,\r\n" + //
-                "se guarda en el repositorio")
+    @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService,\r\n se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
         CreateFilmRequest filmRequest = new CreateFilmRequest(
             "El Viaje de Chihiro", 
@@ -66,7 +66,7 @@ public class TestUnit {
             2001, 
             "+12", 
             Collections.emptyList(), // reviews
-            Collections.emptyList() // usuarios
+            Collections.emptyList() // users
         );
 
         // Configure mocks
