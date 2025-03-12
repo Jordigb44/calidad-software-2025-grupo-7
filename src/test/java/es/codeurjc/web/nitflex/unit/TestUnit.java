@@ -116,11 +116,5 @@ public class TestUnit {
             .hasMessageContaining("The title is empty"); // Ajusta el mensaje esperado
         // Assert
         verify(filmRepository, times(0)).save(any(Film.class)); // comprobamos que no se llama el metodo save
-        // Next asserts are optional, but we're going to assure the film has been saved
-        assertEquals("Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", savedFilm.synopsis());
-        assertEquals(2001, savedFilm.releaseYear());
-        assertEquals("+12", savedFilm.ageRating());
-        assertTrue(savedFilm.reviews().isEmpty(), "La lista de reviews debería estar vacía");
-        assertTrue(savedFilm.usersThatLiked().isEmpty(), "La lista de usuarios debería estar vacía");       
     }
 }
