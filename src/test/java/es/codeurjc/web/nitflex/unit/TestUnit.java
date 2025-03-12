@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,13 +49,12 @@ public class TestUnit {
     @Test
     @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService,\r\n" + //
                 "se guarda en el repositorio")
-    void testSaveFilmWithAllFields() {
-        // Arrange
+    void testSaveFilmAndCheckByTitle() {
         CreateFilmRequest filmRequest = new CreateFilmRequest(
             "El Viaje de Chihiro", 
             "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 
             2001, 
-            "imagen.jpg"
+            "+12"
         );  
         
         Film film = new Film();
@@ -64,25 +64,27 @@ public class TestUnit {
             "El Viaje de Chihiro", 
             "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 
             2001, 
-            "imagen.jpg", 
+            "+12", 
             Collections.emptyList(), // reviews
             Collections.emptyList() // usuarios
         );
 
-        // Configurar mocks
+        // Configure mocks
         when(filmMapper.toDomain(any(CreateFilmRequest.class))).thenReturn(film);
         when(filmMapper.toDTO(any(Film.class))).thenReturn(filmDTO);
         when(filmRepository.save(any(Film.class))).thenReturn(film); 
 
-        // Act
         FilmDTO savedFilm = filmService.save(filmRequest);  
 
-        // Assert
         verify(filmRepository, times(1)).save(any(Film.class));  
         assertNotNull(savedFilm);  
         assertEquals("El Viaje de Chihiro", savedFilm.title()); 
-
-
-        // para el test de integración, como se usa la bbdd, lo suyo es comprobar con todos los campos que se ha guardado bien
+        
+        // Next asserts are optional, but we're going to assure the film has been saved
+        assertEquals("Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", savedFilm.synopsis());
+        assertEquals(2001, savedFilm.releaseYear());
+        assertEquals("+12", savedFilm.ageRating());
+        assertTrue(savedFilm.reviews().isEmpty(), "La lista de reviews debería estar vacía");
+        assertTrue(savedFilm.usersThatLiked().isEmpty(), "La lista de usuarios debería estar vacía");       
     }
 }
