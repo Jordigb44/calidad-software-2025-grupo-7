@@ -1,6 +1,8 @@
 package es.codeurjc.web.nitflex.rest;
 
-import static org.hamcrest.Matchers.equalTo;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,53 +11,51 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import io.restassured.RestAssured;
-import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.minidev.json.JSONObject;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestRest {
-    private String restMainPath = "/api/films"; // Ruta de la API
+    private String restMainPath = "/api/films"; // Path of the Rest API
     
     @LocalServerPort
     int port;
 
     @BeforeEach
     public void setUp() {
-        RestAssured.baseURI = "http://localhost";
+        // Stablish the server port
         RestAssured.port = port;
-        RestAssured.basePath = "/api/films"; 
-        System.out.println("Server running on port: " + port);
+        System.out.println("Puerto en uso: " + port); // Asegúrate de que el puerto es el correcto
     }
 
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
     public void addFilmById() {
-        // Crear el objeto JSON con la película
+        // Create the JSON Objet of the film
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", "Inception");
         filmJson.put("synopsis", "A mind-bending thriller about dreams.");
         filmJson.put("releaseYear", 2010);
         filmJson.put("ageRating", "+13");
 
-        // Enviar la solicitud POST para agregar la película
+        //  Send the POST solicitude
         Response response = given()
             .contentType(ContentType.JSON)
             .body(filmJson.toString())
         .when()
-            .post(restMainPath) // Usa la ruta correcta /api/films
+            .post(restMainPath) // Use the valid path /api/films/
         .then()
-            .statusCode(201) // Verifica que la respuesta sea 201 Created
+            .statusCode(201) // Verify that was succesfully created
             .body("title", equalTo("Inception"))
             .body("synopsis", equalTo("A mind-bending thriller about dreams."))
             .body("releaseYear", equalTo(2010))
             .body("ageRating", equalTo("+13"))
             .extract()
-            .response(); // Extraer la respuesta
+            .response(); // Extract the response
 
-        // Verificar la respuesta
+        // TODO: Verify the response
         System.out.println("Response Body: " + response.getBody().asString());
     }
 
