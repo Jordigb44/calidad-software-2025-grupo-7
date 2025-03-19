@@ -1,10 +1,11 @@
 package es.codeurjc.web.nitflex.e2e;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.Duration;
 
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,8 @@ public class TestSeleniumWebDriver {
         }
     }
 
-    @Test
+    // Task 3
+    @Test 
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película desaparezca de la lista de películas")
     void testAddAndDeleteFilm() {
         // Click on "Add Film" button
@@ -101,6 +103,7 @@ public class TestSeleniumWebDriver {
         assertFalse(driver.getPageSource().contains("El Viaje de Chihiro"), "The film was not deleted correctly.");
     }
 
+    // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
     void testEditFilmTitle() throws InterruptedException {

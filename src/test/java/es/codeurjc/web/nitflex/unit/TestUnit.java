@@ -46,6 +46,7 @@ public class TestUnit {
         filmService = new FilmService(filmRepository, userRepository, imageUtils, filmMapper); 
     }
 
+    // Task 1
     @Test
     @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService,\r\n se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
@@ -80,6 +81,7 @@ public class TestUnit {
         assertEquals("El Viaje de Chihiro", savedFilm.title()); 
     }
 
+    // Task 2
     @Test
     @DisplayName ("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService,\r\n" + //
                 "NO se guarda en el repositorio y se lanza una excepción")

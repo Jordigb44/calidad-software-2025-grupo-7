@@ -1,7 +1,5 @@
 package es.codeurjc.web.nitflex.integration;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ public class TestIntegration {
     @Autowired
     private FilmService filmService;
 
+    // Task 2
     @Test
     @DisplayName ("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un \r\n" + //
                     "título válido mediante FilmService, se guardan los cambios en la base de datos y se \r\n" + //
@@ -95,6 +96,7 @@ public class TestIntegration {
         assertEquals("+12", updatedFilm.getAgeRating());
     }
 
+    // Task 3
     @Test
     @DisplayName ("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un \r\n" + //
                     "título válido mediante FilmService, se guardan los cambios en la base de datos y la \r\n" + //
