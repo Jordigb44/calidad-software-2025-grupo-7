@@ -2,12 +2,16 @@ package es.codeurjc.web.nitflex.rest;
 
 import static org.hamcrest.Matchers.equalTo;
 import org.json.JSONException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import es.codeurjc.web.nitflex.model.User;
+import es.codeurjc.web.nitflex.repository.UserRepository;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
@@ -16,54 +20,76 @@ import net.minidev.json.JSONObject;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestRest {
-    private String restMainPath = "/api/films"; // Ruta de la API
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private String restMainPath = "/api/films/"; 
     
     @LocalServerPort
     int port;
 
     @BeforeEach
     public void setUp() {
-        RestAssured.baseURI = "http://localhost";
         RestAssured.port = port;
-        RestAssured.basePath = "/api/films"; 
-        System.out.println("Server running on port: " + port);
+        userRepository.save(new User("Juan Pérez", "juan.perez@example.com"));
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        userRepository.deleteAll();
     }
 
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
-    public void addFilmById() {
-        // Crear el objeto JSON con la película
+    public void addFilmAndSearchById() {
+    
+        // Create JSON object of film
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", "Inception");
         filmJson.put("synopsis", "A mind-bending thriller about dreams.");
         filmJson.put("releaseYear", 2010);
         filmJson.put("ageRating", "+13");
 
-        // Enviar la solicitud POST para agregar la película
+        // POST to add film
         Response response = given()
             .contentType(ContentType.JSON)
             .body(filmJson.toString())
         .when()
-            .post(restMainPath) // Usa la ruta correcta /api/films
+            .post(restMainPath) 
         .then()
-            .statusCode(201) // Verifica que la respuesta sea 201 Created
+            .statusCode(201) // Verify it has created well
             .body("title", equalTo("Inception"))
             .body("synopsis", equalTo("A mind-bending thriller about dreams."))
             .body("releaseYear", equalTo(2010))
             .body("ageRating", equalTo("+13"))
             .extract()
-            .response(); // Extraer la respuesta
+            .response(); // Extract response
 
-        // Verificar la respuesta
-        System.out.println("Response Body: " + response.getBody().asString());
+        // Extract ID from response
+        int filmId = response.jsonPath().getInt("id");
+
+        // GET to retrieve film by ID
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .get(restMainPath + filmId)
+        .then()
+            .statusCode(200) // Verify it is found
+            .body("id", equalTo(filmId))
+            .body("title", equalTo("Inception"))
+            .body("synopsis", equalTo("A mind-bending thriller about dreams."))
+            .body("releaseYear", equalTo(2010))
+            .body("ageRating", equalTo("+13"));
     }
+
 
     // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
     public void addAndDeleteFilm() throws JSONException {
-        // Create the film
+        // Create the film with JSON object
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", "Inception");
         filmJson.put("synopsis", "A mind-bending thriller about dreams.");
@@ -75,7 +101,7 @@ public class TestRest {
             .contentType(ContentType.JSON)
             .body(filmJson.toJSONString())
         .when()
-            .post("/") 
+            .post(restMainPath) 
         .then()
             .statusCode(201) 
             .body("title", equalTo("Inception"))
@@ -90,7 +116,7 @@ public class TestRest {
         // Eliminate the film
         given()
         .when()
-            .delete("/" + filmId) // DELETE /api/films/{id}
+            .delete(restMainPath + filmId) // DELETE /api/films/{id}
         .then()
             .statusCode(204); // No Content → Success
 
