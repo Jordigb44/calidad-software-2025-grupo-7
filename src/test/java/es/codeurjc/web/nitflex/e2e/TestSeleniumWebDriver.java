@@ -42,12 +42,11 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película desaparezca de la lista de películas")
     void testAddAndDeleteFilm() {
         // Add new film
+        wait.until(ExpectedConditions.urlContains("/")); // Wait for the home page to load
         addNewFilmWhithoutImage();
-
-        // Return to the film list if redirected to the film detail page
-        wait.until(ExpectedConditions.urlContains("/films/")); // Wait for the detail page to load
-
+        
         // Manually navigate back to the film list
+        wait.until(ExpectedConditions.urlContains("/films/")); // Wait for the detail page to load
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
         driver.findElement(By.id("all-films")).click();
 
@@ -69,8 +68,9 @@ public class TestSeleniumWebDriver {
     // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
-    void testEditFilmTitle() throws InterruptedException {
+    void testEditFilmTitle() {
         // Add new film
+        wait.until(ExpectedConditions.urlContains("/")); // Wait for the home page to load
         addNewFilmWhithoutImage();
 
         // Edit the film title
