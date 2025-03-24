@@ -29,22 +29,13 @@ public class TestRest {
     @LocalServerPort
     int port;
 
+    private Response response;
+
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
         userRepository.save(new User("Juan Pérez", "juan.perez@example.com"));
-    }
 
-    @AfterEach
-    public void tearDown() throws Exception {
-        userRepository.deleteAll();
-    }
-
-    // Task 1
-    @Test
-    @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
-    public void addFilmAndSearchById() {
-    
         // Create JSON object of film
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", "Inception");
@@ -53,7 +44,7 @@ public class TestRest {
         filmJson.put("ageRating", "+13");
 
         // POST to add film
-        Response response = given()
+        response = given()
             .contentType(ContentType.JSON)
             .body(filmJson.toString())
         .when()
@@ -66,7 +57,18 @@ public class TestRest {
             .body("ageRating", equalTo("+13"))
             .extract()
             .response(); // Extract response
+    }
 
+    @AfterEach
+    public void tearDown() throws Exception {
+        userRepository.deleteAll();
+    }
+
+    // Task 1
+    @Test
+    @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
+    public void addFilmAndSearchById() {
+                
         // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
@@ -89,27 +91,6 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
     public void addAndDeleteFilm() throws JSONException {
-        // Create the film with JSON object
-        JSONObject filmJson = new JSONObject();
-        filmJson.put("title", "Inception");
-        filmJson.put("synopsis", "A mind-bending thriller about dreams.");
-        filmJson.put("releaseYear", 2010);
-        filmJson.put("ageRating", "+13");
-
-        // Send POST to create the film
-        Response response = given()
-            .contentType(ContentType.JSON)
-            .body(filmJson.toJSONString())
-        .when()
-            .post(restMainPath) 
-        .then()
-            .statusCode(201) 
-            .body("title", equalTo("Inception"))
-            .body("synopsis", equalTo("A mind-bending thriller about dreams."))
-            .body("releaseYear", equalTo(2010))
-            .body("ageRating", equalTo("+13"))
-            .extract()
-            .response(); 
 
         int filmId = response.jsonPath().getInt("id");
 
