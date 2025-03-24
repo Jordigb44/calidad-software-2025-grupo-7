@@ -35,28 +35,6 @@ public class TestRest {
     public void setUp() {
         RestAssured.port = port;
         userRepository.save(new User("Juan Pérez", "juan.perez@example.com"));
-
-        // Create JSON object of film
-        JSONObject filmJson = new JSONObject();
-        filmJson.put("title", "Inception");
-        filmJson.put("synopsis", "A mind-bending thriller about dreams.");
-        filmJson.put("releaseYear", 2010);
-        filmJson.put("ageRating", "+13");
-
-        // POST to add film
-        response = given()
-            .contentType(ContentType.JSON)
-            .body(filmJson.toString())
-        .when()
-            .post(restMainPath) 
-        .then()
-            .statusCode(201) // Verify it has created well
-            .body("title", equalTo("Inception"))
-            .body("synopsis", equalTo("A mind-bending thriller about dreams."))
-            .body("releaseYear", equalTo(2010))
-            .body("ageRating", equalTo("+13"))
-            .extract()
-            .response(); // Extract response
     }
 
     @AfterEach
@@ -64,11 +42,35 @@ public class TestRest {
         userRepository.deleteAll();
     }
 
+    // Function to create a film for all tests
+    private Response addFilm(String title, String synopsis, int releaseYear, String ageRating) {
+        JSONObject filmJson = new JSONObject();
+        filmJson.put("title", title);
+        filmJson.put("synopsis", synopsis);
+        filmJson.put("releaseYear", releaseYear);
+        filmJson.put("ageRating", ageRating);
+    
+        return given()
+            .contentType(ContentType.JSON)
+            .body(filmJson.toString())
+        .when()
+            .post(restMainPath)
+        .then()
+            .statusCode(201)
+            .body("title", equalTo(title))
+            .body("synopsis", equalTo(synopsis))
+            .body("releaseYear", equalTo(releaseYear))
+            .body("ageRating", equalTo(ageRating))
+            .extract()
+            .response();
+    }
+
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
     public void addFilmAndSearchById() {
-                
+        response = addFilm("Inception", "A mind-bending thriller about dreams.", 2010, "+13");       
+        
         // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
@@ -91,6 +93,7 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
     public void addAndDeleteFilm() throws JSONException {
+        response = addFilm("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
 
         int filmId = response.jsonPath().getInt("id");
 
@@ -106,6 +109,6 @@ public class TestRest {
         .when()
             .get("/" + filmId) // GET a /api/films/{id}
         .then()
-            .statusCode(404); 
+            .statusCode(404);
     }
 }
