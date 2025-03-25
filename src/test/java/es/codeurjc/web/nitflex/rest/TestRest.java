@@ -24,7 +24,7 @@ public class TestRest {
     @Autowired
     private UserRepository userRepository;
 
-    private String restMainPath = "/api/films/"; 
+    private final String restMainPath = "/api/films/"; 
     
     @LocalServerPort
     int port;
@@ -43,7 +43,7 @@ public class TestRest {
     }
 
     // Function to create a film for all tests
-    private Response addFilm(String title, String synopsis, int releaseYear, String ageRating) {
+    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", title);
         filmJson.put("synopsis", synopsis);
@@ -69,7 +69,7 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
     public void addFilmAndSearchById() {
-        response = addFilm("Inception", "A mind-bending thriller about dreams.", 2010, "+13");       
+        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");       
         
         // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
@@ -93,7 +93,7 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
     public void addAndDeleteFilm() throws JSONException {
-        response = addFilm("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
 
         int filmId = response.jsonPath().getInt("id");
 
@@ -107,7 +107,7 @@ public class TestRest {
         // Try to obtain it (waiting 404)
         given()
         .when()
-            .get("/" + filmId) // GET a /api/films/{id}
+            .get(restMainPath + filmId) // GET a /api/films/{id}
         .then()
             .statusCode(404);
     }

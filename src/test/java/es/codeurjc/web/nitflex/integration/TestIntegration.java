@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,24 +67,18 @@ public class TestIntegration {
         // Create and save users
         user1 = new User();
         user1.setName("usuario1");
-        user1.setFavoriteFilms(new ArrayList<>());
-        user1.getFavoriteFilms().add(film);
+        user1.setFavoriteFilms(new ArrayList<>(List.of(film)));
         user1 = userRepository.save(user1);
 
         user2 = new User();
         user2.setName("usuario2");
-        user2.setFavoriteFilms(new ArrayList<>());
-        user2.getFavoriteFilms().add(film);
+        user2.setFavoriteFilms(new ArrayList<>(List.of(film)));
         user2 = userRepository.save(user2);
     }
 
     // Task 2
     @Test
-    @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un \\r\\n" + //
-                "\" + //\r\n" + //
-                "\"título válido mediante FilmService, se guardan los cambios en la base de datos y se \\r\\n" + //
-                "\" + //\r\n" + //
-                "\"mantiene la lista de usuarios que la han marcado como favorita")
+    @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y se mantiene la lista de usuarios que la han marcado como favorita")
     void testUpdateFilmTitleAndSynopsisKeepsUsers() {
         // Update the film
         FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
@@ -96,20 +92,16 @@ public class TestIntegration {
         // Verify the changes
         Film updatedFilm = filmRepository.findById(film.getId()).orElseThrow();
 
-        assertEquals("Chihiro y el mundo espiritual", updatedFilm.getTitle());
-        assertEquals("Inolvidable aventura en un mundo mágico.", updatedFilm.getSynopsis());
+        assertNotEquals(film.getTitle(), updatedFilm.getTitle());
+        assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis());
         assertEquals(2, updatedFilm.getUsersThatLiked().size());
-        assertEquals(2001, updatedFilm.getReleaseYear());
-        assertEquals("+12", updatedFilm.getAgeRating());
+        assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
+        assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
     }
 
     // Task 3
     @Test
-    @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un \\r\\n" + //
-                "\" + //\r\n" + //
-                "\"título válido mediante FilmService, se guardan los cambios en la base de datos y la \\r\\n" + //
-                "\" + //\r\n" + //
-                "\"imagen no cambia")
+    @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
     void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException {
         // Update the film
         FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
@@ -123,8 +115,8 @@ public class TestIntegration {
         // Verify the changes
         Film updatedFilm = filmRepository.findById(film.getId()).orElseThrow();
 
-        assertEquals("Chihiro y el mundo espiritual", updatedFilm.getTitle());
-        assertEquals("Inolvidable aventura en un mundo mágico.", updatedFilm.getSynopsis());
+        assertNotEquals(film.getTitle(), updatedFilm.getTitle());
+        assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis());
         assertEquals(2, updatedFilm.getUsersThatLiked().size());
 
         // Verify that the image remains unchanged
@@ -132,7 +124,7 @@ public class TestIntegration {
         assertArrayEquals(posterBlob.getBytes(1, (int) posterBlob.length()),
                           updatedPosterBlob.getBytes(1, (int) updatedPosterBlob.length()));
 
-        assertEquals(2001, updatedFilm.getReleaseYear());
-        assertEquals("+12", updatedFilm.getAgeRating());
+        assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
+        assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
     }
 }

@@ -1,10 +1,11 @@
 package es.codeurjc.web.nitflex.e2e;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.Duration;
 
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class TestSeleniumWebDriver {
     private WebDriver driver;
     private WebDriverWait wait;
-    private String url = "http://localhost:8080";
+    private final String url = "http://localhost:8080";
+    private static final By CREATE_FILM_BUTTON = By.id("create-film");
+    private static final By REMOVE_FILM_BUTTON = By.id("remove-film");
+    private static final By FILM_TITLE_ELEMENT = By.id("film-title");
+    private static final String FILM_TITLE = "El Viaje de Chihiro";
+    private static final String FILM_DESCRIPTION = "A girl trapped in a magical world.";
+
+
 
     @BeforeEach
     void setUp() {
@@ -33,9 +41,14 @@ public class TestSeleniumWebDriver {
     @AfterEach
     void tearDown() {
         if (driver != null) {
-            driver.quit(); // Close the browser after each test
+            try {
+                driver.quit(); // Close the browser after each test
+            } catch (Exception e) {
+                System.err.println("Error closing WebDriver: " + e.getMessage());
+            }
         }
     }
+
 
     // Task 3
     @Test
@@ -51,18 +64,17 @@ public class TestSeleniumWebDriver {
         driver.findElement(By.id("all-films")).click();
 
         // Wait for the film to appear in the list
-        String newTitle = "El Viaje de Chihiro";
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
 
         // Verify that the film appears in the list
-        WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
+        WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
         assertTrue(filmRow.isDisplayed(), "The film was not added correctly.");
 
         // Return to the detail page
         filmRow.click();
 
         // Delete the film & verify the film was successfully deleted
-        deleteFilm(newTitle);
+        deleteFilm(FILM_TITLE);
     }
 
     // Task 4
@@ -81,7 +93,7 @@ public class TestSeleniumWebDriver {
 
         // Verify that the title has been updated on the detail page
         wait.until(ExpectedConditions.urlContains("/films/"));
-        WebElement titleFilm = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("film-title")));
+        WebElement titleFilm = wait.until(ExpectedConditions.presenceOfElementLocated(FILM_TITLE_ELEMENT));
         assertEquals(newTitle, titleFilm.getText(), "The film title was not updated correctly.");
 
         // Return to the main page
@@ -107,15 +119,15 @@ public class TestSeleniumWebDriver {
 
     private void addNewFilmWhithoutImage() {
         // Click on "Add Film" button
-        WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("create-film")));
+        WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(CREATE_FILM_BUTTON));
         addButton.click();
 
         // Fill in the new film form
         WebElement titleInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("title")));
-        titleInput.sendKeys("El Viaje de Chihiro");
+        titleInput.sendKeys(FILM_TITLE);
 
         WebElement synopsisInput = driver.findElement(By.name("synopsis"));
-        synopsisInput.sendKeys("A girl trapped in a magical world.");
+        synopsisInput.sendKeys(FILM_DESCRIPTION);
 
         WebElement releaseYearInput = driver.findElement(By.name("releaseYear"));
         releaseYearInput.sendKeys("2001");
@@ -146,7 +158,7 @@ public class TestSeleniumWebDriver {
         wait.until(ExpectedConditions.urlContains("/films/"));
     
         // Locate and click the delete button
-        WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("remove-film")));
+        WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(REMOVE_FILM_BUTTON));
         deleteButton.click();
     
         // Wait for the URL to change to the delete confirmation page
@@ -161,7 +173,7 @@ public class TestSeleniumWebDriver {
     
         // Wait for the film list page to fully load
         wait.until(ExpectedConditions.urlToBe(url+"/"));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("create-film")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
     
         // Verify that the film is no longer in the list
         assertFalse(driver.getPageSource().contains(filmTitle), "The film was not deleted correctly.");

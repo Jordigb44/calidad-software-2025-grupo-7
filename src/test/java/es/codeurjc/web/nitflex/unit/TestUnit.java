@@ -1,16 +1,18 @@
 package es.codeurjc.web.nitflex.unit;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 import es.codeurjc.web.nitflex.dto.film.CreateFilmRequest;
@@ -46,7 +48,7 @@ public class TestUnit {
 
     // Task 1
     @Test
-    @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService,\r\n se guarda en el repositorio")
+    @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
         // Create films
         CreateFilmRequest filmRequest = new CreateFilmRequest(
@@ -82,8 +84,7 @@ public class TestUnit {
 
     // Task 2
     @Test
-    @DisplayName ("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService,\r\n" + //
-                "NO se guarda en el repositorio y se lanza una excepción")
+    @DisplayName ("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
     void testSaveFilmWithEmptyTitleFields() {
         // Create films
         CreateFilmRequest filmRequest = new CreateFilmRequest(
