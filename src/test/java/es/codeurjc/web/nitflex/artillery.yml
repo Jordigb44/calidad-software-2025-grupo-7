@@ -1,0 +1,74 @@
+config:
+  name: "Prueba de carga completa para API Nitflex (Películas y Usuarios)"
+  target: "http://localhost:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+  ensure:
+    p95: 2000  # 95% de las respuestas deben estar bajo 2 segundos
+
+scenarios:
+  - name: "Flujo completo de operaciones CRUD para películas"
+    flow:
+      # Obtener todas las películas
+      - get:
+          url: "/api/films/"
+          capture:
+            - json: "$[0].id"
+              as: "filmId"
+
+      # Obtener detalles de una película específica
+      - get:
+          url: "/api/films/{{filmId}}"
+
+      # Crear nueva película
+      - post:
+          url: "/api/films/"
+          json:
+            title: "Deadpool & Wolverine"
+            synopsis: "La Autoridad de Variación Temporal (AVT) ofrece a Deadpool un lugar en el Universo cinematográfico de Marvel, pero en su lugar recluta a una variante de Lobezno para salvar su universo de la extinción."
+            releaseYear: 2024
+            ageRating: "+18"
+          capture:
+            - json: "$.id"
+              as: "newFilmId"
+
+      # Actualizar película
+      - put:
+          url: "/api/films/{{newFilmId}}"
+          json:
+            title: "Oppenheimer"
+            synopsis: "Película sobre el físico J. Robert Oppenheimer y su papel como desarrollador de la bomba atómica. Basada en el libro 'American Prometheus: The Triumph and Tragedy of J. Robert Oppenheimer' de Kai Bird y Martin J. Sherwin."
+            releaseYear: 2023
+            ageRating: "+16"
+
+      # Crear reseña
+      - post:
+          url: "/api/films/{{newFilmId}}/reviews/"
+          json:
+            text: "Muy mala"
+            score: 2
+          capture:
+            - json: "$.id"
+              as: "reviewId"
+
+      # Eliminar reseña
+      - delete:
+          url: "/api/films/{{newFilmId}}/reviews/{{reviewId}}"
+
+      # Eliminar película
+      - delete:
+          url: "/api/films/{{newFilmId}}"
+
+  - name: "Flujo de consulta de usuarios"
+    flow:
+      # Obtener todos los usuarios
+      - get:
+          url: "/api/users/"
+          capture:
+            - json: "$[0].id"
+              as: "userId"
+
+      # Obtener detalles de un usuario específico
+      - get:
+          url: "/api/users/{{userId}}"
