@@ -1,74 +1,72 @@
 config:
-  name: "Prueba de carga completa para API Nitflex (Películas y Usuarios)"
-  target: "http://localhost:8080"
-  phases:
-    - duration: 60
-      arrivalRate: 10
-  ensure:
-    p95: 2000  # 95% de las respuestas deben estar bajo 2 segundos
+  target: "http://localhost:8080"  
+  environments:
+    local:
+      phases:
+        - duration: 40
+          arrivalRate: 5  # 5 usuarios por segundo
+      ensure:
+        p95: 100  # 95% de las respuestas deben estar por debajo de 100ms
+        maxErrorRate: 0  # No se permite ningún fallo
+    staging:
+      phases:
+        - duration: 40
+          arrivalRate: 10  # Warm-up: comienza con 10 usuarios/s...
+          rampTo: 50       # ...y sube hasta 50 usuarios/s
+        - pause: 30        # Pausa de 30 segundos
+        - duration: 300
+          arrivalRate: 50  # Load test: 50 usuarios por segundo
+          maxVusers: 8     # Máximo de 8 usuarios simultáneos
+      ensure:
+        p95: 300  # 95% de las respuestas deben estar por debajo de 300ms
+        maxErrorRate: 0  # No se permite ningún fallo
 
 scenarios:
-  - name: "Flujo completo de operaciones CRUD para películas"
+  - name: "Escenario 1 - Consultar películas"  # 70%
+    weight: 70
     flow:
-      # Obtener todas las películas
       - get:
           url: "/api/films/"
           capture:
             - json: "$[0].id"
               as: "filmId"
-
-      # Obtener detalles de una película específica
       - get:
           url: "/api/films/{{filmId}}"
 
-      # Crear nueva película
+  - name: "Escenario 2 - Crear y comprobar película"  # 20%
+    weight: 20
+    flow:
       - post:
           url: "/api/films/"
           json:
-            title: "Deadpool & Wolverine"
-            synopsis: "La Autoridad de Variación Temporal (AVT) ofrece a Deadpool un lugar en el Universo cinematográfico de Marvel, pero en su lugar recluta a una variante de Lobezno para salvar su universo de la extinción."
-            releaseYear: 2024
-            ageRating: "+18"
+            title: "Nueva película {{ $randomString() }}"
+            synopsis: "Sinopsis de prueba"
+            releaseYear: "2025"
+            ageRating: "+13"
           capture:
             - json: "$.id"
               as: "newFilmId"
-
-      # Actualizar película
-      - put:
+      - get:
           url: "/api/films/{{newFilmId}}"
-          json:
-            title: "Oppenheimer"
-            synopsis: "Película sobre el físico J. Robert Oppenheimer y su papel como desarrollador de la bomba atómica. Basada en el libro 'American Prometheus: The Triumph and Tragedy of J. Robert Oppenheimer' de Kai Bird y Martin J. Sherwin."
-            releaseYear: 2023
-            ageRating: "+16"
 
-      # Crear reseña
+  - name: "Escenario 3 - Crear, comprobar y borrar película"  # 10%
+    weight: 10
+    flow:
       - post:
-          url: "/api/films/{{newFilmId}}/reviews/"
+          url: "/api/films/"
           json:
-            text: "Muy mala"
-            score: 2
+            title: "Película temporal {{ $randomString() }}"
+            synopsis: "Sinopsis temporal"
+            releaseYear: "2025"
+            ageRating: "+13"
           capture:
             - json: "$.id"
-              as: "reviewId"
-
-      # Eliminar reseña
-      - delete:
-          url: "/api/films/{{newFilmId}}/reviews/{{reviewId}}"
-
-      # Eliminar película
-      - delete:
-          url: "/api/films/{{newFilmId}}"
-
-  - name: "Flujo de consulta de usuarios"
-    flow:
-      # Obtener todos los usuarios
+              as: "tempFilmId"
       - get:
-          url: "/api/users/"
-          capture:
-            - json: "$[0].id"
-              as: "userId"
-
-      # Obtener detalles de un usuario específico
+          url: "/api/films/{{tempFilmId}}"
+      - delete:
+          url: "/api/films/{{tempFilmId}}"
       - get:
-          url: "/api/users/{{userId}}"
+          url: "/api/films/{{tempFilmId}}"
+          expect:
+            - statusCode: 404  # La película ya no debería existir
