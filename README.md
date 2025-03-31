@@ -1,4 +1,4 @@
-# Práctica Calidad Software - Grupo X
+# Práctica Calidad Software - Grupo 7
 
 # Miembros del grupo
 | Nombre y apellidos | Email urjc | Nickname GitHub |
