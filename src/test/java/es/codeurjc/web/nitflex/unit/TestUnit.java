@@ -1,15 +1,21 @@
 package es.codeurjc.web.nitflex.unit;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +28,7 @@ import es.codeurjc.web.nitflex.model.Film;
 import es.codeurjc.web.nitflex.repository.FilmRepository;
 import es.codeurjc.web.nitflex.repository.UserRepository;
 import es.codeurjc.web.nitflex.service.FilmService;
+import es.codeurjc.web.nitflex.service.exceptions.FilmNotFoundException;
 import es.codeurjc.web.nitflex.utils.ImageUtils;
 public class TestUnit {
     // Here we set up the simulations
@@ -115,6 +122,24 @@ public class TestUnit {
         
         verify(filmRepository, times(0)).save(any(Film.class)); // check save method is not called
     }
+
+    //Task 4
+    @Test
+    @DisplayName("Cuando se borra una película que no existe, se lanza FilmNotFoundException")
+    void testDeleteNonExistentFilmThrowsException() {
+
+        long fictionalId = 999L;
+        
+        when(filmRepository.findById(fictionalId)).thenReturn(Optional.empty());
+        
+        FilmNotFoundException ex = assertThrows(FilmNotFoundException.class, () -> {
+            filmService.delete(fictionalId); // Esto es lo que debería lanzar la excepción
+        });
+        
+        assertEquals("Film not found with id: " + fictionalId, ex.getMessage());
+        verify(filmRepository, never()).deleteById(anyLong());
+    }
+    
 
     private void creationMocks(Film film, FilmDTO filmDTO) {
         when(filmMapper.toDomain(any(CreateFilmRequest.class))).thenReturn(film);
