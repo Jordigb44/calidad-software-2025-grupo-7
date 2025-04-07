@@ -87,6 +87,13 @@
 			<scope>test</scope>
 		</dependency> -->
 
+		<!-- WebDriverManager para gestionar automáticamente ChromeDriver -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.7.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
