@@ -150,24 +150,23 @@ public class TestUnit {
         film.getUsersThatLiked().add(user1);
         film.getUsersThatLiked().add(user2);
 
-        // Simular que, al buscar la película por su ID, el repositorio la encuentra
-        // correctamente
+        // Simulate that, when searching for the movie by its ID, the repository finds
+        // it correctly
         when(filmRepository.findById(filmId)).thenReturn(Optional.of(film));
 
-        // Act: Se llama al método delete del servico, que debe:
+        // Act: The service delete method is called, which must:
         filmService.delete(filmId);
 
         // Assert
-        // Se verifica que la pelicaula ha sido eliminada de los favoritos de los
-        // usuarios
+        // It has been verified that the movie has been removed from users' favorites.
         assertEquals(0, user1.getFavoriteFilms().size());
         assertEquals(0, user2.getFavoriteFilms().size());
 
-        // Se verifica que se guarda los cambios de cada usuario actualizado
+        // It is verified that the changes of each updated user are saved
         verify(userRepository, times(1)).save(user1);
         verify(userRepository, times(1)).save(user2);
 
-        // Se verifica que se eliminó la película del repositorio
+        // It is verified that the movie has been removed from the repository
         verify(filmRepository, times(1)).deleteById(filmId);
 
     }
