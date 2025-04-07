@@ -25,11 +25,13 @@ import es.codeurjc.web.nitflex.dto.film.CreateFilmRequest;
 import es.codeurjc.web.nitflex.dto.film.FilmDTO;
 import es.codeurjc.web.nitflex.dto.film.FilmMapper;
 import es.codeurjc.web.nitflex.model.Film;
+import es.codeurjc.web.nitflex.model.User;
 import es.codeurjc.web.nitflex.repository.FilmRepository;
 import es.codeurjc.web.nitflex.repository.UserRepository;
 import es.codeurjc.web.nitflex.service.FilmService;
 import es.codeurjc.web.nitflex.service.exceptions.FilmNotFoundException;
 import es.codeurjc.web.nitflex.utils.ImageUtils;
+
 public class TestUnit {
     // Here we set up the simulations
     @Mock
@@ -55,27 +57,26 @@ public class TestUnit {
 
     // Task 1
     @Test
-    @DisplayName ("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
+    @DisplayName("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
         // Create films
         CreateFilmRequest filmRequest = new CreateFilmRequest(
-            "El Viaje de Chihiro",
-            "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
-            2001,
-            "+12"
-        ); // Interface to add film, returns film object
-        
+                "El Viaje de Chihiro",
+                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
+                2001,
+                "+12"); // Interface to add film, returns film object
+
         Film film = new Film();
-        
+
         FilmDTO filmDTO = new FilmDTO(
-            1L,
-            "El Viaje de Chihiro",
-            "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
-            2001,
-            "+12",
-            Collections.emptyList(), // reviews
-            Collections.emptyList() // users
-        );  // Interface of the film with users and reviews, returns objet FilmDTO
+                1L,
+                "El Viaje de Chihiro",
+                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
+                2001,
+                "+12",
+                Collections.emptyList(), // reviews
+                Collections.emptyList() // users
+        ); // Interface of the film with users and reviews, returns objet FilmDTO
 
         // Configure mocks
         creationMocks(film, filmDTO);
@@ -91,55 +92,102 @@ public class TestUnit {
 
     // Task 2
     @Test
-    @DisplayName ("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
+    @DisplayName("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
     void testSaveFilmWithEmptyTitleFields() {
         // Create films
         CreateFilmRequest filmRequest = new CreateFilmRequest(
-            "",
-            "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
-            2001,
-            ""
-        ); // Interface to add film, returns film object
-        
+                "",
+                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
+                2001,
+                ""); // Interface to add film, returns film object
+
         Film film = new Film();
-        
+
         FilmDTO filmDTO = new FilmDTO(
-            1L,
-            "",
-            "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
-            2001,
-            "",
-            Collections.emptyList(), // reviews
-            Collections.emptyList() // users
+                1L,
+                "",
+                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.",
+                2001,
+                "",
+                Collections.emptyList(), // reviews
+                Collections.emptyList() // users
         ); // Interface of the film with users and reviews, returns objet FilmDTO
 
         creationMocks(film, filmDTO);
 
         // Verify that film film was not save and throws exception
         assertThatThrownBy(() -> filmService.save(filmRequest))
-            .isInstanceOf(IllegalArgumentException.class) // Changes depending of the exception
-            .hasMessageContaining("The title is empty"); // Adjust espected message
-        
+                .isInstanceOf(IllegalArgumentException.class) // Changes depending of the exception
+                .hasMessageContaining("The title is empty"); // Adjust espected message
+
         verify(filmRepository, times(0)).save(any(Film.class)); // check save method is not called
     }
 
-    //Task 4
+    // Task 3
+    @Test
+    @DisplayName("Cuando se borra una película que existe utilizando FilmService, se elimina del repositorio y se elimina de la lista de películas favoritas de los usuarios")
+    void testDeleteFilm() {
+        // Preparing
+
+        // Create a film
+        Long filmId = 1L;
+        Film film = new Film();
+        film.setId(filmId);
+        film.setTitle("Viaje de Chihiro");
+        film.setSynopsis("Una niña atrapada en un mundo mágico lucha por salvar a sus padres.");
+        film.setReleaseYear(2001);
+        film.setAgeRating("+12");
+
+        // Create users
+        User user1 = new User("User1", "user1@example.com");
+        user1.setId(10L);
+        User user2 = new User("User2", "user2@example.com");
+        user2.setId(20L);
+
+        // Add films to user favorite list
+        user1.getFavoriteFilms().add(film);
+        user2.getFavoriteFilms().add(film);
+        film.getUsersThatLiked().add(user1);
+        film.getUsersThatLiked().add(user2);
+
+        // Simular que, al buscar la película por su ID, el repositorio la encuentra
+        // correctamente
+        when(filmRepository.findById(filmId)).thenReturn(Optional.of(film));
+
+        // Act: Se llama al método delete del servico, que debe:
+        filmService.delete(filmId);
+
+        // Assert
+        // Se verifica que la pelicaula ha sido eliminada de los favoritos de los
+        // usuarios
+        assertEquals(0, user1.getFavoriteFilms().size());
+        assertEquals(0, user2.getFavoriteFilms().size());
+
+        // Se verifica que se guarda los cambios de cada usuario actualizado
+        verify(userRepository, times(1)).save(user1);
+        verify(userRepository, times(1)).save(user2);
+
+        // Se verifica que se eliminó la película del repositorio
+        verify(filmRepository, times(1)).deleteById(filmId);
+
+    }
+
+    // Task 4
     @Test
     @DisplayName("Cuando se borra una película que no existe, se lanza FilmNotFoundException")
     void testDeleteNonExistentFilmThrowsException() {
 
         long fictionalId = 999L;
-        
+
         when(filmRepository.findById(fictionalId)).thenReturn(Optional.empty());
-        
+
         FilmNotFoundException ex = assertThrows(FilmNotFoundException.class, () -> {
             filmService.delete(fictionalId); // Esto es lo que debería lanzar la excepción
         });
-        
+
         assertEquals("Film not found with id: " + fictionalId, ex.getMessage());
         verify(filmRepository, never()).deleteById(anyLong());
     }
-    
 
     private void creationMocks(Film film, FilmDTO filmDTO) {
         when(filmMapper.toDomain(any(CreateFilmRequest.class))).thenReturn(film);
