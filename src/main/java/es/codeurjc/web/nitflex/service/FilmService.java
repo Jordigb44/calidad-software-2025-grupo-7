@@ -108,6 +108,7 @@ public class FilmService {
 			u.getFavoriteFilms().remove(film);
 			userRepository.save(u);
 		}
+		film.getUsersThatLiked().clear(); // Added line
 		filmRepository.deleteById(id);
 	}
 

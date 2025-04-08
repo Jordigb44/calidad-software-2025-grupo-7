@@ -1,7 +1,5 @@
 package es.codeurjc.web.nitflex.integration;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +10,11 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -128,6 +131,10 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y se mantiene la lista de usuarios que la han marcado como favorita")
         void testUpdateFilmTitleAndSynopsisKeepsUsers() {
+                // Eliminate the poster (image), because it creates in BeforeEach
+                film.setPosterFile(null);
+                film = filmRepository.save(film);
+
                 // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
                                 film.getId(), "Chihiro y el mundo espiritual",

@@ -70,11 +70,6 @@ public class TestUnit {
         return new CreateFilmRequest(title, synopsis, releaseYear, ageRating);
     }
 
-    // Verifying repository save method
-    private void verifySave() {
-        verify(filmRepository, times(1)).save(any(Film.class));
-    }
-
     private void creationMocks(Film film, FilmDTO filmDTO) {
         when(filmMapper.toDomain(any(CreateFilmRequest.class))).thenReturn(film);
         when(filmMapper.toDTO(any(Film.class))).thenReturn(filmDTO);
@@ -102,7 +97,7 @@ public class TestUnit {
         FilmDTO savedFilm = filmService.save(filmRequest);
 
         // Verify repository interaction and result
-        verifySave();
+        verify(filmRepository, times(1)).save(any(Film.class));
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.of(film));
         assertTrue(filmRepository.findById(filmDTO.id()).isPresent());
         assertEquals("El Viaje de Chihiro", savedFilm.title());
@@ -164,16 +159,17 @@ public class TestUnit {
     
         filmService.save(filmRequest);
 
-        // Act: delete the film
         filmService.delete(filmDTO.id());
     
         // Verify that the film has been removed from users' favorite films
         assertEquals(0, user1.getFavoriteFilms().size());
         assertEquals(0, user2.getFavoriteFilms().size());
+        
     
         // Film is no longer in the repository (film not found)
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.empty());
         assertTrue(filmRepository.findById(filmDTO.id()).isEmpty());
+        assertEquals(0, film.getUsersThatLiked().size());
     }
 
     // Task 4
