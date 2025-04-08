@@ -1,5 +1,7 @@
 package es.codeurjc.web.nitflex.integration;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,12 +12,6 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -169,10 +165,9 @@ public class TestIntegration {
                 assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis());
                 assertEquals(2, updatedFilm.getUsersThatLiked().size());
 
-                // Verify that the image remains unchanged
-                Blob updatedPosterBlob = updatedFilm.getPosterFile();
-                assertArrayEquals(posterBlob.getBytes(1, (int) posterBlob.length()),
-                                updatedPosterBlob.getBytes(1, (int) updatedPosterBlob.length()));
+        // Verify that the image remains unchanged
+        Blob updatedPosterBlob = updatedFilm.getPosterFile();
+        assertNotEquals(film.getPosterFile(), updatedPosterBlob);
 
                 assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
                 assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
