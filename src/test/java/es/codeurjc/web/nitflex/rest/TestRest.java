@@ -24,8 +24,8 @@ public class TestRest {
     @Autowired
     private UserRepository userRepository;
 
-    private final String restMainPath = "/api/films/"; 
-    
+    private final String restMainPath = "/api/films/";
+
     @LocalServerPort
     int port;
 
@@ -42,52 +42,84 @@ public class TestRest {
         userRepository.deleteAll();
     }
 
-    // Function to create a film for all tests
-    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
+    // Functionto build a JSON object of a film
+    private JSONObject buildFilmJson(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", title);
         filmJson.put("synopsis", synopsis);
         filmJson.put("releaseYear", releaseYear);
         filmJson.put("ageRating", ageRating);
-    
+        return filmJson;
+    }
+
+    // Function to create a film for all tests
+    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
+        JSONObject filmJson = buildFilmJson(title, synopsis, releaseYear, ageRating);
+
         return given()
-            .contentType(ContentType.JSON)
-            .body(filmJson.toString())
-        .when()
-            .post(restMainPath)
-        .then()
-            .statusCode(201)
-            .body("title", equalTo(title))
-            .body("synopsis", equalTo(synopsis))
-            .body("releaseYear", equalTo(releaseYear))
-            .body("ageRating", equalTo(ageRating))
-            .extract()
-            .response();
+                .contentType(ContentType.JSON)
+                .body(filmJson.toString())
+                .when()
+                .post(restMainPath)
+                .then()
+                .statusCode(201)
+                .body("title", equalTo(title))
+                .body("synopsis", equalTo(synopsis))
+                .body("releaseYear", equalTo(releaseYear))
+                .body("ageRating", equalTo(ageRating))
+                .extract()
+                .response();
     }
 
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
     public void addFilmAndSearchById() {
-        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");       
-        
+        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+
         // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
         // GET to retrieve film by ID
         given()
-            .contentType(ContentType.JSON)
-        .when()
-            .get(restMainPath + filmId)
-        .then()
-            .statusCode(200) // Verify it is found
-            .body("id", equalTo(filmId))
-            .body("title", equalTo("Inception"))
-            .body("synopsis", equalTo("A mind-bending thriller about dreams."))
-            .body("releaseYear", equalTo(2010))
-            .body("ageRating", equalTo("+13"));
+                .contentType(ContentType.JSON)
+                .when()
+                .get(restMainPath + filmId)
+                .then()
+                .statusCode(200) // Verify it is found
+                .body("id", equalTo(filmId))
+                .body("title", equalTo("Inception"))
+                .body("synopsis", equalTo("A mind-bending thriller about dreams."))
+                .body("releaseYear", equalTo(2010))
+                .body("ageRating", equalTo("+13"));
     }
 
+    // Task 2
+    @Test
+    @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error apropiado")
+    public void addFilmWithoutTitle_ShouldReturnError() {
+        // NO puedo reutilzar el código de la función addFilmAndValidate porque el
+        // código que espera es positivo de creado (201) pero como yo lo que da es un
+        // error o se otra a función sólo a parte de construir una película y luego a
+        // parte el de crear o nada es lo único que se me ocurre
+        // ES LO QUE HE HECHO
+
+        JSONObject filmJSON = buildFilmJson("", "A mind-bending thriller about dreams.", 2010, "+13"); // Title is empty
+        given()
+                .contentType(ContentType.JSON)
+                .body(filmJSON.toString())
+                .when()
+                .post(restMainPath)
+                .then()
+                .statusCode(400) // Bad Request
+                .body(equalTo("The title is empty")); // Error message
+        // Si pongo esta línea :
+        // .body( message, equalTo("The title is empty")); // Error message
+        // No me funciona, no sé por qué. el mensaje en sí lo envía en un texto plano y
+        // no tipo JSON, si queremos JSON hay que cambiar parte del codigo del profe no
+        // mucho pero algo sí
+
+    }
 
     // Task 4
     @Test
@@ -95,20 +127,21 @@ public class TestRest {
     public void addAndDeleteFilm() throws JSONException {
         response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
 
+        // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
         // Eliminate the film
         given()
-        .when()
-            .delete(restMainPath + filmId) // DELETE /api/films/{id}
-        .then()
-            .statusCode(204); // No Content → Success
+                .when()
+                .delete(restMainPath + filmId) // DELETE /api/films/{id}
+                .then()
+                .statusCode(204); // No Content → Success
 
         // Try to obtain it (waiting 404)
         given()
-        .when()
-            .get(restMainPath + filmId) // GET a /api/films/{id}
-        .then()
-            .statusCode(404);
+                .when()
+                .get(restMainPath + filmId) // GET a /api/films/{id}
+                .then()
+                .statusCode(404);
     }
 }
