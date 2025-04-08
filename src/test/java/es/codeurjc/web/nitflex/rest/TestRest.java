@@ -42,13 +42,19 @@ public class TestRest {
         userRepository.deleteAll();
     }
 
-    // Function to create a film for all tests
-    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
+    // Functionto build a JSON object of a film
+    private JSONObject buildFilmJson(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", title);
         filmJson.put("synopsis", synopsis);
         filmJson.put("releaseYear", releaseYear);
         filmJson.put("ageRating", ageRating);
+        return filmJson;
+    }
+
+    // Function to create a film for all tests
+    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
+        JSONObject filmJson = buildFilmJson(title, synopsis, releaseYear, ageRating);
 
         return given()
                 .contentType(ContentType.JSON)
@@ -92,12 +98,13 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error apropiado")
     public void addFilmWithoutTitle_ShouldReturnError() {
-        JSONObject filmJSON = new JSONObject();
-        filmJSON.put("title", ""); // Empty title
-        filmJSON.put("synopsis", "A mind-bending thriller about dreams.");
-        filmJSON.put("releaseYear", 2010);
-        filmJSON.put("ageRating", "+13");
+        // NO puedo reutilzar el código de la función addFilmAndValidate porque el
+        // código que espera es positivo de creado (201) pero como yo lo que da es un
+        // error o se otra a función sólo a parte de construir una película y luego a
+        // parte el de crear o nada es lo único que se me ocurre
+        // ES LO QUE HE HECHO
 
+        JSONObject filmJSON = buildFilmJson("", "A mind-bending thriller about dreams.", 2010, "+13"); // Title is empty
         given()
                 .contentType(ContentType.JSON)
                 .body(filmJSON.toString())
@@ -120,6 +127,7 @@ public class TestRest {
     public void addAndDeleteFilm() throws JSONException {
         response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
 
+        // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
         // Eliminate the film
