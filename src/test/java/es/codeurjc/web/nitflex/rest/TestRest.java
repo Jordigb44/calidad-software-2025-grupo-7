@@ -121,6 +121,53 @@ public class TestRest {
 
     }
 
+    //Task 3
+    @Test
+    @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
+    public void addAndUpdateFilm() throws JSONException {
+        //Primero creamos una película
+        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+        
+        int filmId = response.jsonPath().getInt("id"); //Obtenemos id
+
+        String updatedTitle = "Inception - parte 2"; //Titulo a actualizar
+
+        //Se crea el objeto JSON con los datos a actualizar
+        JSONObject updatedFilmJson = buildFilmJson(
+            updatedTitle, 
+            "A mind-bending thriller about dreams. Part 2.", 
+            2012, 
+            "+13"
+        );
+        
+        //Realizamos la petición PUT para actualizar el titulo correspondiente
+        given()
+            .contentType(ContentType.JSON)
+            .body(updatedFilmJson.toString())
+            .when()
+            .put(restMainPath + filmId)  // PUT /api/films/{id}
+            .then()
+            .statusCode(200)  // Verificamos que la actualización fue exitosa
+            .body("id", equalTo(filmId))  // Verificamos que es la misma película
+            .body("title", equalTo(updatedTitle))  // Verificamos el nuevo título
+            .body("synopsis", equalTo("A mind-bending thriller about dreams. Part 2."))
+            .body("releaseYear", equalTo(2012))
+            .body("ageRating", equalTo("+13"));
+        
+        //Verificamos que los cambios persisten haciendo un GET
+        given()
+            .when()
+            .get(restMainPath + filmId)
+            .then()
+            .statusCode(200)
+            .body("title", equalTo(updatedTitle))
+            .body("id", equalTo(filmId))
+            .body("synopsis", equalTo("A mind-bending thriller about dreams. Part 2."))
+            .body("releaseYear", equalTo(2012))
+            .body("ageRating", equalTo("+13"));
+    }
+
+
     // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
