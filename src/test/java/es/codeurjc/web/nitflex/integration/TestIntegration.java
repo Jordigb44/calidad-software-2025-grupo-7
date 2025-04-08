@@ -149,7 +149,7 @@ public class TestIntegration {
         // Task 3
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
-        void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException {
+        void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException, IOException {
                 // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
                                 film.getId(), "Chihiro y el mundo espiritual",
@@ -165,9 +165,12 @@ public class TestIntegration {
                 assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis());
                 assertEquals(2, updatedFilm.getUsersThatLiked().size());
 
-        // Verify that the image remains unchanged
-        Blob updatedPosterBlob = updatedFilm.getPosterFile();
-        assertNotEquals(film.getPosterFile(), updatedPosterBlob);
+                // Verify that the image remains unchanged
+                Blob updatedPosterBlob = updatedFilm.getPosterFile();
+                assertTrue(ImageTestUtils.areSameBlob(
+                        film.getPosterFile(),
+                        updatedPosterBlob
+                        ), "La imagen debería mantenerse igual tras la actualización");
 
                 assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
                 assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
