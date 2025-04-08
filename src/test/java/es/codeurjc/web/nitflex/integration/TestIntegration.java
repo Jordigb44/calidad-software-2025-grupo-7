@@ -87,17 +87,17 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se añade una película con un título válido mediante FilmService, se guarda en la base de datos y se devuelve la película creada")
         void testAddFilmWithValidTitle() throws Exception {
-                // Se definen los atributos de la nueva pelicula
-                String validTitle = "Interstellar";
-                String synopsis = "Un grupo de explorers viaja a través de un agujero de gusano en el espacio";
-                int releaseYear = 2014;
-                String ageRating = "PG-13";
+                // // Se definen los atributos de la nueva pelicula
+                // String validTitle = "Interstellar";
+                // String synopsis = "Un grupo de explorers viaja a través de un agujero de gusano en el espacio";
+                // int releaseYear = 2014;
+                // String ageRating = "PG-13";
 
                 CreateFilmRequest filmRequest = new CreateFilmRequest(
-                                validTitle,
-                                synopsis,
-                                releaseYear,
-                                ageRating);
+                                film.getTitle(),
+                                film.getSynopsis(),
+                                film.getReleaseYear(),
+                                film.getAgeRating());
 
                 MultipartFile sampleImage = ImageTestUtils.createSampleImage();
 
@@ -105,20 +105,20 @@ public class TestIntegration {
 
                 // Verificación del objeto devuelto
                 assertNotNull(createdFilm.id(), "El ID de la película no debería ser null");
-                assertEquals(validTitle, createdFilm.title(), "El título no coincide");
-                assertEquals(synopsis, createdFilm.synopsis(), "La sinopsis no coincide");
-                assertEquals(releaseYear, createdFilm.releaseYear(), "El año de lanzamiento no coincide");
-                assertEquals(ageRating, createdFilm.ageRating(), "La clasificación por edad no coincide");
+                assertEquals(film.getTitle(), createdFilm.title(), "El título no coincide");
+                assertEquals(film.getSynopsis(), createdFilm.synopsis(), "La sinopsis no coincide");
+                assertEquals(film.getReleaseYear(), createdFilm.releaseYear(), "El año de lanzamiento no coincide");
+                assertEquals(film.getAgeRating(), createdFilm.ageRating(), "La clasificación por edad no coincide");
 
                 // Verificación en base de datos
                 Film savedFilm = filmRepository.findById(createdFilm.id())
                                 .orElseThrow(() -> new AssertionError(
                                                 "La película debería existir en la base de datos"));
 
-                assertEquals(validTitle, savedFilm.getTitle(), "Título en BD no coincide");
-                assertEquals(synopsis, savedFilm.getSynopsis(), "Sinopsis en BD no coincide");
-                assertEquals(releaseYear, savedFilm.getReleaseYear(), "Año en BD no coincide");
-                assertEquals(ageRating, savedFilm.getAgeRating(), "Clasificación en BD no coincide");
+                assertEquals(film.getTitle(), savedFilm.getTitle(), "Título en BD no coincide");
+                assertEquals(film.getSynopsis(), savedFilm.getSynopsis(), "Sinopsis en BD no coincide");
+                assertEquals(film.getReleaseYear(), savedFilm.getReleaseYear(), "Año en BD no coincide");
+                assertEquals(film.getAgeRating(), savedFilm.getAgeRating(), "Clasificación en BD no coincide");
 
                 // Verificación de la imagen
                 assertNotNull(savedFilm.getPosterFile(), "El póster no debería ser null");
@@ -131,10 +131,6 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y se mantiene la lista de usuarios que la han marcado como favorita")
         void testUpdateFilmTitleAndSynopsisKeepsUsers() {
-                // Eliminate the poster (image), because it creates in BeforeEach
-                film.setPosterFile(null);
-                film = filmRepository.save(film);
-
                 // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
                                 film.getId(), "Chihiro y el mundo espiritual",
