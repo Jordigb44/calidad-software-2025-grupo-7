@@ -1,6 +1,7 @@
 package es.codeurjc.web.nitflex.e2e;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,6 +50,45 @@ public class TestSeleniumWebDriver {
         }
     }
 
+    //Task 2
+    @Test
+@DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error y que no aparece esa película en la página principal")
+void testAddFilmWithNoTitle() {
+    // Obtenemos botón de form y navegamos para crear film
+    WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(CREATE_FILM_BUTTON));
+    addButton.click();
+    wait.until(ExpectedConditions.urlContains("/films/new"));
+
+    //Accedemos a los campos y se rellenan
+    WebElement synopsisInput = driver.findElement(By.name("synopsis"));
+    synopsisInput.sendKeys("Descripcion de prueba");
+
+    WebElement releaseYearInput = driver.findElement(By.name("releaseYear"));
+    releaseYearInput.sendKeys("2023");
+    
+    WebElement ageRatingInput = driver.findElement(By.name("ageRating"));
+    ageRatingInput.sendKeys("+12");
+    
+    // Se guardan los cambios
+    clickOnSaveButton();
+
+    //Guardamos el mensaje de error buscando el div con la clase negative message y en su interior el div con id de message
+    WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        By.xpath("//div[contains(@class, 'negative message')]//div[@id='message']")));
+
+    assertEquals("The title is empty", errorMessage.getText()); //verificamos el mensaje de error
+
+    assertTrue(driver.getCurrentUrl().contains("/films/new")); //Veirifcamos que no haya redirección a la página principal
+
+    driver.get("http://localhost:8080/"); //Nos movemos a la principal 
+    List<WebElement> filmCards = driver.findElements(By.cssSelector(".film .ui.card")); //Guardamos en una lista todas las peliculas
+
+    boolean filmWithTestDataExists = filmCards.stream()
+    .anyMatch(card -> card.getText().contains("Descripcion de prueba")); //Buscamos el film con la descripción de prueba
+
+    assertFalse(filmWithTestDataExists); //Verificamos que no haya encontrado ningún film con la descripción de prueba
+    
+}
 
     // Task 3
     @Test
