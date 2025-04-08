@@ -150,30 +150,36 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
         void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException, IOException {
+                // The original film is already created in the beforeEach method
+
                 // Update the film
+                Long filmId = film.getId();
+                String newFilmTitle = "Chihiro y el mundo espiritual";
+                String newFilmSynopsis = "Inolvidable aventura en un mundo mágico.";
+                Integer releaseYear = film.getReleaseYear();
+                String ageRating = film.getAgeRating();
+
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
-                                film.getId(), "Chihiro y el mundo espiritual",
-                                "Inolvidable aventura en un mundo mágico.",
-                                film.getReleaseYear(), film.getAgeRating());
+                        filmId,
+                        newFilmTitle,
+                        newFilmSynopsis,
+                        releaseYear,
+                        ageRating);
+                filmService.update(filmId, updatedFilmDTO);
 
-                filmService.update(film.getId(), updatedFilmDTO);
-
+                // Get the updated film
+                Film updatedFilm = filmRepository.findById(filmId).orElseThrow();
+                
                 // Verify the changes
-                Film updatedFilm = filmRepository.findById(film.getId()).orElseThrow();
-
-                assertNotEquals(film.getTitle(), updatedFilm.getTitle());
-                assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis());
-                assertEquals(2, updatedFilm.getUsersThatLiked().size());
-
-                // Verify that the image remains unchanged
-                Blob updatedPosterBlob = updatedFilm.getPosterFile();
+                assertNotEquals(film.getTitle(), updatedFilm.getTitle()); // Title should change
+                assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis()); // Synopsis should change
+                assertEquals(2, updatedFilm.getUsersThatLiked().size()); // Users that liked should remain the same
+                assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear()); // Release year should remain the same
+                assertEquals(film.getAgeRating(), updatedFilm.getAgeRating()); // Age rating should remain the same
                 assertTrue(ImageTestUtils.areSameBlob(
                         film.getPosterFile(),
-                        updatedPosterBlob
-                        ), "La imagen debería mantenerse igual tras la actualización");
-
-                assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
-                assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
+                        updatedFilm.getPosterFile()
+                        ), "The image should be the same after update."); // Verify that the poster image remains the same
         }
 
         // Task 4
