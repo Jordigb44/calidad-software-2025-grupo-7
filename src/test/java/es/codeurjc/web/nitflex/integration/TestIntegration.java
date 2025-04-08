@@ -1,5 +1,7 @@
 package es.codeurjc.web.nitflex.integration;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,12 +12,6 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -153,7 +149,7 @@ public class TestIntegration {
         // Task 3
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
-        void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException {
+        void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException, IOException {
                 // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
                                 film.getId(), "Chihiro y el mundo espiritual",
@@ -171,8 +167,10 @@ public class TestIntegration {
 
                 // Verify that the image remains unchanged
                 Blob updatedPosterBlob = updatedFilm.getPosterFile();
-                assertArrayEquals(posterBlob.getBytes(1, (int) posterBlob.length()),
-                                updatedPosterBlob.getBytes(1, (int) updatedPosterBlob.length()));
+                assertTrue(ImageTestUtils.areSameBlob(
+                        film.getPosterFile(),
+                        updatedPosterBlob
+                        ), "La imagen debería mantenerse igual tras la actualización");
 
                 assertEquals(film.getReleaseYear(), updatedFilm.getReleaseYear());
                 assertEquals(film.getAgeRating(), updatedFilm.getAgeRating());
