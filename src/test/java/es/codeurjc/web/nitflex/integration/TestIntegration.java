@@ -215,11 +215,5 @@ public class TestIntegration {
                                 "El usuario1 no debe tener la película como favorita después de la eliminación");
                 assertFalse(user2.getFavoriteFilms().contains(existingFilm),
                                 "El usuario2 no debe tener la película como favorita después de la eliminación");
-
-                // Todo el anterior código se podría sustituir por:
-
-                // assertEquals(0, user1.getFavoriteFilms().size());
-                // assertEquals(0, user2.getFavoriteFilms().size());
-        } // Si previamente estamos seguros de el único favorito que tenínan era la
-          // película eliminada y no hay más como favoritos
+        } 
 }
