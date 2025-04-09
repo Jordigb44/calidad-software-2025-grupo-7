@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nitflex-web-bbdd-rest</a> &gt; <a href="index.source.html" class="el_package">es.codeurjc.web.nitflex.service</a> &gt; <span class="el_source">UserComponent.java</span></div><h1>UserComponent.java</h1><pre class="source lang-java linenums">package es.codeurjc.web.nitflex.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import es.codeurjc.web.nitflex.model.User;
+import es.codeurjc.web.nitflex.repository.UserRepository;
+
+@Component
+<span class="fc" id="L10">public class UserComponent {</span>
+    
+    @Autowired
+    UserRepository userRepository;
+
+    /**
+     * Returns always the same user for simplicity before adding authentication
+     * @return User
+     */
+    public User getUser() {
+<span class="fc" id="L20">        return userRepository.findAll().get(0);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

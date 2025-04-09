@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebErrorHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nitflex-web-bbdd-rest</a> &gt; <a href="index.source.html" class="el_package">es.codeurjc.web.nitflex.configuration</a> &gt; <span class="el_source">WebErrorHandler.java</span></div><h1>WebErrorHandler.java</h1><pre class="source lang-java linenums">package es.codeurjc.web.nitflex.configuration;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+
+import es.codeurjc.web.nitflex.service.exceptions.FilmNotFoundException;
+
+@ControllerAdvice(basePackages = &quot;es.codeurjc.web.nitflex.controller.web&quot;)
+<span class="fc" id="L12">public class WebErrorHandler {</span>
+
+    /**
+	 * When a 'FilmNotFound' exception occurs, the following method is executed
+	 * @param ex
+	 * @return a view with a message indicating the error
+	 */
+	@ExceptionHandler({FilmNotFoundException.class, IllegalArgumentException.class, BindException.class})
+    public ModelAndView handleException(Exception ex){
+<span class="nc" id="L21">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="nc" id="L22">        modelAndView.setViewName(&quot;message&quot;);</span>
+<span class="nc" id="L23">		modelAndView.addObject(&quot;error&quot;, true);</span>
+
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if(ex instanceof MethodArgumentNotValidException manvExp){</span>
+<span class="nc" id="L26">			modelAndView.addObject(&quot;message&quot;, manvExp.getFieldError().getDefaultMessage());</span>
+		}else{
+<span class="nc" id="L28">			modelAndView.addObject(&quot;message&quot;, ex.getMessage());</span>
+		}
+
+<span class="nc" id="L31">        return modelAndView;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

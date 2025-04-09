@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FilmService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nitflex-web-bbdd-rest</a> &gt; <a href="index.source.html" class="el_package">es.codeurjc.web.nitflex.service</a> &gt; <span class="el_source">FilmService.java</span></div><h1>FilmService.java</h1><pre class="source lang-java linenums">package es.codeurjc.web.nitflex.service;
+
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import es.codeurjc.web.nitflex.dto.film.CreateFilmRequest;
+import es.codeurjc.web.nitflex.dto.film.FilmDTO;
+import es.codeurjc.web.nitflex.dto.film.FilmMapper;
+import es.codeurjc.web.nitflex.dto.film.FilmSimpleDTO;
+import es.codeurjc.web.nitflex.model.Film;
+import es.codeurjc.web.nitflex.model.User;
+import es.codeurjc.web.nitflex.repository.FilmRepository;
+import es.codeurjc.web.nitflex.repository.UserRepository;
+import es.codeurjc.web.nitflex.service.exceptions.FilmNotFoundException;
+import es.codeurjc.web.nitflex.utils.ImageUtils;
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class FilmService {
+
+	private FilmRepository filmRepository;
+
+	private UserRepository userRepository;
+
+	private ImageUtils imageUtils;
+
+	private FilmMapper filmMapper;
+
+<span class="fc" id="L36">	public FilmService(FilmRepository filmRepository, UserRepository userRepository, ImageUtils imageUtils, FilmMapper filmMapper) {</span>
+<span class="fc" id="L37">		this.filmRepository = filmRepository;</span>
+<span class="fc" id="L38">		this.userRepository = userRepository;</span>
+<span class="fc" id="L39">		this.imageUtils = imageUtils;</span>
+<span class="fc" id="L40">		this.filmMapper = filmMapper;</span>
+<span class="fc" id="L41">	}</span>
+
+	public Optional&lt;FilmDTO&gt; findOne(long id) {
+<span class="fc" id="L44">		return filmRepository.findById(id).map(filmMapper::toDTO);</span>
+	}
+
+	public InputStream getPosterFile(long id) {
+<span class="nc" id="L48">		Film film = filmRepository.findById(id)</span>
+<span class="nc" id="L49">				.orElseThrow(() -&gt; new FilmNotFoundException(id));</span>
+<span class="nc" id="L50">		Blob blob = film.getPosterFile();</span>
+		try {
+<span class="nc" id="L52">			return blob.getBinaryStream();</span>
+<span class="nc" id="L53">		} catch (SQLException e) {</span>
+<span class="nc" id="L54">			throw new RuntimeException(&quot;Error getting image from database&quot;, e);</span>
+		}
+	}
+
+	public boolean exist(long id) {
+<span class="fc" id="L59">		return filmRepository.existsById(id);</span>
+	}
+
+	public List&lt;FilmDTO&gt; findAll() {
+<span class="nc" id="L63">		return filmMapper.toDTO(filmRepository.findAll());</span>
+	}
+
+	public FilmDTO save(CreateFilmRequest film, Blob imageField) {
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">		if (film.title() == null || film.title().isEmpty()) {</span>
+<span class="fc" id="L68">			throw new IllegalArgumentException(&quot;The title is empty&quot;);</span>
+		}
+<span class="fc" id="L70">		Film newFilm = filmMapper.toDomain(film);</span>
+<span class="fc" id="L71">		newFilm.setPosterFile(imageField);</span>
+<span class="fc" id="L72">		return filmMapper.toDTO(filmRepository.save(newFilm));</span>
+	}
+
+	public FilmDTO save(CreateFilmRequest film, MultipartFile imageField) {
+<span class="pc bpc" id="L76" title="2 of 4 branches missed.">		if (imageField != null &amp;&amp; imageField.getSize() &gt; 0) {</span>
+<span class="fc" id="L77">			return this.save(film, imageUtils.multiPartFileImageToBlob(imageField));</span>
+		}
+<span class="nc" id="L79">		return this.save(film, (Blob) null);</span>
+	}
+
+	public FilmDTO save(CreateFilmRequest film) {
+<span class="fc" id="L83">		return this.save(film, (Blob) null);</span>
+	}
+
+	public FilmDTO update(long filmId, FilmSimpleDTO film) {
+<span class="fc" id="L87">		return this.update(filmId, film, null);</span>
+	}
+
+	public FilmDTO update(long filmId, FilmSimpleDTO film, MultipartFile imageField) {
+<span class="fc" id="L91">		Film toUpdateFilm = filmRepository.findById(filmId)</span>
+<span class="pc" id="L92">				.orElseThrow(() -&gt; new FilmNotFoundException(filmId));</span>
+<span class="fc" id="L93">		toUpdateFilm.setTitle(film.title());</span>
+<span class="fc" id="L94">		toUpdateFilm.setSynopsis(film.synopsis());</span>
+<span class="fc" id="L95">		toUpdateFilm.setReleaseYear(film.releaseYear());</span>
+<span class="fc" id="L96">		toUpdateFilm.setAgeRating(film.ageRating());</span>
+<span class="pc bpc" id="L97" title="3 of 4 branches missed.">		if (imageField != null &amp;&amp; imageField.getSize() &gt; 0) {</span>
+<span class="nc" id="L98">			Blob blobImage = imageUtils.multiPartFileImageToBlob(imageField);</span>
+<span class="nc" id="L99">			toUpdateFilm.setPosterFile(blobImage);</span>
+		}
+<span class="fc" id="L101">		return filmMapper.toDTO(filmRepository.save(toUpdateFilm));</span>
+	}
+
+	public void delete(long id) {
+<span class="fc" id="L105">		Film film = filmRepository.findById(id)</span>
+<span class="fc" id="L106">				.orElseThrow(() -&gt; new FilmNotFoundException(id));</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">		for (User u : film.getUsersThatLiked()) {</span>
+<span class="fc" id="L108">			u.getFavoriteFilms().remove(film);</span>
+<span class="fc" id="L109">			userRepository.save(u);</span>
+<span class="fc" id="L110">		}</span>
+<span class="fc" id="L111">		film.getUsersThatLiked().clear(); // Added line</span>
+<span class="fc" id="L112">		filmRepository.deleteById(id);</span>
+<span class="fc" id="L113">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
