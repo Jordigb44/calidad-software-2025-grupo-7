@@ -213,15 +213,11 @@ public class TestSeleniumWebDriver {
         // Saving changes
         clickOnSaveButton();
 
-        By errorLocator = By.xpath(
-            "//div[@id='message'] | " + 
-            "//ul[@id='error-list']/li" 
-        );
+        //Saving the error message
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//ul[@id='error-list']//li[contains(text(), 'The title is empty')]")));
 
-        WebElement errorMessage = wait.until(
-        ExpectedConditions.visibilityOfElementLocated(errorLocator));
-
-        assertEquals("The title is empty", errorMessage.getText()); //verificamos el mensaje de error
+        assertEquals("The title is empty", errorMessage.getText());
 
         assertTrue(driver.getCurrentUrl().contains("/films/new")); //Veirifcamos que no haya redirección a la página principal
 

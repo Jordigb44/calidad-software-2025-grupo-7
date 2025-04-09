@@ -98,11 +98,6 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error apropiado")
     public void addFilmWithoutTitle_ShouldReturnError() {
-        // NO puedo reutilzar el código de la función addFilmAndValidate porque el
-        // código que espera es positivo de creado (201) pero como yo lo que da es un
-        // error o se otra a función sólo a parte de construir una película y luego a
-        // parte el de crear o nada es lo único que se me ocurre
-        // ES LO QUE HE HECHO
 
         JSONObject filmJSON = buildFilmJson("", "A mind-bending thriller about dreams.", 2010, "+13"); // Title is empty
         given()
@@ -113,12 +108,6 @@ public class TestRest {
                 .then()
                 .statusCode(400) // Bad Request
                 .body(equalTo("The title is empty")); // Error message
-        // Si pongo esta línea :
-        // .body( message, equalTo("The title is empty")); // Error message
-        // No me funciona, no sé por qué. el mensaje en sí lo envía en un texto plano y
-        // no tipo JSON, si queremos JSON hay que cambiar parte del codigo del profe no
-        // mucho pero algo sí
-
     }
 
     //Task 3
