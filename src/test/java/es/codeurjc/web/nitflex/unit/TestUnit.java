@@ -1,5 +1,6 @@
 package es.codeurjc.web.nitflex.unit;
 
+import java.sql.Blob;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -46,6 +47,12 @@ public class TestUnit {
 
     private FilmService filmService;
 
+    private Film film;
+
+    private FilmDTO filmDTO;
+
+    private CreateFilmRequest filmRequest;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -77,18 +84,29 @@ public class TestUnit {
         when(filmRepository.findById(film.getId())).thenReturn(Optional.of(film));
     }
 
+    private void createAllFormatFilm(Long id, String title, String synopsis, int releaseYear, String ageRating, Blob posterFile) {
+
+        // Utiliza tus métodos ya definidos
+        this.filmDTO = createFilmDTO(id, title, synopsis, releaseYear, ageRating);
+        this.film = createFilm(id, title, synopsis, releaseYear, ageRating);
+
+        // Agrega el poster si viene
+        if (posterFile != null) {
+            this.film.setPosterFile(posterFile);
+        }
+
+        this.filmRequest = createCreateFilmRequest(title, synopsis, releaseYear, ageRating);
+        
+        // Configura los mocks
+        creationMocks(film, filmDTO);
+    }
+
     // Task 1
     @Test
     @DisplayName("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
-        // New film
-        CreateFilmRequest filmRequest = createCreateFilmRequest("El Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        FilmDTO filmDTO = createFilmDTO(1L, "El Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        // Its neccesary for saving the film
-        Film film = createFilm(1L, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
+
+        createAllFormatFilm(1L,"El Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
 
         // Configure mocks
         creationMocks(film, filmDTO);
@@ -107,14 +125,9 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
     void testSaveFilmWithEmptyTitleFields() {
-        // Create request and DTO
-        CreateFilmRequest filmRequest = createCreateFilmRequest("", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        FilmDTO filmDTO = createFilmDTO(1L, "", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        // Neccessary for assertFalse
-        Film film = createFilm(1L, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
+        
+        createAllFormatFilm(1L,"", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
+   
 
         creationMocks(film, filmDTO);
 
@@ -133,21 +146,14 @@ public class TestUnit {
     @DisplayName("Cuando se borra una película que existe utilizando FilmService, se elimina del repositorio y se elimina de la lista de películas favoritas de los usuarios")
     void testDeleteFilm() {
         Long filmId = 1L;
-        // Create Request for saving the film
-        CreateFilmRequest filmRequest = createCreateFilmRequest("Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        // Create FilmDTO and Film object
-        FilmDTO filmDTO = createFilmDTO(filmId, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        // Its neccesary for adding favorite films to users list (the aplication requires Film not FilmDTO)
-        Film film = createFilm(filmId, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
+
+        createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/log.jpg"));
 
         creationMocks(film, filmDTO);
     
         // Create users
         User user1 = new User("User1", "user1@example.com");
-        user1.setId(10L); // there is no other way to set the id to the users, unless we change the code to make it more efficient
+        user1.setId(10L);
         User user2 = new User("User2", "user2@example.com");
         user2.setId(20L); // there is no other way to set the id to the users, unless we change the code to make it more efficient
     
