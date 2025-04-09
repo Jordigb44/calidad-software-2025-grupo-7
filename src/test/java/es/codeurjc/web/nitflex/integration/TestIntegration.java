@@ -87,11 +87,6 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se añade una película con un título válido mediante FilmService, se guarda en la base de datos y se devuelve la película creada")
         void testAddFilmWithValidTitle() throws Exception {
-                // // Se definen los atributos de la nueva pelicula
-                // String validTitle = "Interstellar";
-                // String synopsis = "Un grupo de explorers viaja a través de un agujero de gusano en el espacio";
-                // int releaseYear = 2014;
-                // String ageRating = "PG-13";
 
                 CreateFilmRequest filmRequest = new CreateFilmRequest(
                                 film.getTitle(),
@@ -103,14 +98,14 @@ public class TestIntegration {
 
                 FilmDTO createdFilm = filmService.save(filmRequest, sampleImage);
 
-                // Verificación del objeto devuelto
+                // Verifying the returned object
                 assertNotNull(createdFilm.id(), "El ID de la película no debería ser null");
                 assertEquals(film.getTitle(), createdFilm.title(), "El título no coincide");
                 assertEquals(film.getSynopsis(), createdFilm.synopsis(), "La sinopsis no coincide");
                 assertEquals(film.getReleaseYear(), createdFilm.releaseYear(), "El año de lanzamiento no coincide");
                 assertEquals(film.getAgeRating(), createdFilm.ageRating(), "La clasificación por edad no coincide");
 
-                // Verificación en base de datos
+                //Verifyind in database
                 Film savedFilm = filmRepository.findById(createdFilm.id())
                                 .orElseThrow(() -> new AssertionError(
                                                 "La película debería existir en la base de datos"));
@@ -120,7 +115,7 @@ public class TestIntegration {
                 assertEquals(film.getReleaseYear(), savedFilm.getReleaseYear(), "Año en BD no coincide");
                 assertEquals(film.getAgeRating(), savedFilm.getAgeRating(), "Clasificación en BD no coincide");
 
-                // Verificación de la imagen
+                // Verifying the poster
                 assertNotNull(savedFilm.getPosterFile(), "El póster no debería ser null");
                 assertTrue(ImageTestUtils.areSameBlob(
                                 new javax.sql.rowset.serial.SerialBlob(sampleImage.getBytes()),

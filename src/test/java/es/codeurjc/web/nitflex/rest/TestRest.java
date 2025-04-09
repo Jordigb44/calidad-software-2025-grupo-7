@@ -114,14 +114,14 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
     public void addAndUpdateFilm() throws JSONException {
-        //Primero creamos una película
+        //Firt ting is create a film 
         response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
         
-        int filmId = response.jsonPath().getInt("id"); //Obtenemos id
+        int filmId = response.jsonPath().getInt("id"); //getting id
 
-        String updatedTitle = "Inception - parte 2"; //Titulo a actualizar
+        String updatedTitle = "Inception - parte 2"; //Title to update
 
-        //Se crea el objeto JSON con los datos a actualizar
+        //Creating JSON object
         JSONObject updatedFilmJson = buildFilmJson(
             updatedTitle, 
             "A mind-bending thriller about dreams. Part 2.", 
@@ -129,21 +129,21 @@ public class TestRest {
             "+13"
         );
         
-        //Realizamos la petición PUT para actualizar el titulo correspondiente
+        //Making petition put
         given()
             .contentType(ContentType.JSON)
             .body(updatedFilmJson.toString())
             .when()
             .put(restMainPath + filmId)  // PUT /api/films/{id}
             .then()
-            .statusCode(200)  // Verificamos que la actualización fue exitosa
-            .body("id", equalTo(filmId))  // Verificamos que es la misma película
-            .body("title", equalTo(updatedTitle))  // Verificamos el nuevo título
+            .statusCode(200)
+            .body("id", equalTo(filmId)) 
+            .body("title", equalTo(updatedTitle)) 
             .body("synopsis", equalTo("A mind-bending thriller about dreams. Part 2."))
             .body("releaseYear", equalTo(2012))
             .body("ageRating", equalTo("+13"));
         
-        //Verificamos que los cambios persisten haciendo un GET
+        //Verify changes still after updating
         given()
             .when()
             .get(restMainPath + filmId)
