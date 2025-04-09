@@ -214,8 +214,16 @@ public class TestSeleniumWebDriver {
         clickOnSaveButton();
 
         //Guardamos el mensaje de error buscando el div con la clase negative message y en su interior el div con id de message
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//div[contains(@class, 'negative message')]//div[@id='message']")));
+        // WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        //     By.xpath("//div[@id='message']")));
+
+        By errorLocator = By.xpath(
+            "//div[@id='message'] | " +  // Para error.html
+            "//ul[@id='error-list']/li"  // Para new-film.html
+        );
+
+        WebElement errorMessage = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(errorLocator));
 
         assertEquals("The title is empty", errorMessage.getText()); //verificamos el mensaje de error
 
