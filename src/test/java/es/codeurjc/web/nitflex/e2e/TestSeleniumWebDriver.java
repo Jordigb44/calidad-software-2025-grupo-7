@@ -219,14 +219,13 @@ public class TestSeleniumWebDriver {
 
         assertEquals("The title is empty", errorMessage.getText());
 
-        assertTrue(driver.getCurrentUrl().contains("/films/new")); //Veirifcamos que no haya redirección a la página principal
+        assertTrue(driver.getCurrentUrl().contains("/films/new")); //Verifying we still in the homepage
 
-        driver.get("http://localhost:8080/"); //Moving to main page
-        List<WebElement> filmCards = driver.findElements(By.cssSelector(".film .ui.card")); //Guardamos en una lista todas las peliculas
+        driver.get(url); //Moving to main page
+        List<WebElement> filmCards = driver.findElements(By.cssSelector(".film .ui.card")); //Saving in a list every film
 
         boolean filmWithTestDataExists = filmCards.stream()
-        .anyMatch(card -> card.getText().contains("Descripcion de prueba")); //Buscamos el film con la descripción de prueba
-
+        .anyMatch(card -> card.getText().contains("Descripcion de prueba"));
         assertFalse(filmWithTestDataExists); //Verifying it does not find any fil with Description Test
         
     }
