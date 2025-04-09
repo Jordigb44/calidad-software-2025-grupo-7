@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +20,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Neccessary to test each test in order and not execute them at the same time
 public class TestSeleniumWebDriver {
     private WebDriver driver;
     private WebDriverWait wait;
@@ -46,7 +50,7 @@ public class TestSeleniumWebDriver {
                 wait = new WebDriverWait(driver, Duration.ofSeconds(10));
                 wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
 
-                // Títulos que pueden haber quedado tras el test
+                // Possible titles
                 String[] possibleTitles = {
                     FILM_TITLE,
                     FILM_TITLE + " - part 2"
@@ -172,6 +176,7 @@ public class TestSeleniumWebDriver {
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película (sin incluir la imagen), esperamos que la película creada aparezca en la plantilla resultante")
+    @Order(1)
     void testAddNewFilmWithoutImage() {
         // Access the main page
         wait.until(ExpectedConditions.urlContains("/")); // Wait for the home page to load
@@ -194,6 +199,7 @@ public class TestSeleniumWebDriver {
     //Task 2
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error y que no aparece esa película en la página principal")
+    @Order(2)
     void testAddFilmWithNoTitle() {
         //Obtain add button and moving to create the new film
         WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(CREATE_FILM_BUTTON));
@@ -233,6 +239,7 @@ public class TestSeleniumWebDriver {
     // Task 3
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película desaparezca de la lista de películas")
+    @Order(3)
     void testAddAndDeleteFilm() {
         // Add new film
         wait.until(ExpectedConditions.urlContains("/")); // Wait for the home page to load
@@ -262,6 +269,7 @@ public class TestSeleniumWebDriver {
     // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
+    @Order(4)
     void testEditFilmTitle() {
         // Add new film
         wait.until(ExpectedConditions.urlContains("/")); // Wait for the home page to load
