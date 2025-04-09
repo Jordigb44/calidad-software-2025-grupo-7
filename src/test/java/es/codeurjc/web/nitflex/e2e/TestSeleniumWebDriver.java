@@ -195,12 +195,12 @@ public class TestSeleniumWebDriver {
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error y que no aparece esa película en la página principal")
     void testAddFilmWithNoTitle() {
-        // Obtenemos botón de form y navegamos para crear film
+        //Obtain add button and moving to create the new film
         WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(CREATE_FILM_BUTTON));
         addButton.click();
         wait.until(ExpectedConditions.urlContains("/films/new"));
 
-        //Accedemos a los campos y se rellenan
+        //Accesing to fields and filling them
         WebElement synopsisInput = driver.findElement(By.name("synopsis"));
         synopsisInput.sendKeys("Descripcion de prueba");
 
@@ -210,16 +210,12 @@ public class TestSeleniumWebDriver {
         WebElement ageRatingInput = driver.findElement(By.name("ageRating"));
         ageRatingInput.sendKeys("+12");
         
-        // Se guardan los cambios
+        // Saving changes
         clickOnSaveButton();
 
-        //Guardamos el mensaje de error buscando el div con la clase negative message y en su interior el div con id de message
-        // WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-        //     By.xpath("//div[@id='message']")));
-
         By errorLocator = By.xpath(
-            "//div[@id='message'] | " +  // Para error.html
-            "//ul[@id='error-list']/li"  // Para new-film.html
+            "//div[@id='message'] | " + 
+            "//ul[@id='error-list']/li" 
         );
 
         WebElement errorMessage = wait.until(
@@ -229,13 +225,13 @@ public class TestSeleniumWebDriver {
 
         assertTrue(driver.getCurrentUrl().contains("/films/new")); //Veirifcamos que no haya redirección a la página principal
 
-        driver.get("http://localhost:8080/"); //Nos movemos a la principal 
+        driver.get("http://localhost:8080/"); //Moving to main page
         List<WebElement> filmCards = driver.findElements(By.cssSelector(".film .ui.card")); //Guardamos en una lista todas las peliculas
 
         boolean filmWithTestDataExists = filmCards.stream()
         .anyMatch(card -> card.getText().contains("Descripcion de prueba")); //Buscamos el film con la descripción de prueba
 
-        assertFalse(filmWithTestDataExists); //Verificamos que no haya encontrado ningún film con la descripción de prueba
+        assertFalse(filmWithTestDataExists); //Verifying it does not find any fil with Description Test
         
     }
 
