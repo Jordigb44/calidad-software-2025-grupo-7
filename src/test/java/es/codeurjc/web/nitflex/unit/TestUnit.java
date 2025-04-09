@@ -86,18 +86,17 @@ public class TestUnit {
 
     private void createAllFormatFilm(Long id, String title, String synopsis, int releaseYear, String ageRating, Blob posterFile) {
 
-        // Utiliza tus métodos ya definidos
         this.filmDTO = createFilmDTO(id, title, synopsis, releaseYear, ageRating);
         this.film = createFilm(id, title, synopsis, releaseYear, ageRating);
 
-        // Agrega el poster si viene
+        // Adding poster if is not null
         if (posterFile != null) {
             this.film.setPosterFile(posterFile);
         }
 
         this.filmRequest = createCreateFilmRequest(title, synopsis, releaseYear, ageRating);
         
-        // Configura los mocks
+        // Configure mocks
         creationMocks(film, filmDTO);
     }
 
@@ -108,8 +107,6 @@ public class TestUnit {
 
         createAllFormatFilm(1L,"El Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
 
-        // Configure mocks
-        creationMocks(film, filmDTO);
 
         // Save film
         FilmDTO savedFilm = filmService.save(filmRequest);
@@ -129,8 +126,6 @@ public class TestUnit {
         createAllFormatFilm(1L,"", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
    
 
-        creationMocks(film, filmDTO);
-
         // Verify that exception is thrown
         assertThatThrownBy(() -> filmService.save(filmRequest))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -149,8 +144,6 @@ public class TestUnit {
 
         createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/log.jpg"));
 
-        creationMocks(film, filmDTO);
-    
         // Create users
         User user1 = new User("User1", "user1@example.com");
         user1.setId(10L);
