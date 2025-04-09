@@ -26,6 +26,11 @@ public class TestRest {
 
     private final String restMainPath = "/api/films/";
 
+    private final String defaultTitle = "Inception";
+    private final String defaultSynopsis = "A mind-bending thriller about dreams.";
+    private final int defaultYear = 2010;
+    private final String defaultRating = "+13";
+
     @LocalServerPort
     int port;
 
@@ -42,7 +47,19 @@ public class TestRest {
         userRepository.deleteAll();
     }
 
-    // Functionto build a JSON object of a film
+    private void verifyFilm(int id, String title, String synopsis, int year, String ageRating) {
+        given() // GET to retrieve film by ID
+            .when()
+            .get(restMainPath + id)
+            .then()
+            .statusCode(200) // Verify it is found
+            .body("id", equalTo(id))
+            .body("title", equalTo(title))
+            .body("synopsis", equalTo(synopsis))
+            .body("releaseYear", equalTo(year))
+            .body("ageRating", equalTo(ageRating));
+    }
+
     private JSONObject buildFilmJson(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = new JSONObject();
         filmJson.put("title", title);
@@ -52,8 +69,8 @@ public class TestRest {
         return filmJson;
     }
 
-    // Function to create a film for all tests
-    private Response addFilmAndValidate(String title, String synopsis, int releaseYear, String ageRating) {
+    // Method to create a default film for all tests, and validating it
+    private Response addFilm(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = buildFilmJson(title, synopsis, releaseYear, ageRating);
 
         return given()
@@ -75,31 +92,19 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
     public void addFilmAndSearchById() {
-        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+        response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
 
-        // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
-        // GET to retrieve film by ID
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .get(restMainPath + filmId)
-                .then()
-                .statusCode(200) // Verify it is found
-                .body("id", equalTo(filmId))
-                .body("title", equalTo("Inception"))
-                .body("synopsis", equalTo("A mind-bending thriller about dreams."))
-                .body("releaseYear", equalTo(2010))
-                .body("ageRating", equalTo("+13"));
+        verifyFilm(filmId, defaultTitle, defaultSynopsis, defaultYear, defaultRating);
     }
 
     // Task 2
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error apropiado")
-    public void addFilmWithoutTitle_ShouldReturnError() {
+    public void addFilmWithoutTitle() {
 
-        JSONObject filmJSON = buildFilmJson("", "A mind-bending thriller about dreams.", 2010, "+13"); // Title is empty
+        JSONObject filmJSON = buildFilmJson("", defaultSynopsis, defaultYear, defaultRating);
         given()
                 .contentType(ContentType.JSON)
                 .body(filmJSON.toString())
@@ -113,47 +118,32 @@ public class TestRest {
     //Task 3
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
-    public void addAndUpdateFilm() throws JSONException {
-        //Firt ting is create a film 
-        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+    public void addAndUpdateFilmTitle() throws JSONException {
+        response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
         
-        int filmId = response.jsonPath().getInt("id"); //getting id
+        int filmId = response.jsonPath().getInt("id"); 
 
-        String updatedTitle = "Inception - parte 2"; //Title to update
+        String updatedTitle = "Inception - parte 2"; 
 
-        //Creating JSON object
-        JSONObject updatedFilmJson = buildFilmJson(
-            updatedTitle, 
-            "A mind-bending thriller about dreams. Part 2.", 
-            2012, 
-            "+13"
-        );
+        // Create JSON object
+        JSONObject updatedFilmJson = buildFilmJson(updatedTitle, defaultSynopsis, defaultYear, defaultRating);
         
-        //Making petition put
+        // Put petition
         given()
             .contentType(ContentType.JSON)
             .body(updatedFilmJson.toString())
             .when()
-            .put(restMainPath + filmId)  // PUT /api/films/{id}
+            .put(restMainPath + filmId)
             .then()
             .statusCode(200)
             .body("id", equalTo(filmId)) 
             .body("title", equalTo(updatedTitle)) 
-            .body("synopsis", equalTo("A mind-bending thriller about dreams. Part 2."))
-            .body("releaseYear", equalTo(2012))
-            .body("ageRating", equalTo("+13"));
+            .body("synopsis", equalTo(defaultSynopsis))
+            .body("releaseYear", equalTo(defaultYear))
+            .body("ageRating", equalTo(defaultRating));
         
-        //Verify changes still after updating
-        given()
-            .when()
-            .get(restMainPath + filmId)
-            .then()
-            .statusCode(200)
-            .body("title", equalTo(updatedTitle))
-            .body("id", equalTo(filmId))
-            .body("synopsis", equalTo("A mind-bending thriller about dreams. Part 2."))
-            .body("releaseYear", equalTo(2012))
-            .body("ageRating", equalTo("+13"));
+        // Verify changes after title update
+        verifyFilm(filmId, updatedTitle, defaultSynopsis, defaultYear, defaultRating);
     }
 
 
@@ -161,22 +151,21 @@ public class TestRest {
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
     public void addAndDeleteFilm() throws JSONException {
-        response = addFilmAndValidate("Inception", "A mind-bending thriller about dreams.", 2010, "+13");
+        response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
 
-        // Extract ID from response
         int filmId = response.jsonPath().getInt("id");
 
-        // Eliminate the film
+        // Delete the film
         given()
                 .when()
-                .delete(restMainPath + filmId) // DELETE /api/films/{id}
+                .delete(restMainPath + filmId)
                 .then()
                 .statusCode(204); // No Content → Success
 
         // Try to obtain it (waiting 404)
         given()
                 .when()
-                .get(restMainPath + filmId) // GET a /api/films/{id}
+                .get(restMainPath + filmId)
                 .then()
                 .statusCode(404);
     }
