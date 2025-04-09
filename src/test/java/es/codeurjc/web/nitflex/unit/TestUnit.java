@@ -1,5 +1,6 @@
 package es.codeurjc.web.nitflex.unit;
 
+import java.sql.Blob;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -46,6 +47,12 @@ public class TestUnit {
 
     private FilmService filmService;
 
+    private Film film;
+
+    private FilmDTO filmDTO;
+
+    private CreateFilmRequest filmRequest;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -77,26 +84,36 @@ public class TestUnit {
         when(filmRepository.findById(film.getId())).thenReturn(Optional.of(film));
     }
 
+    private void createAllFormatFilm(Long id, String title, String synopsis, int releaseYear, String ageRating, Blob posterFile) {
+
+        this.filmDTO = createFilmDTO(id, title, synopsis, releaseYear, ageRating);
+        this.film = createFilm(id, title, synopsis, releaseYear, ageRating);
+
+        // Adding poster if is not null
+        if (posterFile != null) {
+            this.film.setPosterFile(posterFile);
+        }
+
+        this.filmRequest = createCreateFilmRequest(title, synopsis, releaseYear, ageRating);
+        
+        // Configure mocks
+        creationMocks(film, filmDTO);
+    }
+
     // Task 1
     @Test
     @DisplayName("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
-        // New film
-        CreateFilmRequest filmRequest = createCreateFilmRequest("El Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        FilmDTO filmDTO = createFilmDTO(1L, "El Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        // Its neccesary for saving the film
-        Film film = createFilm(1L, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
 
-        // Configure mocks
-        creationMocks(film, filmDTO);
+        //GIVEN
+        createAllFormatFilm(1L,"El Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
 
-        // Save film
+        //WHEN
+            // Save film
         FilmDTO savedFilm = filmService.save(filmRequest);
-
-        // Verify repository interaction and result
+    
+        //THEN
+            // Verify repository interaction and result
         verify(filmRepository, times(1)).save(any(Film.class));
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.of(film));
         assertTrue(filmRepository.findById(filmDTO.id()).isPresent());
@@ -107,23 +124,19 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
     void testSaveFilmWithEmptyTitleFields() {
-        // Create request and DTO
-        CreateFilmRequest filmRequest = createCreateFilmRequest("", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        FilmDTO filmDTO = createFilmDTO(1L, "", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        // Neccessary for assertFalse
-        Film film = createFilm(1L, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
 
-        creationMocks(film, filmDTO);
 
-        // Verify that exception is thrown
+        //GIVEN
+        createAllFormatFilm(1L,"", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
+   
+        //WHEN
+            // Verify that exception is thrown
         assertThatThrownBy(() -> filmService.save(filmRequest))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The title is empty");
 
-        // Film is not in the repository (film not found)
+        //THEN        
+            // Film is not in the repository (film not found)
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.empty());
         assertFalse(filmRepository.findById(filmDTO.id()).isPresent());
     }
@@ -132,41 +145,35 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se borra una película que existe utilizando FilmService, se elimina del repositorio y se elimina de la lista de películas favoritas de los usuarios")
     void testDeleteFilm() {
-        Long filmId = 1L;
-        // Create Request for saving the film
-        CreateFilmRequest filmRequest = createCreateFilmRequest("Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "");
-        // Create FilmDTO and Film object
-        FilmDTO filmDTO = createFilmDTO(filmId, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
-        // Its neccesary for adding favorite films to users list (the aplication requires Film not FilmDTO)
-        Film film = createFilm(filmId, "Viaje de Chihiro", 
-                "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12");
+        
 
-        creationMocks(film, filmDTO);
-    
-        // Create users
+        //GIVEN
+        createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/log.jpg"));
+
+            // Create users
         User user1 = new User("User1", "user1@example.com");
-        user1.setId(10L); // there is no other way to set the id to the users, unless we change the code to make it more efficient
+        user1.setId(10L);
         User user2 = new User("User2", "user2@example.com");
         user2.setId(20L); // there is no other way to set the id to the users, unless we change the code to make it more efficient
     
-        // Add films to users' favorite list
+            // Add films to users' favorite list
         user1.getFavoriteFilms().add(film);
         user2.getFavoriteFilms().add(film);
         film.getUsersThatLiked().add(user1);
         film.getUsersThatLiked().add(user2);
     
         filmService.save(filmRequest);
-
+        
+        //WHEN
         filmService.delete(filmDTO.id());
     
-        // Verify that the film has been removed from users' favorite films
+            // Verify that the film has been removed from users' favorite films
         assertEquals(0, user1.getFavoriteFilms().size());
         assertEquals(0, user2.getFavoriteFilms().size());
         
     
-        // Film is no longer in the repository (film not found)
+        //THEN
+            // Film is no longer in the repository (film not found)
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.empty());
         assertTrue(filmRepository.findById(filmDTO.id()).isEmpty());
         assertEquals(0, film.getUsersThatLiked().size());
@@ -176,14 +183,17 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se borra una película que no existe, se lanza FilmNotFoundException")
     void testDeleteNonExistentFilmThrowsException() {
-        long fictionalId = 999L;
 
+        //GIVEN
+        long fictionalId = 999L;
         when(filmRepository.findById(fictionalId)).thenReturn(Optional.empty());
 
+        //WHEN
         FilmNotFoundException ex = assertThrows(FilmNotFoundException.class, () -> {
             filmService.delete(fictionalId);
         });
 
+        //THEN
         assertEquals("Film not found with id: " + fictionalId, ex.getMessage());
         verify(filmRepository, never()).deleteById(anyLong());
     }

@@ -1,5 +1,7 @@
 package es.codeurjc.web.nitflex.integration;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,11 +12,6 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -87,25 +84,27 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se añade una película con un título válido mediante FilmService, se guarda en la base de datos y se devuelve la película creada")
         void testAddFilmWithValidTitle() throws Exception {
-
+                // GIVEN
+                  // Create a new film requests
                 CreateFilmRequest filmRequest = new CreateFilmRequest(
                                 film.getTitle(),
                                 film.getSynopsis(),
                                 film.getReleaseYear(),
                                 film.getAgeRating());
-
                 MultipartFile sampleImage = ImageTestUtils.createSampleImage();
 
+                // WHEN
                 FilmDTO createdFilm = filmService.save(filmRequest, sampleImage);
 
-                // Verifying the returned object
+                // THEN
+                  // Verifying the returned object
                 assertNotNull(createdFilm.id(), "El ID de la película no debería ser null");
                 assertEquals(film.getTitle(), createdFilm.title(), "El título no coincide");
                 assertEquals(film.getSynopsis(), createdFilm.synopsis(), "La sinopsis no coincide");
                 assertEquals(film.getReleaseYear(), createdFilm.releaseYear(), "El año de lanzamiento no coincide");
                 assertEquals(film.getAgeRating(), createdFilm.ageRating(), "La clasificación por edad no coincide");
 
-                //Verifyind in database
+                  //Verifyind in database
                 Film savedFilm = filmRepository.findById(createdFilm.id())
                                 .orElseThrow(() -> new AssertionError(
                                                 "La película debería existir en la base de datos"));
@@ -115,7 +114,7 @@ public class TestIntegration {
                 assertEquals(film.getReleaseYear(), savedFilm.getReleaseYear(), "Año en BD no coincide");
                 assertEquals(film.getAgeRating(), savedFilm.getAgeRating(), "Clasificación en BD no coincide");
 
-                // Verifying the poster
+                  // Verifying the poster
                 assertNotNull(savedFilm.getPosterFile(), "El póster no debería ser null");
                 assertTrue(ImageTestUtils.areSameBlob(
                                 new javax.sql.rowset.serial.SerialBlob(sampleImage.getBytes()),
@@ -126,15 +125,19 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y se mantiene la lista de usuarios que la han marcado como favorita")
         void testUpdateFilmTitleAndSynopsisKeepsUsers() {
-                // Update the film
+                //GIVEN
+                  // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
                                 film.getId(), "Chihiro y el mundo espiritual",
                                 "Inolvidable aventura en un mundo mágico.",
                                 film.getReleaseYear(), film.getAgeRating());
 
+                // WHEN
+                  // Update the film using FilmService
                 filmService.update(film.getId(), updatedFilmDTO);
 
-                // Verify the changes
+                // THEN
+                  // Verify the changes
                 Film updatedFilm = filmRepository.findById(film.getId()).orElseThrow();
 
                 assertNotEquals(film.getTitle(), updatedFilm.getTitle());
@@ -148,9 +151,8 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
         void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException, IOException {
-                // The original film is already created in the beforeEach method
-
-                // Update the film
+                // GIVEN
+                  // Update the film
                 Long filmId = film.getId();
                 String newFilmTitle = "Chihiro y el mundo espiritual";
                 String newFilmSynopsis = "Inolvidable aventura en un mundo mágico.";
@@ -163,12 +165,16 @@ public class TestIntegration {
                         newFilmSynopsis,
                         releaseYear,
                         ageRating);
+
+                // WHEN
+                  // Update the film using FilmService
                 filmService.update(filmId, updatedFilmDTO);
 
-                // Get the updated film
+                // THEN
+                  // Get the updated film
                 Film updatedFilm = filmRepository.findById(filmId).orElseThrow();
                 
-                // Verify the changes
+                  // Verify the changes
                 assertNotEquals(film.getTitle(), updatedFilm.getTitle()); // Title should change
                 assertNotEquals(film.getSynopsis(), updatedFilm.getSynopsis()); // Synopsis should change
                 assertEquals(2, updatedFilm.getUsersThatLiked().size()); // Users that liked should remain the same
@@ -184,31 +190,37 @@ public class TestIntegration {
         @Test
         @DisplayName("Cuando se borra una película que existe mediante FilmService, se elimina del repositorio y se elemina de la lista de pelícuals favoritas de los usuarios")
         void testDeleteFilmREmovesFromRepositoryAndUsersFavoriteFilms() {
-                // Verify that the film exists before deltetion
+                // GIVEN
+                  // In the beforeEach you can see the creation of the film and the users
+                
+                // WHEN
+                  // Verify that the film exists before deltetion
                 Film existingFilm = filmRepository.findById(film.getId())
                                 .orElseThrow(() -> new AssertionError(
                                                 "La película debería existir en la base de datos"));
+                // THEN
                 assertNotNull(existingFilm, "La película debería existir en la base de datos antes de eliminarla");
-
-                // Verify that the film is in the users favorite films
+                  // Verify that the film is in the users favorite films
                 assertTrue(user1.getFavoriteFilms().contains(existingFilm),
                                 "La película debería estar en los favoritos del usuario 1 antes de eliminarla");
                 assertTrue(user2.getFavoriteFilms().contains(existingFilm),
                                 "La película debería estar en los favoritos del usuario 2 antes de eliminarla");
 
-                // Delete the film
+                // WHEN
+                  // Delete the film
                 filmService.delete(film.getId());
 
-                // Verify the deletion from the repository
+                // THEN
+                  // Verify the deletion from the repository
                 assertTrue(filmRepository.findById(film.getId()).isEmpty(), "La película debería haber sido eliminada");
 
-                // Verify that the film is removed from the users' favorite films
+                // GIVEN
+                  // Verify that the film is removed from the users' favorite films
                 user1 = userRepository.findById(user1.getId()).orElseThrow();
                 user2 = userRepository.findById(user2.getId()).orElseThrow();
 
-                assertFalse(user1.getFavoriteFilms().contains(existingFilm),
-                                "El usuario1 no debe tener la película como favorita después de la eliminación");
-                assertFalse(user2.getFavoriteFilms().contains(existingFilm),
-                                "El usuario2 no debe tener la película como favorita después de la eliminación");
-        } 
+                // THEN
+                assertEquals(0, user1.getFavoriteFilms().size());
+                assertEquals(0, user2.getFavoriteFilms().size());
+        }
 }
