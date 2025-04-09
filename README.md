@@ -19,3 +19,13 @@
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/699e5f397d67ed7f3564f4c3cf5c5fa62923b90e) | Task 4 (Test de sistemas Rest) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/173509a46e60b805e0cac953f8ccfa67cf0f1183) | Artillery Test |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+
+
+## Jordi Guix Betancor
+| Commit | Description |
+| :----: | :---------: |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/9d0b562343c25d3fc28510d0c53e1421e060d88e) | Task 2 (Test Unitario) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c5111c44b52609500c805e5c2011185ba06e72ba) | Task 3 (Test de Integración con BBDD) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/93c66c3c998597beb8c929101113c8a2f38b5c02) | Task 4 (Test de sistemas web - Selenium) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/8385d76cf56c417ae3491401a8cdda3c9fd5b35d) | Task 1 (Test de sistemas Rest) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c56167eafc2af5cb146dc0b7a5ca416099b9d5b2) | Artillery Test |
