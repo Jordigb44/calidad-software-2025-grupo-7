@@ -215,9 +215,9 @@ public class TestSeleniumWebDriver {
 
         //Guardamos el mensaje de error buscando el div con la clase negative message y en su interior el div con id de message
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//div[contains(@class, 'negative message')]//div[@id='message']")));
+            By.xpath("//ul[@id='error-list']//li[contains(text(), 'The title is empty')]")));
 
-        assertEquals("The title is empty", errorMessage.getText()); //verificamos el mensaje de error
+        assertEquals("The title is empty", errorMessage.getText());
 
         assertTrue(driver.getCurrentUrl().contains("/films/new")); //Veirifcamos que no haya redirección a la página principal
 
