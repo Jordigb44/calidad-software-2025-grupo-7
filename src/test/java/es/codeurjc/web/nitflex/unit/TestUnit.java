@@ -105,13 +105,15 @@ public class TestUnit {
     @DisplayName("Cuando se guarda una película (sin imagen) y con un título válido utilizando FilmService, se guarda en el repositorio")
     void testSaveFilmAndCheckByTitle() {
 
+        //GIVEN
         createAllFormatFilm(1L,"El Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
 
-
-        // Save film
+        //WHEN
+            // Save film
         FilmDTO savedFilm = filmService.save(filmRequest);
-
-        // Verify repository interaction and result
+    
+        //THEN
+            // Verify repository interaction and result
         verify(filmRepository, times(1)).save(any(Film.class));
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.of(film));
         assertTrue(filmRepository.findById(filmDTO.id()).isPresent());
@@ -122,16 +124,19 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se guarda una película (sin imagen) y un título vacío utilizando FilmService, NO se guarda en el repositorio y se lanza una excepción")
     void testSaveFilmWithEmptyTitleFields() {
-        
+
+
+        //GIVEN
         createAllFormatFilm(1L,"", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
    
-
-        // Verify that exception is thrown
+        //WHEN
+            // Verify that exception is thrown
         assertThatThrownBy(() -> filmService.save(filmRequest))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The title is empty");
 
-        // Film is not in the repository (film not found)
+        //THEN        
+            // Film is not in the repository (film not found)
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.empty());
         assertFalse(filmRepository.findById(filmDTO.id()).isPresent());
     }
@@ -140,32 +145,35 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se borra una película que existe utilizando FilmService, se elimina del repositorio y se elimina de la lista de películas favoritas de los usuarios")
     void testDeleteFilm() {
-        Long filmId = 1L;
+        
 
+        //GIVEN
         createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/log.jpg"));
 
-        // Create users
+            // Create users
         User user1 = new User("User1", "user1@example.com");
         user1.setId(10L);
         User user2 = new User("User2", "user2@example.com");
         user2.setId(20L); // there is no other way to set the id to the users, unless we change the code to make it more efficient
     
-        // Add films to users' favorite list
+            // Add films to users' favorite list
         user1.getFavoriteFilms().add(film);
         user2.getFavoriteFilms().add(film);
         film.getUsersThatLiked().add(user1);
         film.getUsersThatLiked().add(user2);
     
         filmService.save(filmRequest);
-
+        
+        //WHEN
         filmService.delete(filmDTO.id());
     
-        // Verify that the film has been removed from users' favorite films
+            // Verify that the film has been removed from users' favorite films
         assertEquals(0, user1.getFavoriteFilms().size());
         assertEquals(0, user2.getFavoriteFilms().size());
         
     
-        // Film is no longer in the repository (film not found)
+        //THEN
+            // Film is no longer in the repository (film not found)
         when(filmRepository.findById(filmDTO.id())).thenReturn(Optional.empty());
         assertTrue(filmRepository.findById(filmDTO.id()).isEmpty());
         assertEquals(0, film.getUsersThatLiked().size());
@@ -175,14 +183,17 @@ public class TestUnit {
     @Test
     @DisplayName("Cuando se borra una película que no existe, se lanza FilmNotFoundException")
     void testDeleteNonExistentFilmThrowsException() {
-        long fictionalId = 999L;
 
+        //GIVEN
+        long fictionalId = 999L;
         when(filmRepository.findById(fictionalId)).thenReturn(Optional.empty());
 
+        //WHEN
         FilmNotFoundException ex = assertThrows(FilmNotFoundException.class, () -> {
             filmService.delete(fictionalId);
         });
 
+        //THEN
         assertEquals("Film not found with id: " + fictionalId, ex.getMessage());
         verify(filmRepository, never()).deleteById(anyLong());
     }
