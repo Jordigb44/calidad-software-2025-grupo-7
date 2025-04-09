@@ -29,3 +29,14 @@
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/93c66c3c998597beb8c929101113c8a2f38b5c02) | Task 4 (Test de sistemas web - Selenium) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/8385d76cf56c417ae3491401a8cdda3c9fd5b35d) | Task 1 (Test de sistemas Rest) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c56167eafc2af5cb146dc0b7a5ca416099b9d5b2) | Artillery Test |
+
+
+## Elinee Nathalie freites Muñoz
+| Commit | Description |
+| :----: | :---------: |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 4 Ttest Unitario) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 1 (Test de Integración con BBDD) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/9c167b09bd6799bc8a6116c03d8233fbda1458f2) | Task 2 (Test de sistemas wen - Selenium) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ed49dc75f653b9581d2e726d446a50de4a569a52) | Task 3 (Test de sistemas Rest) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
