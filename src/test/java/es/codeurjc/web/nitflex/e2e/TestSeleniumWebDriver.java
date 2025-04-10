@@ -112,10 +112,10 @@ public class TestSeleniumWebDriver {
         WebElement ageRatingInput = driver.findElement(By.name("ageRating"));
         ageRatingInput.sendKeys(ageRating);
     
-        // Manejo de la imagen
+        // Managing the poster image
         if (imagePath != null) {
             WebElement fileInput = driver.findElement(By.name("imageField"));
-            // Envía la ruta absoluta del archivo al input file
+            // send the path to the file input
             fileInput.sendKeys(new File(imagePath).getAbsolutePath());
         }
     
@@ -235,11 +235,11 @@ public class TestSeleniumWebDriver {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
         driver.findElement(By.id("all-films")).click();
 
-        // Wait for the film to appear in the list
+            // Wait for the film to appear in the list
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
 
-        // Verify that the film appears in the list
+            // Verify that the film appears in the list
         WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
         assertTrue(filmRow.isDisplayed(), "The film was not added correctly.");
@@ -257,7 +257,10 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
     @Order(4)
     void testEditFilmTitle() {
+        //GIVEN
         wait.until(ExpectedConditions.urlContains("/"));
+
+        //WHEN
         addFilm(FILM_TITLE, FILM_DESCRIPTION, "2001", "+12", FILM_IMAGE);
 
         wait.until(ExpectedConditions.urlContains("/films/"));
@@ -275,6 +278,8 @@ public class TestSeleniumWebDriver {
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
         WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
+
+        //THEN        
         assertTrue(filmRow.isDisplayed(), "The film was not edited correctly.");
 
         filmRow.click();
