@@ -148,7 +148,7 @@ public class TestUnit {
         
 
         //GIVEN
-        createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/log.jpg"));
+        createAllFormatFilm(1L,"Viaje de Chihiro", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", imageUtils.remoteImageToBlob("./src/main/resources/static/images/logo.png"));
 
             // Create users
         User user1 = new User("User1", "user1@example.com");
