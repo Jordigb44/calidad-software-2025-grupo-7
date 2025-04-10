@@ -1,7 +1,5 @@
 package es.codeurjc.web.nitflex.integration;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +10,10 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -124,7 +126,7 @@ public class TestIntegration {
         // Task 2
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (SIN imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y se mantiene la lista de usuarios que la han marcado como favorita")
-        void testUpdateFilmTitleAndSynopsisKeepsUsers() {
+        void testUpdateFilmTitleAndSynopsisNoImage() {
                 //GIVEN
                   // Update the film
                 FilmSimpleDTO updatedFilmDTO = new FilmSimpleDTO(
@@ -150,7 +152,7 @@ public class TestIntegration {
         // Task 3
         @Test
         @DisplayName("Cuando se actualizan los campos 'title' y 'synopsis' de una película (CON imagen) y con un título válido mediante FilmService, se guardan los cambios en la base de datos y la imagen no cambia")
-        void testUpdateFilmTitleAndSynopsisAndImageDoesntChange() throws SQLException, IOException {
+        void testUpdateFilmTitleAndSynopsisWithImage() throws SQLException, IOException {
                 // GIVEN
                   // Update the film
                 Long filmId = film.getId();
@@ -189,7 +191,7 @@ public class TestIntegration {
         // Task 4
         @Test
         @DisplayName("Cuando se borra una película que existe mediante FilmService, se elimina del repositorio y se elemina de la lista de pelícuals favoritas de los usuarios")
-        void testDeleteFilmREmovesFromRepositoryAndUsersFavoriteFilms() {
+        void testDeleteFilm() {
                 // GIVEN
                   // In the beforeEach you can see the creation of the film and the users
                 

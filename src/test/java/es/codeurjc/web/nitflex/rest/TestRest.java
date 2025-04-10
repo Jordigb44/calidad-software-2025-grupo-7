@@ -91,7 +91,7 @@ public class TestRest {
     // Task 1
     @Test
     @DisplayName("Cuando se da de alta una nueva película, esperamos que la película pueda recuperarse a través de su id")
-    public void addFilmAndSearchById() {
+    public void testAddFilmAndSearchById() {
         response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
 
         int filmId = response.jsonPath().getInt("id");
@@ -102,7 +102,7 @@ public class TestRest {
     // Task 2
     @Test
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error apropiado")
-    public void addFilmWithoutTitle() {
+    public void testAddFilmWithoutTitle() {
 
         JSONObject filmJSON = buildFilmJson("", defaultSynopsis, defaultYear, defaultRating);
         given()
@@ -118,7 +118,7 @@ public class TestRest {
     //Task 3
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
-    public void addAndUpdateFilmTitle() throws JSONException {
+    public void testAddAndUpdateFilmTitle() throws JSONException {
         response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
         
         int filmId = response.jsonPath().getInt("id"); 
@@ -150,7 +150,7 @@ public class TestRest {
     // Task 4
     @Test
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película no esté disponible al consultarla de nuevo")
-    public void addAndDeleteFilm() throws JSONException {
+    public void testAddAndDeleteFilm() throws JSONException {
         response = addFilm(defaultTitle, defaultSynopsis, defaultYear, defaultRating);
 
         int filmId = response.jsonPath().getInt("id");

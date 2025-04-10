@@ -37,7 +37,6 @@ public class TestSeleniumWebDriver {
     void setUp() {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         driver.get(url);
     }
 
