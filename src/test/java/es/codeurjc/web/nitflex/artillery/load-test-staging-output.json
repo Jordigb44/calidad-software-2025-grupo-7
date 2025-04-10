@@ -1,0 +1,323 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.Escenario 2 - Crear y comprobar película": 1,
+      "vusers.created": 1,
+      "http.requests": 2,
+      "http.codes.201": 1,
+      "http.responses": 2,
+      "http.downloaded_bytes": 386,
+      "plugins.metrics-by-endpoint./api/films/.codes.201": 1,
+      "http.codes.200": 1,
+      "plugins.metrics-by-endpoint./api/films/{{newFilmId}}.codes.200": 1,
+      "vusers.failed": 0,
+      "vusers.completed": 1
+    },
+    "rates": {
+      "http.request_rate": 2
+    },
+    "firstCounterAt": 1744303834680,
+    "firstHistogramAt": 1744303834911,
+    "lastCounterAt": 1744303834931,
+    "lastHistogramAt": 1744303834931,
+    "firstMetricAt": 1744303834680,
+    "lastMetricAt": 1744303834931,
+    "period": 1744303830000,
+    "summaries": {
+      "http.response_time": {
+        "min": 13,
+        "max": 192,
+        "count": 2,
+        "mean": 102.5,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "http.response_time.2xx": {
+        "min": 13,
+        "max": 192,
+        "count": 2,
+        "mean": 102.5,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "plugins.metrics-by-endpoint.response_time./api/films/": {
+        "min": 192,
+        "max": 192,
+        "count": 1,
+        "mean": 192,
+        "p50": 190.6,
+        "median": 190.6,
+        "p75": 190.6,
+        "p90": 190.6,
+        "p95": 190.6,
+        "p99": 190.6,
+        "p999": 190.6
+      },
+      "plugins.metrics-by-endpoint.response_time./api/films/{{newFilmId}}": {
+        "min": 13,
+        "max": 13,
+        "count": 1,
+        "mean": 13,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "vusers.session_length": {
+        "min": 250.5,
+        "max": 250.5,
+        "count": 1,
+        "mean": 250.5,
+        "p50": 252.2,
+        "median": 252.2,
+        "p75": 252.2,
+        "p90": 252.2,
+        "p95": 252.2,
+        "p99": 252.2,
+        "p999": 252.2
+      }
+    },
+    "histograms": {
+      "http.response_time": {
+        "min": 13,
+        "max": 192,
+        "count": 2,
+        "mean": 102.5,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "http.response_time.2xx": {
+        "min": 13,
+        "max": 192,
+        "count": 2,
+        "mean": 102.5,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "plugins.metrics-by-endpoint.response_time./api/films/": {
+        "min": 192,
+        "max": 192,
+        "count": 1,
+        "mean": 192,
+        "p50": 190.6,
+        "median": 190.6,
+        "p75": 190.6,
+        "p90": 190.6,
+        "p95": 190.6,
+        "p99": 190.6,
+        "p999": 190.6
+      },
+      "plugins.metrics-by-endpoint.response_time./api/films/{{newFilmId}}": {
+        "min": 13,
+        "max": 13,
+        "count": 1,
+        "mean": 13,
+        "p50": 13.1,
+        "median": 13.1,
+        "p75": 13.1,
+        "p90": 13.1,
+        "p95": 13.1,
+        "p99": 13.1,
+        "p999": 13.1
+      },
+      "vusers.session_length": {
+        "min": 250.5,
+        "max": 250.5,
+        "count": 1,
+        "mean": 250.5,
+        "p50": 252.2,
+        "median": 252.2,
+        "p75": 252.2,
+        "p90": 252.2,
+        "p95": 252.2,
+        "p99": 252.2,
+        "p999": 252.2
+      }
+    }
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.Escenario 2 - Crear y comprobar película": 1,
+        "vusers.created": 1,
+        "http.requests": 2,
+        "http.codes.201": 1,
+        "http.responses": 2,
+        "http.downloaded_bytes": 386,
+        "plugins.metrics-by-endpoint./api/films/.codes.201": 1,
+        "http.codes.200": 1,
+        "plugins.metrics-by-endpoint./api/films/{{newFilmId}}.codes.200": 1,
+        "vusers.failed": 0,
+        "vusers.completed": 1
+      },
+      "rates": {
+        "http.request_rate": 2
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1744303834680,
+      "firstHistogramAt": 1744303834911,
+      "lastCounterAt": 1744303834931,
+      "lastHistogramAt": 1744303834931,
+      "firstMetricAt": 1744303834680,
+      "lastMetricAt": 1744303834931,
+      "period": "1744303830000",
+      "summaries": {
+        "http.response_time": {
+          "min": 13,
+          "max": 192,
+          "count": 2,
+          "mean": 102.5,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "http.response_time.2xx": {
+          "min": 13,
+          "max": 192,
+          "count": 2,
+          "mean": 102.5,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "plugins.metrics-by-endpoint.response_time./api/films/": {
+          "min": 192,
+          "max": 192,
+          "count": 1,
+          "mean": 192,
+          "p50": 190.6,
+          "median": 190.6,
+          "p75": 190.6,
+          "p90": 190.6,
+          "p95": 190.6,
+          "p99": 190.6,
+          "p999": 190.6
+        },
+        "plugins.metrics-by-endpoint.response_time./api/films/{{newFilmId}}": {
+          "min": 13,
+          "max": 13,
+          "count": 1,
+          "mean": 13,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "vusers.session_length": {
+          "min": 250.5,
+          "max": 250.5,
+          "count": 1,
+          "mean": 250.5,
+          "p50": 252.2,
+          "median": 252.2,
+          "p75": 252.2,
+          "p90": 252.2,
+          "p95": 252.2,
+          "p99": 252.2,
+          "p999": 252.2
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 13,
+          "max": 192,
+          "count": 2,
+          "mean": 102.5,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "http.response_time.2xx": {
+          "min": 13,
+          "max": 192,
+          "count": 2,
+          "mean": 102.5,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "plugins.metrics-by-endpoint.response_time./api/films/": {
+          "min": 192,
+          "max": 192,
+          "count": 1,
+          "mean": 192,
+          "p50": 190.6,
+          "median": 190.6,
+          "p75": 190.6,
+          "p90": 190.6,
+          "p95": 190.6,
+          "p99": 190.6,
+          "p999": 190.6
+        },
+        "plugins.metrics-by-endpoint.response_time./api/films/{{newFilmId}}": {
+          "min": 13,
+          "max": 13,
+          "count": 1,
+          "mean": 13,
+          "p50": 13.1,
+          "median": 13.1,
+          "p75": 13.1,
+          "p90": 13.1,
+          "p95": 13.1,
+          "p99": 13.1,
+          "p999": 13.1
+        },
+        "vusers.session_length": {
+          "min": 250.5,
+          "max": 250.5,
+          "count": 1,
+          "mean": 250.5,
+          "p50": 252.2,
+          "median": 252.2,
+          "p75": 252.2,
+          "p90": 252.2,
+          "p95": 252.2,
+          "p99": 252.2,
+          "p999": 252.2
+        }
+      }
+    }
+  ]
+}
