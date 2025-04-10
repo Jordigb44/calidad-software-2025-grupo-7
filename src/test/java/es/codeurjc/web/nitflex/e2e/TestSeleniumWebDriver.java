@@ -219,7 +219,6 @@ public class TestSeleniumWebDriver {
         wait.until(ExpectedConditions.urlContains("/"));
         addNewFilmWhithoutImage();
 
-        // Manually navigate back to the film list
         wait.until(ExpectedConditions.urlContains("/films/"));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
         driver.findElement(By.id("all-films")).click();
@@ -250,14 +249,12 @@ public class TestSeleniumWebDriver {
         String newTitle = "El Viaje de Chihiro - part 2";
         editFilmTitle(newTitle);
 
-        // Verify that the title has been updated on the detail page
         wait.until(ExpectedConditions.urlContains("/films/"));
         WebElement titleFilm = wait.until(ExpectedConditions.presenceOfElementLocated(FILM_TITLE_ELEMENT));
         assertEquals(newTitle, titleFilm.getText(), "The film title was not updated correctly.");
 
         returnToHomePage();
 
-        // Verify that the edited title is displayed in the main film list
         wait.until(ExpectedConditions.urlContains("/"));
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
