@@ -40,3 +40,13 @@
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ed49dc75f653b9581d2e726d446a50de4a569a52) | Task 3 (Test de sistemas Rest) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+
+## Andrea Garrobo Guzmán
+| Commit | Description |
+| :----: | :---------: |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/890668abfe9d13d21e79e9cad564e2a55a721b85) | Task 3 -  Test Unit) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/5747d956b66760d1c5b4bb4aa71b5691cf753600) | Task 4 - Test Integration |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c438b79a41a8b54aa19f814adb34b3e4770983ae) | Task 1 - Selenium Web Test) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ac2a3b51c9cad6a2cf9206b64af91dd894af59d2) | Task 2 - Test  rest |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
