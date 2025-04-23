@@ -1,24 +1,18 @@
 package es.codeurjc.web.nitflex.unit;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 import java.sql.Blob;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.Mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 import es.codeurjc.web.nitflex.dto.film.CreateFilmRequest;
@@ -128,7 +122,7 @@ public class TestUnit {
 
         //GIVEN
         createAllFormatFilm(1L,"", "Una niña atrapada en un mundo mágico lucha por salvar a sus padres.", 2001, "+12", null);
-   
+
         //WHEN
             // Verify that exception is thrown
         assertThatThrownBy(() -> filmService.save(filmRequest))
