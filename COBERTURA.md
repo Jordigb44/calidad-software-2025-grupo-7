@@ -1,6 +1,6 @@
 # Informe de cobertura
 
-Cobertura de instrucciones obtenida: 29%
+Cobertura de instrucciones obtenida: 29% 
 Cobertura de ramas obtenida: 27%
 
 Es decir, solo un 29% de todas las instrucciones del proyecto se han probado mediante test. 
