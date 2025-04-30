@@ -4,6 +4,9 @@ on:
   pull_request: # depende de si es push o pull request
     branches: [ main ]
     types: [ closed ]
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'README.md'
     
 permissions:
   contents: read
