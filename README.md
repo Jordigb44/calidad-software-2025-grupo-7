@@ -8,8 +8,16 @@
 | **Andrea Garrobo Guzmán**    | a.garrobo.2022@alumnos.urjc.es | Garrobo08 |
 | **Jordi Guix Betancor**    | j.guix.2023@alumnos.urjc.es | jordigb44 |
 
+# 🔗 Github Repository URL 
+https://github.com/chubi0l/calidad-software-2025-grupo-7
 
+# 🔗 Azure Production URL
+# TODO
 
+## 🖥️ Screenshots
+# TODO
+
+# Practise 1
 ## Olga Chubinova Bortsova
 | Commit | Description |
 | :----: | :---------: |
@@ -50,3 +58,12 @@
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ac2a3b51c9cad6a2cf9206b64af91dd894af59d2) | Task 2 - Test  rest |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+
+
+
+# Practise 2
+## Work Assignment
+
+## Steps
+
+## Workflow of nightly
