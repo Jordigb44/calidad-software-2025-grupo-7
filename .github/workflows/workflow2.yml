@@ -1,0 +1,53 @@
+name: Workflow 3 - Full Test After Merge from Feature-1 to Main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Full Test Suite (Unit, Integration, System)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Cancel if source is not feature-1
+        run: |
+          git fetch origin
+          previous_commit=$(git log -1 --pretty=%P)
+          source_branch=$(git name-rev --name-only $previous_commit | cut -d'^' -f1)
+
+          echo "Previous commit was from: $source_branch"
+
+          if [[ "$source_branch" != "feature-1" ]]; then
+            echo "This push did not come from feature-1. Skipping tests."
+            exit 1
+          fi
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run Unit Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.unit.**.*' test
+
+      - name: Run Integration Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.integration.**.*' test
+
+      - name: Run System Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
