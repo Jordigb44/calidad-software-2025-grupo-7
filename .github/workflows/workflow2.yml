@@ -1,16 +1,16 @@
 name: Workflow 3 - Full Test After Merge from Feature-1 to Main
 
 on:
-  push:
-    branches:
-      - main
-
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+    
 permissions:
   contents: read
 
 jobs:
   test:
-    if: github.ref_name == 'feature-1'
+    if: github.ref_name != 'main' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: Full Test Suite (Unit, Integration, System)
     steps:
