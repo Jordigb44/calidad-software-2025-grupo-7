@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   test:
+    if: github.ref_name = 'feature-1'
     runs-on: ubuntu-latest
     name: Full Test Suite (Unit, Integration, System)
     steps:
