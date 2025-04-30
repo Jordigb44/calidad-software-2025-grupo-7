@@ -1,7 +1,7 @@
-name: Workflow 3 - Full Test After Merge from Feature-1 to Main
+name: Workflow 3 - Test After Ending Feature to Main
 
 on:
-  pull_request:
+  pull_request: # depende de si es push o pull request
     branches: [ main ]
     types: [ closed ]
     
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test:
-    if: github.ref_name != 'main' && github.event.pull_request.merged == true
+    if: github.ref_name != 'main' && github.event.pull_request.merged == true # depende si es solo feature-1 o !main
     runs-on: ubuntu-latest
     name: Full Test Suite (Unit, Integration, System)
     steps:
@@ -23,17 +23,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Cancel if source is not feature-1
-        run: |
-          git fetch origin
-          previous_commit=$(git log -1 --pretty=%P)
-          source_branch=$(git name-rev --name-only $previous_commit | cut -d'^' -f1)
-
-          echo "Previous commit was from: $source_branch"
-
-          if [[ "$source_branch" != "feature-1" ]]; then
-            echo "This push did not come from feature-1. Skipping tests."
-            exit 1
+      - name: Check if PR is from feature-1
+        if: github.event.pull_request.head.ref != 'feature-1'
+        run: echo "PR not from feature-1. Skipping ..." && exit 1
           fi
 
       - name: Cache Maven packages
