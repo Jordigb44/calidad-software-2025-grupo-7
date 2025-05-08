@@ -25,11 +25,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestSeleniumWebDriver {
+
     @LocalServerPort
     private int port;
+
     private WebDriver driver;
     private WebDriverWait wait;
-    private final String url = "http://localhost:" + port;
+
     private static final By CREATE_FILM_BUTTON = By.id("create-film");
     private static final By REMOVE_FILM_BUTTON = By.id("remove-film");
     private static final By FILM_TITLE_ELEMENT = By.id("film-title");
@@ -37,18 +39,22 @@ public class TestSeleniumWebDriver {
     private static final String FILM_DESCRIPTION = "A girl trapped in a magical world.";
     private static final String FILM_IMAGE = "src/main/resources/static/images/logo.png";
 
+    private String getUrl() {
+        return "http://localhost:" + port;
+    }
+
     @BeforeEach
     void setUp() {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.get(url);
+        driver.get(getUrl()); // Asegurarse de que el servidor está levantado antes de continuar.
     }
 
     @AfterEach
     void tearDown() {
         if (driver != null) {
             try {
-                driver.get(url);
+                driver.get(getUrl());;
 
                 wait = new WebDriverWait(driver, Duration.ofSeconds(10));
                 wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
@@ -152,7 +158,7 @@ public class TestSeleniumWebDriver {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
         driver.findElement(By.id("all-films")).click();
 
-        wait.until(ExpectedConditions.urlToBe(url + "/"));
+        wait.until(ExpectedConditions.urlToBe(getUrl() + "/"));
         wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
 
     }
