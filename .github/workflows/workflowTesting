@@ -1,0 +1,44 @@
+name: Workflow - All Test Only on Main
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Unit, Integration, REST & E2E Tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run Unit Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.unit.**.*' test
+
+      - name: Run Integration Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.integration.**.*' test
+
+      - name: Run System (E2E) Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
+
+      - name: Run REST Tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.rest.TestRest' test
