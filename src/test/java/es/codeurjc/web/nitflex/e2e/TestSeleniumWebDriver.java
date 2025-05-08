@@ -1,12 +1,14 @@
 package es.codeurjc.web.nitflex.e2e;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -59,11 +61,21 @@ public class TestSeleniumWebDriver {
             user.setEmail("test@example.com");
             userRepository.save(user);
         }
+
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-allow-origins=*");
+
+        // For 
+        options.addArguments("--user-data-dir=/tmp/chrome-profile-" + UUID.randomUUID());
+
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
+
 
     @AfterEach
     public void teardown() {
