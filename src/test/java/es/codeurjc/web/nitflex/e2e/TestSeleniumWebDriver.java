@@ -19,12 +19,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestSeleniumWebDriver {
+    @LocalServerPort
+    private int port;
     private WebDriver driver;
     private WebDriverWait wait;
-    private final String url = "http://localhost:8080";
+    private final String url = "http://localhost:" + port;
     private static final By CREATE_FILM_BUTTON = By.id("create-film");
     private static final By REMOVE_FILM_BUTTON = By.id("remove-film");
     private static final By FILM_TITLE_ELEMENT = By.id("film-title");
