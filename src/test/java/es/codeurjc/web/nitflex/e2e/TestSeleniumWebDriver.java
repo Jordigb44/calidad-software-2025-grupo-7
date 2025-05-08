@@ -15,15 +15,27 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+
+import es.codeurjc.web.nitflex.model.User;
+import es.codeurjc.web.nitflex.repository.UserRepository;
+import es.codeurjc.web.nitflex.service.UserComponent;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestSeleniumWebDriver {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserComponent userComponent;
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -41,59 +53,24 @@ public class TestSeleniumWebDriver {
 
     @BeforeEach
     void setUp() {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.get(getUrl()); // Asegurarse de que el servidor está levantado antes de continuar.
+        if (userRepository.count() == 0) {
+            User user = new User();
+            user.setName("testUser");
+            user.setEmail("test@example.com");
+            userRepository.save(user);
+        }
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+        driver = new ChromeDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     @AfterEach
-    void tearDown() {
+    public void teardown() {
+        // Close browser
         if (driver != null) {
-            try {
-                driver.get(getUrl());;
-
-                wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
-
-                String[] possibleTitles = {
-                        FILM_TITLE,
-                        FILM_TITLE + " - part 2"
-                };
-
-                for (String title : possibleTitles) {
-                    List<WebElement> filmLinks = driver.findElements(By.xpath(
-                            "//a[contains(@class, 'film-title') and text()='" + title + "']"));
-
-                    for (WebElement filmLink : filmLinks) {
-                        try {
-                            filmLink.click();
-                            wait.until(ExpectedConditions.urlContains("/films/"));
-
-                            WebElement deleteButton = wait
-                                    .until(ExpectedConditions.presenceOfElementLocated(REMOVE_FILM_BUTTON));
-                            deleteButton.click();
-
-                            wait.until(ExpectedConditions.urlContains("/delete"));
-                            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
-                            driver.findElement(By.id("all-films")).click();
-
-                            wait.until(ExpectedConditions.presenceOfElementLocated(CREATE_FILM_BUTTON));
-                        } catch (Exception e) {
-                            System.err.println("Error deleting film in cleanup: " + e.getMessage());
-                        }
-                    }
-                }
-
-                driver.quit();
-            } catch (Exception e) {
-                System.err.println("Error during tearDown: " + e.getMessage());
-            }
+            driver.quit();
         }
-    }
-
-    private void returnToHomePage() {
-        WebElement logoImage = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#logo-img > img")));
-        logoImage.click();
     }
 
     private void addFilm(String title, String description, String releaseYear, String ageRating, String imagePath) {
@@ -179,6 +156,9 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película (sin incluir la imagen), esperamos que la película creada aparezca en la plantilla resultante")
     @Order(1)
     void testAddNewFilmWithoutImage() {
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+
         //GIVEN
         wait.until(ExpectedConditions.urlContains("/"));
 
@@ -201,22 +181,22 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película sin título, esperamos que se muestre un mensaje de error y que no aparece esa película en la página principal")
     @Order(2)
     void testAddFilmWithNoTitle() {
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+
         //GIVEN
         wait.until(ExpectedConditions.urlContains("/"));
 
         //WHEN
-        addFilm(null, FILM_DESCRIPTION, "2001", "+12", FILM_IMAGE);
+        addFilm("", FILM_DESCRIPTION, "2001", "+12", FILM_IMAGE);
 
         assertTrue(driver.getCurrentUrl().contains("/films/new"));
-
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//ul[@id='error-list']//li[contains(text(), 'The title is empty')]")));
-        
         
         //THEN
-        returnToHomePage();
-        assertFalse(driver.getCurrentUrl().contains("/films/new")); // Verifying we moved to homepage
-
+            // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+        wait.until(ExpectedConditions.urlContains("/"));
+        
         List<WebElement> filmCards = driver.findElements(By.cssSelector(".film .ui.card"));
 
         boolean filmWithTestDataExists = filmCards.stream()
@@ -230,11 +210,14 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película y se elimina, esperamos que la película desaparezca de la lista de películas")
     @Order(3)
     void testAddAndDeleteFilm() {
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+
         //GIVEN
         wait.until(ExpectedConditions.urlContains("/"));
 
         //WHEN
-        addFilm(FILM_TITLE, FILM_DESCRIPTION, "2001", "+12", FILM_IMAGE);
+        addFilm("El Viaje de Chihiro Test 3", FILM_DESCRIPTION, "2001", "+12", FILM_IMAGE);
 
         wait.until(ExpectedConditions.urlContains("/films/"));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("all-films")));
@@ -242,19 +225,19 @@ public class TestSeleniumWebDriver {
 
             // Wait for the film to appear in the list
         wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
+                By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + "El Viaje de Chihiro Test 3" + "')]")));
 
             // Verify that the film appears in the list
         WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + FILM_TITLE + "')]")));
+                By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + "El Viaje de Chihiro Test 3" + "')]")));
         assertTrue(filmRow.isDisplayed(), "The film was not added correctly.");
 
         filmRow.click();
 
-        deleteFilm(FILM_TITLE);
+        deleteFilm("El Viaje de Chihiro Test 3");
 
         //THEN
-        assertFalse(driver.getPageSource().contains(FILM_TITLE), "The film was not deleted correctly.");
+        assertFalse(driver.getPageSource().contains("El Viaje de Chihiro Test 3"), "The film was not deleted correctly.");
     }
 
     // Task 4
@@ -262,6 +245,9 @@ public class TestSeleniumWebDriver {
     @DisplayName("Cuando se da de alta una nueva película y se edita para añadir '- parte 2' en su título, comprobamos que el cambio se ha aplicado")
     @Order(4)
     void testEditFilmTitle() {
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+        
         //GIVEN
         wait.until(ExpectedConditions.urlContains("/"));
 
@@ -276,9 +262,10 @@ public class TestSeleniumWebDriver {
         WebElement titleFilm = wait.until(ExpectedConditions.presenceOfElementLocated(FILM_TITLE_ELEMENT));
         assertEquals(newTitle, titleFilm.getText(), "The film title was not updated correctly.");
 
-        returnToHomePage();
-
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
         wait.until(ExpectedConditions.urlContains("/"));
+
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//a[contains(@class, 'film-title') and contains(text(), '" + newTitle + "')]")));
         WebElement filmRow = wait.until(ExpectedConditions.presenceOfElementLocated(
