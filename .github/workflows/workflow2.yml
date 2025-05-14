@@ -1,19 +1,16 @@
-name: Workflow 3 - Test After Ending Feature to Main
+name: Workflow 2 - Test Before Integrate to Main
 
 on:
-  pull_request: # depende de si es push o pull request
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [ main ]
-    types: [ closed ]
-    paths-ignore:
-      - '.github/workflows/**'
-      - 'README.md'
-    
+  workflow_dispatch:
+
 permissions:
   contents: read
 
 jobs:
   test:
-    if: github.ref_name != 'main' && github.event.pull_request.merged == true # depende si es solo feature-1 o !main
     runs-on: ubuntu-latest
     name: Full Test Suite (Unit, Integration, System)
     steps:
@@ -25,11 +22,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-
-      - name: Check if PR is from feature-1
-        if: github.event.pull_request.head.ref != 'feature-1'
-        run: echo "PR not from feature-1. Skipping ..." && exit 1
-          fi
 
       - name: Cache Maven packages
         uses: actions/cache@v3
