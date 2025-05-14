@@ -1,0 +1,62 @@
+name: Workflow 3 - Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build, Push Docker Image, and Deploy to Azure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Get version from pom.xml
+        id: get_version
+        run: |
+          VERSION=$(mvn -q -Dexec.outputFile=/dev/stdout -Dexpression=project.version --non-recursive org.apache.maven.plugins:maven-help-plugin:3.2.1:evaluate)
+          echo "::set-output name=version::$VERSION"
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE_NAME=tu_usuario_dockerhub/nitflex:${{ steps.get_version.outputs.version }}
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: nitflex-production
+          images: tu_usuario_dockerhub/nitflex:${{ steps.get_version.outputs.version }}
+
+      - name: Run Smoke Test
+        run: |
+          # Replace with your actual smoke test command.  This is just an example.
+          # Assumes your application is running on port 8080.  Adjust as needed.
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex-production.azurewebsites.net:8080)
+          if [ "$STATUS_CODE" -eq "200" ]; then
+            echo "Smoke test passed!"
+          else
+            echo "Smoke test failed. Status code: $STATUS_CODE"
+            exit 1
+          fi
