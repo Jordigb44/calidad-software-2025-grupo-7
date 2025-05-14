@@ -24,10 +24,13 @@ jobs:
           java-version: '17'
 
       - name: Get version from pom.xml
-        id: get_version
+        id: version
+        shell: bash
         run: |
-          VERSION=$(mvn -q -Dexec.outputFile=/dev/stdout -Dexpression=project.version --non-recursive org.apache.maven.plugins:maven-help-plugin:3.2.1:evaluate)
-          echo "::set-output name=version::$VERSION"
+          set -e
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tr -d '\n')
+          [ -n "$VERSION" ] || { echo "No se pudo obtener la versión"; exit 1; }
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
