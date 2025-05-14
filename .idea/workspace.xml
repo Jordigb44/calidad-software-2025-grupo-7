@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="test workflows 2" />
+    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,7 +18,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="fix-1" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -57,7 +59,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/jordiguix/Documents/UNIVERSIDAD/MADRID/MATRICULADO - URJC/24-25 2o year/2o Semestre/Calidad del sofware/Practica1/calidad-software-2025-grupo-7&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jordiguix/Documents/UNIVERSIDAD/MADRID/MATRICULADO - URJC/24-25 2o year/2o Semestre/Calidad del sofware/Practica1/calidad-software-2025-grupo-7/.github/workflows&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -66,6 +68,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.github/workflows" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
@@ -179,7 +186,7 @@
       <updated>1747217419870</updated>
       <workItem from="1747217420980" duration="104000" />
       <workItem from="1747217542439" duration="1284000" />
-      <workItem from="1747218843354" duration="2699000" />
+      <workItem from="1747218843354" duration="3264000" />
     </task>
     <task id="LOCAL-00001" summary="test workflows 2">
       <option name="closed" value="true" />
@@ -189,7 +196,31 @@
       <option name="project" value="LOCAL" />
       <updated>1747219741774</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable.">
+      <option name="closed" value="true" />
+      <created>1747223376088</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747223376088</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success.">
+      <option name="closed" value="true" />
+      <created>1747223843705</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747223843705</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.">
+      <option name="closed" value="true" />
+      <created>1747243453528</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1747243453528</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,6 +228,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test workflows 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="test workflows 2" />
+    <MESSAGE value="add paths to ignore" />
+    <MESSAGE value="Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable." />
+    <MESSAGE value="Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success." />
+    <MESSAGE value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
   </component>
 </project>
