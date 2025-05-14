@@ -9,9 +9,9 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    name: Build, Push Docker Image, and Deploy to Azure
+    name: Build, Push Docker Image
 
     steps:
       - name: Checkout code
@@ -32,31 +32,45 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        run: |
-          IMAGE_NAME=tu_usuario_dockerhub/nitflex:${{ steps.get_version.outputs.version }}
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
+      - name: Generate Docker image
+        run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Push image to DockerHub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Azure
+
+    steps:
+      - name: 'Az CLI login'
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: nitflex-production
-          images: tu_usuario_dockerhub/nitflex:${{ steps.get_version.outputs.version }}
-
-      - name: Run Smoke Test
+      - name: 'Run az commands to deploy container '
         run: |
-          # Replace with your actual smoke test command.  This is just an example.
-          # Assumes your application is running on port 8080.  Adjust as needed.
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex-production.azurewebsites.net:8080)
-          if [ "$STATUS_CODE" -eq "200" ]; then
-            echo "Smoke test passed!"
-          else
-            echo "Smoke test failed. Status code: $STATUS_CODE"
-            exit 1
-          fi
+          az container create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name posts \
+            --image ${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest \
+            --registry-login-server index.docker.io \
+            --registry-username ${{ secrets.DOCKER_USERNAME }} \
+            --registry-password ${{ secrets.DOCKER_PASSWORD }} \
+            --dns-name-label nitflex-production-${{ secrets.DOCKER_USERNAME }} \
+            --ports 8080 \
+            --os-type Linux \
+            --cpu 1 \
+            --memory 1 \
+#      - name: Run Smoke Test
+#        run: |
+#          # Replace with your actual smoke test command.  This is just an example.
+#          # Assumes your application is running on port 8080.  Adjust as needed.
+#          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex-production.azurewebsites.net:8080)
+#          if [ "$STATUS_CODE" -eq "200" ]; then
+#            echo "Smoke test passed!"
+#          else
+#            echo "Smoke test failed. Status code: $STATUS_CODE"
+#            exit 1
+#          fi
