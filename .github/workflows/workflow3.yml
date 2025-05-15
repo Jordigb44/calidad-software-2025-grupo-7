@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
   id-token: write
+  contents: read
 
 jobs:
   build:
@@ -34,18 +34,14 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
 
       - name: Generate Docker image
         run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest
 
       - name: Push image to DockerHub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest
-  deploy:
-    runs-on: ubuntu-latest
-    name: Deploy to Azure
 
-    steps:
       - name: 'Az CLI login'
         uses: azure/login@v2
         with:
@@ -57,16 +53,16 @@ jobs:
         run: |
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name posts \
+            --name ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --image ${{ secrets.DOCKER_USERNAME }}/nitflex-production:latest \
             --registry-login-server index.docker.io \
             --registry-username ${{ secrets.DOCKER_USERNAME }} \
-            --registry-password ${{ secrets.DOCKER_PASSWORD }} \
+            --registry-password ${{ secrets.DOCKER_TOKEN }} \
             --dns-name-label nitflex-production-${{ secrets.DOCKER_USERNAME }} \
             --ports 8080 \
             --os-type Linux \
             --cpu 1 \
-            --memory 1 \
+            --memory 1.5 \
 #      - name: Run Smoke Test
 #        run: |
 #          # Replace with your actual smoke test command.  This is just an example.
