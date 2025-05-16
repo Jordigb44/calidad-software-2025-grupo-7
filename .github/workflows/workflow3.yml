@@ -83,6 +83,32 @@ jobs:
 #            exit 1
 #          fi
 
+      # This Delete the new dockerimage created to this deploy, this is to avoid have many docker images innecessary
+      - name: Remove local image                   # 1. eliminar del runner
+        if: always()
+        run: |
+          docker rmi ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} || true
+
+      - name: Delete tag in Docker Hub             # 2. eliminar del registro remoto
+        if: always()
+        env:
+          DOCKERHUB_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_PAT: ${{ secrets.DOCKER_TOKEN }}   # token con scope "delete:repository"
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Obtener el digest (manifiesto) de la etiqueta
+          DIGEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                       -u "${DOCKERHUB_USER}:${DOCKERHUB_PAT}" \
+                       "https://registry-1.docker.io/v2/${DOCKERHUB_USER}/nitflex/manifests/${IMAGE_TAG}" \
+                    | jq -r '.config.digest')
+
+          # Borrar el manifiesto (equivale a borrar la etiqueta)
+          curl -s -o /dev/null -w "%{http_code}\n" -X DELETE \
+               -u "${DOCKERHUB_USER}:${DOCKERHUB_PAT}" \
+               "https://registry-1.docker.io/v2/${DOCKERHUB_USER}/nitflex/manifests/${DIGEST}"
+
+          echo "Imagen remota nitflex:${IMAGE_TAG} eliminada"
+
       # This Stop the new container just created after all test to avoid to use all credit
 #      - name: Stop container group
 #        if: always()
