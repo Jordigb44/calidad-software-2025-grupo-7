@@ -53,7 +53,7 @@ jobs:
         run: |
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
             --image ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} \
             --registry-login-server index.docker.io \
             --registry-username ${{ secrets.DOCKER_USERNAME }} \
@@ -63,6 +63,7 @@ jobs:
             --os-type Linux \
             --cpu 1 \
             --memory 1.5 \
+
 #      - name: Run Smoke Test
 #        run: |
 #          # Replace with your actual smoke test command.  This is just an example.
@@ -74,3 +75,11 @@ jobs:
 #            echo "Smoke test failed. Status code: $STATUS_CODE"
 #            exit 1
 #          fi
+
+      # This Stop the new container just created after all test to avoid to use all credit
+      - name: Stop container group
+        if: always()
+        run: |
+          az container stop \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production
