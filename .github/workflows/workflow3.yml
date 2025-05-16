@@ -84,9 +84,9 @@ jobs:
 #          fi
 
       # This Stop the new container just created after all test to avoid to use all credit
-      - name: Stop container group
-        if: always()
-        run: |
-          az container stop \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name nitflex-production
+#      - name: Stop container group
+#        if: always()
+#        run: |
+#          az container stop \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --name nitflex-production
