@@ -37,10 +37,10 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
 
       - name: Generate Docker image
-        run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex
+        run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
 
       - name: Push image to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
 
       - name: 'Az CLI login'
         uses: azure/login@v2
@@ -54,11 +54,11 @@ jobs:
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --image ${{ secrets.DOCKER_USERNAME }}/nitflex \
+            --image ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} \
             --registry-login-server index.docker.io \
             --registry-username ${{ secrets.DOCKER_USERNAME }} \
             --registry-password ${{ secrets.DOCKER_TOKEN }} \
-            --dns-name-label nitflex-${{ secrets.DOCKER_USERNAME }} \
+            --dns-name-label nitflex-production \
             --ports 8080 \
             --os-type Linux \
             --cpu 1 \
@@ -67,7 +67,7 @@ jobs:
 #        run: |
 #          # Replace with your actual smoke test command.  This is just an example.
 #          # Assumes your application is running on port 8080.  Adjust as needed.
-#          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex.azurewebsites.net:8080)
+#          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex-production.azurewebsites.net:8080)
 #          if [ "$STATUS_CODE" -eq "200" ]; then
 #            echo "Smoke test passed!"
 #          else
