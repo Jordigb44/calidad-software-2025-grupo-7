@@ -49,6 +49,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Delete container group if exists
+        run: |
+          az container delete \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --yes || true      # Not fail, if not exist
+
       - name: 'Run az commands to deploy container '
         run: |
           az container create \
