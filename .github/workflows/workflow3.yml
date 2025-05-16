@@ -89,25 +89,38 @@ jobs:
         run: |
           docker rmi ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} || true
 
-      - name: Delete tag in Docker Hub             # 2. eliminar del registro remoto
+      - name: Delete tag in Docker Hub
         if: always()
         env:
           DOCKERHUB_USER: ${{ secrets.DOCKER_USERNAME }}
-          DOCKERHUB_PAT: ${{ secrets.DOCKER_TOKEN }}   # token con scope "delete:repository"
+          DOCKERHUB_PAT: ${{ secrets.DOCKER_TOKEN }}   # token/clave personal
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Obtener el digest (manifiesto) de la etiqueta
-          DIGEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-                       -u "${DOCKERHUB_USER}:${DOCKERHUB_PAT}" \
-                       "https://registry-1.docker.io/v2/${DOCKERHUB_USER}/nitflex/manifests/${IMAGE_TAG}" \
-                    | jq -r '.config.digest')
+          set -e
 
-          # Borrar el manifiesto (equivale a borrar la etiqueta)
-          curl -s -o /dev/null -w "%{http_code}\n" -X DELETE \
-               -u "${DOCKERHUB_USER}:${DOCKERHUB_PAT}" \
-               "https://registry-1.docker.io/v2/${DOCKERHUB_USER}/nitflex/manifests/${DIGEST}"
+          # 1) Obtener JWT para la API de Hub
+          TOKEN=$(curl -s -H "Content-Type: application/json" \
+                    -d '{"username": "'"${DOCKERHUB_USER}"'", "password": "'"${DOCKERHUB_PAT}"'"}' \
+                    https://hub.docker.com/v2/users/login/ | jq -r .token)
 
-          echo "Imagen remota nitflex:${IMAGE_TAG} eliminada"
+          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+            echo "No se pudo obtener el token JWT de Docker Hub"
+            exit 1
+          fi
+
+          # 2) Lanzar DELETE sobre la etiqueta
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
+                   -H "Authorization: JWT ${TOKEN}" \
+                   "https://hub.docker.com/v2/repositories/${DOCKERHUB_USER}/nitflex/tags/${IMAGE_TAG}/")
+
+          if [[ "$STATUS" == "204" ]]; then
+            echo "Imagen remota nitflex:${IMAGE_TAG} eliminada correctamente"
+          elif [[ "$STATUS" == "404" ]]; then
+            echo "La etiqueta ${IMAGE_TAG} no existe en Docker Hub"
+          else
+            echo "Fallo al eliminar la etiqueta; código HTTP: $STATUS"
+            exit 1
+          fi
 
       # This Stop the new container just created after all test to avoid to use all credit
 #      - name: Stop container group
