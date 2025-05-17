@@ -79,11 +79,11 @@ jobs:
             --name nitflex-production \
             --query "ipAddress.fqdn" -o tsv)
           echo "FQDN=$FQDN" >> $GITHUB_OUTPUT
-          echo "Application URL: https://$FQDN:8080"
+          echo "Application URL: http://$FQDN:8080"
 
       - name: Run Smoke Test
         run: |
-          URL="https://${{ steps.get-url.outputs.fqdn }}:8080"
+          URL="http://${{ steps.get-url.outputs.fqdn }}:8080"
           echo "➡️  Esperando a que el endpoint /api/films/ responda…"
           for i in {1..10}; do
             HTTP=$(curl --retry 2 --retry-delay 3 -s -o /dev/null -w "%{http_code}" "${URL}/api/films/") || HTTP=000
