@@ -83,35 +83,19 @@ jobs:
 
       - name: Run Smoke Test
         run: |
-          # 1. Obtener la URL del contenedor en Azure
-          FQDN=$(az container show \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name nitflex-production \
-            --query "ipAddress.fqdn" -o tsv)
-          URL="http://${FQDN}:8080"
-
-          # 2. Probamos SOLO el endpoint de salud de Spring Boot Actuator
-          echo "Testing health endpoint: ${URL}/actuator/health"
-          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/actuator/health")
-
-          if [ "$HEALTH_STATUS" -eq "200" ]; then
-            echo "✅ Smoke test passed! Application is healthy."
-          else
-            echo "❌ Smoke test failed. Status code: ${HEALTH_STATUS}"
-            exit 1
-          fi
-
-#      - name: Run Smoke Test
-#        run: |
-#          # Replace with your actual smoke test command.  This is just an example.
-#          # Assumes your application is running on port 8080.  Adjust as needed.
-#          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://nitflex-production.azurewebsites.net:8080)
-#          if [ "$STATUS_CODE" -eq "200" ]; then
-#            echo "Smoke test passed!"
-#          else
-#            echo "Smoke test failed. Status code: $STATUS_CODE"
-#            exit 1
-#          fi
+          URL="https://${{ steps.get-url.outputs.fqdn }}:8080"
+          echo "➡️  Esperando a que el endpoint /api/films/ responda…"
+          for i in {1..10}; do
+            HTTP=$(curl --retry 2 --retry-delay 3 -s -o /dev/null -w "%{http_code}" "${URL}/api/films/") || HTTP=000
+            if [ "$HTTP" -eq "200" ]; then
+              echo "✅ /api/films/ OK tras $i intento(s)"
+              exit 0
+            fi
+            echo "Intento $i: status=$HTTP. Reintentando en 5s…"
+            sleep 5
+          done
+          echo "❌ La app nunca respondió en /api/films/ (último código: $HTTP)"
+          exit 1
 
       # This Delete the new dockerimage created to this deploy, this is to avoid have many docker images innecessary
       - name: Remove local image                   # 1. eliminar del runner
