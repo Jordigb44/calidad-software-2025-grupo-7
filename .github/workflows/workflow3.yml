@@ -71,6 +71,36 @@ jobs:
             --cpu 1 \
             --memory 1.5 \
 
+      - name: Get container URL
+        id: get-url
+        run: |
+          FQDN=$(az container show \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --query "ipAddress.fqdn" -o tsv)
+          echo "FQDN=$FQDN" >> $GITHUB_OUTPUT
+          echo "Application URL: http://$FQDN:8080"
+
+      - name: Run Smoke Test
+        run: |
+          # 1. Obtener la URL del contenedor en Azure
+          FQDN=$(az container show \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --query "ipAddress.fqdn" -o tsv)
+          URL="http://${FQDN}:8080"
+
+          # 2. Probamos SOLO el endpoint de salud de Spring Boot Actuator
+          echo "Testing health endpoint: ${URL}/actuator/health"
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/actuator/health")
+
+          if [ "$HEALTH_STATUS" -eq "200" ]; then
+            echo "✅ Smoke test passed! Application is healthy."
+          else
+            echo "❌ Smoke test failed. Status code: ${HEALTH_STATUS}"
+            exit 1
+          fi
+
 #      - name: Run Smoke Test
 #        run: |
 #          # Replace with your actual smoke test command.  This is just an example.
