@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.">
+    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="Update Docker Hub tag deletion process in workflow&#10;&#10;Revised the tag deletion step to use JWT authentication instead of basic auth, improving security. Added detailed error handling and status messages to ensure better debugging and clarity during execution. This ensures a more robust and reliable cleanup process.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +22,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;history&quot;: [
@@ -104,67 +105,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="calidad-software-2025-grupo-7" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="calidad-software-2025-grupo-7" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="calidad-software-2025-grupo-7" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="Python.FlaskServer">
-      <module name="calidad-software-2025-grupo-7" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="Tox" factoryName="Tox">
-      <module name="calidad-software-2025-grupo-7" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <method v="2" />
-    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -187,6 +127,13 @@
       <workItem from="1747217420980" duration="104000" />
       <workItem from="1747217542439" duration="1284000" />
       <workItem from="1747218843354" duration="3264000" />
+      <workItem from="1747246254201" duration="340000" />
+      <workItem from="1747246668416" duration="776000" />
+      <workItem from="1747316618675" duration="585000" />
+      <workItem from="1747321056375" duration="825000" />
+      <workItem from="1747379063207" duration="3104000" />
+      <workItem from="1747432791890" duration="200000" />
+      <workItem from="1747469454880" duration="901000" />
     </task>
     <task id="LOCAL-00001" summary="test workflows 2">
       <option name="closed" value="true" />
@@ -220,7 +167,71 @@
       <option name="project" value="LOCAL" />
       <updated>1747243453528</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Enable id-token:write permissions in workflow3.yml&#10;&#10;Added `id-token: write` permissions to the GitHub Actions workflow to support operations requiring identity tokens. This change ensures compatibility with services that authenticate via OIDC.">
+      <option name="closed" value="true" />
+      <created>1747246689652</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1747246689652</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency.">
+      <option name="closed" value="true" />
+      <created>1747316870725</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747316870725</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Update Docker image workflow to use commit SHA in tags&#10;&#10;Replaced the static 'latest' tag with dynamic commit SHA for Docker image generation, pushing, and deployment. This ensures better traceability of deployments and avoids overwriting images. Removed Docker username from DNS name to simplify naming conventions.">
+      <option name="closed" value="true" />
+      <created>1747379198678</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747379198678</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Update container creation and add stop step in workflow&#10;&#10;Renamed the container to &quot;nitflex-production&quot; for consistency and added a step to stop the container group after testing. This ensures better resource management and avoids unnecessary credit usage.">
+      <option name="closed" value="true" />
+      <created>1747380006998</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1747380006998</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Add cleanup step to delete existing Azure container group&#10;&#10;This ensures any pre-existing container group is deleted before deploying a new one. The step prevents deployment conflicts and handles non-existent containers gracefully without failing the workflow.">
+      <option name="closed" value="true" />
+      <created>1747380210990</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747380210990</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Disable container stopping step in workflow3.yml DEVELOP MODE&#10;&#10;Commented out the step to stop the container group after tests. This change prevents the automatic halt of the specified container, potentially leaving it running for further use or debugging.">
+      <option name="closed" value="true" />
+      <created>1747380597357</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1747380597357</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Remove unnecessary Docker images after deployment&#10;&#10;Added steps to delete both local and remote Docker images generated during deployment to prevent accumulation of unused images. This includes removing the local image from the runner and deleting the tag in Docker Hub using its manifest.">
+      <option name="closed" value="true" />
+      <created>1747380931467</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1747380931467</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Update Docker Hub tag deletion process in workflow&#10;&#10;Revised the tag deletion step to use JWT authentication instead of basic auth, improving security. Added detailed error handling and status messages to ensure better debugging and clarity during execution. This ensures a more robust and reliable cleanup process.">
+      <option name="closed" value="true" />
+      <created>1747381369940</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1747381369940</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,6 +243,14 @@
     <MESSAGE value="Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable." />
     <MESSAGE value="Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success." />
     <MESSAGE value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
+    <MESSAGE value="Enable id-token:write permissions in workflow3.yml&#10;&#10;Added `id-token: write` permissions to the GitHub Actions workflow to support operations requiring identity tokens. This change ensures compatibility with services that authenticate via OIDC." />
+    <MESSAGE value="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency." />
+    <MESSAGE value="Update Docker image workflow to use commit SHA in tags&#10;&#10;Replaced the static 'latest' tag with dynamic commit SHA for Docker image generation, pushing, and deployment. This ensures better traceability of deployments and avoids overwriting images. Removed Docker username from DNS name to simplify naming conventions." />
+    <MESSAGE value="Update container creation and add stop step in workflow&#10;&#10;Renamed the container to &quot;nitflex-production&quot; for consistency and added a step to stop the container group after testing. This ensures better resource management and avoids unnecessary credit usage." />
+    <MESSAGE value="Add cleanup step to delete existing Azure container group&#10;&#10;This ensures any pre-existing container group is deleted before deploying a new one. The step prevents deployment conflicts and handles non-existent containers gracefully without failing the workflow." />
+    <MESSAGE value="Disable container stopping step in workflow3.yml DEVELOP MODE&#10;&#10;Commented out the step to stop the container group after tests. This change prevents the automatic halt of the specified container, potentially leaving it running for further use or debugging." />
+    <MESSAGE value="Remove unnecessary Docker images after deployment&#10;&#10;Added steps to delete both local and remote Docker images generated during deployment to prevent accumulation of unused images. This includes removing the local image from the runner and deleting the tag in Docker Hub using its manifest." />
+    <MESSAGE value="Update Docker Hub tag deletion process in workflow&#10;&#10;Revised the tag deletion step to use JWT authentication instead of basic auth, improving security. Added detailed error handling and status messages to ensure better debugging and clarity during execution. This ensures a more robust and reliable cleanup process." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Docker Hub tag deletion process in workflow&#10;&#10;Revised the tag deletion step to use JWT authentication instead of basic auth, improving security. Added detailed error handling and status messages to ensure better debugging and clarity during execution. This ensures a more robust and reliable cleanup process." />
   </component>
 </project>
