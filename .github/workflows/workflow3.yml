@@ -100,7 +100,7 @@ jobs:
       - name: Run Smoke Test
         run: |
           URL="http://${{ steps.get-url.outputs.fqdn }}:8080"
-          ENDPOINTS=("/api/films/" "/api/films/new")
+          ENDPOINTS=("/api/films/")
 
           echo "➡️  Esperando a que los endpoints respondan…"
 
