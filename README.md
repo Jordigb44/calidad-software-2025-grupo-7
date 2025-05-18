@@ -66,4 +66,4 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 ## Steps
 
-## Workflow of nightly 
+## Workflow of nightly   
