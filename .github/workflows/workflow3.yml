@@ -3,12 +3,11 @@ name: Workflow 3 - Deploy to Production
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
-  push:
-    branches: [ main ]
     paths-ignore:
       - '.github/workflows/**'
       - 'README.md'
+  workflow_dispatch:
+    
 
 permissions:
   id-token: write
