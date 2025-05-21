@@ -62,8 +62,57 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 
 # Practise 2
+Por limitaciones del entorno GitHub Actions, no se ejecutan pruebas reales en Edge y Safari. El job multibrowser cubre Chrome y Firefox sobre Linux, Windows y macOS, cumpliendo el criterio de validación cruzada multiplataforma.
+
 ## Work Assignment
 
 ## Steps 
 
-## Workflow of nightly
+# 🌙 Workflow 4 - Nightly Testing & Staging Deployment
+
+Este workflow se ejecuta cada noche a las **2:00 AM UTC** (o manualmente mediante `workflow_dispatch`) y realiza validaciones completas del sistema en distintos navegadores y entornos.
+
+---
+
+## 🛠️ ¿Qué hace?
+
+### 🔹 `multibrowser`
+Ejecuta pruebas de sistema con Selenium sobre:
+
+- **Navegadores:** Chrome y Firefox  
+- **Sistemas Operativos:** Linux, Windows y macOS  
+- **Qué se prueba:**  
+  - Crear una nueva película desde la interfaz  
+  - Verificar que aparecen el título, el año y la sinopsis
+
+### 🔹 `loadtesting`
+Despliega automáticamente la aplicación en **Azure (staging)** y realiza:
+
+- ✅ Pruebas unitarias  
+- ✅ Pruebas de integración  
+- ✅ Pruebas de sistema (excepto multibrowser)  
+- ✅ Construcción y publicación de imagen Docker `nitflex:<SHA>`  
+- ✅ Despliegue en Azure con nombre `nitflex-staging`  
+- ✅ **Smoke test** de `/api/films/`  
+- ✅ Prueba de carga con [Artillery](https://www.artillery.io/)  
+- ✅ Detención del contenedor al finalizar
+
+### 🔹 `tag-nightly`
+Si los dos jobs anteriores finalizan correctamente, este job:
+
+- Extrae la imagen con SHA
+- La etiqueta como `nightly-YYYY-MM-DD`
+- La publica en DockerHub
+
+---
+
+## 📦 Artefactos generados
+
+- Imagen Docker:
+  ```bash
+  docker pull <tu_usuario>/nitflex:<SHA>
+  docker pull <tu_usuario>/nitflex:nightly-YYYY-MM-DD
+
+
+
+
