@@ -18,6 +18,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import es.codeurjc.web.nitflex.model.User;
 import es.codeurjc.web.nitflex.repository.UserRepository;
 import es.codeurjc.web.nitflex.service.UserComponent;
+import io.github.bonigarcia.wdm.WebDriverManager;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestSeleniumWebDriver {
 
@@ -62,17 +65,28 @@ public class TestSeleniumWebDriver {
             userRepository.save(user);
         }
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--remote-allow-origins=*");
+        String browser = System.getenv("BROWSER");
 
-        // For 
-        options.addArguments("--user-data-dir=/tmp/chrome-profile-" + UUID.randomUUID());
+        if ("firefox".equalsIgnoreCase(browser)) {
+            WebDriverManager.firefoxdriver().setup();
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            driver = new FirefoxDriver(options);
+        } else {
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless=new");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--user-data-dir=/tmp/chrome-profile-" + UUID.randomUUID());
+            driver = new ChromeDriver(options);
+        }
 
-        driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 

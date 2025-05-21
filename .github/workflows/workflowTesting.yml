@@ -1,18 +1,57 @@
-name: Workflow - All Test Only on Main
+name: Workflow 4 - Nightly Testing & Staging Deployment
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'README.md'
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
-  test:
+  multibrowser:
+    name: Multibrowser Selenium Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        browser: [chrome, firefox]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Install browsers (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg unzip curl
+          # Chrome
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+          # Firefox
+          sudo apt install -y firefox
+
+      - name: Set BROWSER env variable
+        run: echo "BROWSER=${{ matrix.browser }}" >> $GITHUB_ENV
+
+      - name: Run Selenium tests
+        run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
+
+  loadtesting:
+    name: Load Testing & Staging Deployment
     runs-on: ubuntu-latest
-    name: Unit, Integration, REST & E2E Tests
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,8 +76,78 @@ jobs:
       - name: Run Integration Tests
         run: mvn -Dtest='es.codeurjc.web.nitflex.integration.**.*' test
 
-      - name: Run System (E2E) Tests
+      - name: Run System Tests (no multibrowser)
         run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
 
-      - name: Run REST Tests
-        run: mvn -Dtest='es.codeurjc.web.nitflex.rest.TestRest' test
+      - name: Build Docker image
+        run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure (staging)
+        run: |
+          az container delete --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name nitflex-staging --yes || true
+
+          az container create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-staging \
+            --image ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} \
+            --registry-login-server index.docker.io \
+            --registry-username ${{ secrets.DOCKER_USERNAME }} \
+            --registry-password ${{ secrets.DOCKER_TOKEN }} \
+            --dns-name-label nitflex-staging \
+            --ports 8080 \
+            --os-type Linux \
+            --cpu 1 \
+            --memory 1.5
+
+      - name: Smoke Test on Staging
+        run: |
+          STAGING_URL="http://nitflex-staging.eastus.azurecontainer.io:8080"
+          ENDPOINT="/api/films/"
+          for i in {1..10}; do
+            HTTP=$(curl -s -o /dev/null -w "%{http_code}" "${STAGING_URL}${ENDPOINT}") || HTTP=000
+            if [ "$HTTP" == "200" ]; then
+              echo "✅ Smoke test passed"
+              break
+            fi
+            echo "⏳ Intento $i: Código HTTP $HTTP. Reintentando..."
+            sleep 5
+          done
+          if [ "$HTTP" != "200" ]; then
+            echo "❌ Smoke test failed"
+            exit 1
+          fi
+
+      - name: Run Load Test with Artillery
+        run: |
+          npm install -g artillery
+          artillery run src/test/java/es/codeurjc/web/nitflex/artillery/load-test.yml
+
+      - name: Stop staging container
+        if: always()
+        run: |
+          az container stop \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-staging
+
+  tag-nightly:
+    name: Tag Nightly Image
+    needs: [multibrowser, loadtesting]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Pull and Retag Docker image
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          docker pull ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/nitflex:nightly-${DATE}
+          docker push ${{ secrets.DOCKER_USERNAME }}/nitflex:nightly-${DATE}
