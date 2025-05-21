@@ -1,0 +1,134 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"3faef7ce-423f-4046-9de2-bc5042f3ec20\" name=\"Changes\" comment=\"Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ComposerSettings\">\n    <execution />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;history&quot;: [\n    {\n      &quot;assignee&quot;: &quot;Jordigb44&quot;\n    }\n  ],\n  &quot;lastFilter&quot;: {\n    &quot;assignee&quot;: &quot;Jordigb44&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">{\n  &quot;selectedUrlAndAccountId&quot;: {\n    &quot;url&quot;: &quot;https://github.com/chubi0l/calidad-software-2025-grupo-7.git&quot;,\n    &quot;accountId&quot;: &quot;0d67d68d-d3af-44f3-81a3-2cedc914339f&quot;\n  }\n}</component>\n  <component name=\"KubernetesApiPersistence\">{}</component>\n  <component name=\"KubernetesApiProvider\">{\n  &quot;isMigrated&quot;: true\n}</component>\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"php\" />\n  <component name=\"ProjectColorInfo\">{\n  &quot;customColor&quot;: &quot;&quot;,\n  &quot;associatedIndex&quot;: 7\n}</component>\n  <component name=\"ProjectId\" id=\"2x5AAlCb9sIFSafWSmP1nUxVyeF\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\n    &quot;last_opened_file_path&quot;: &quot;/Users/jordiguix/Documents/UNIVERSIDAD/MADRID/MATRICULADO - URJC/24-25 2o year/2o Semestre/Calidad del sofware/Practica1/calidad-software-2025-grupo-7/.github/workflows&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/.github/workflows\" />\n    </key>\n  </component>\n  <component name=\"RunManager\">\n    <configuration default=\"true\" type=\"AZURE_FUNCTION_SUPPORT\" factoryName=\"Run Functions\">\n      <option name=\"appName\" />\n      <option name=\"appServicePlanName\" />\n      <option name=\"appServicePlanResourceGroup\" />\n      <option name=\"appSettingsKey\" value=\"c6f48c8d-9ed2-4aed-867f-e48b92eb76bd\" />\n      <option name=\"artifact\" />\n      <option name=\"debugOptions\" />\n      <option name=\"deployment\" />\n      <option name=\"deploymentStagingDirectoryPath\" />\n      <option name=\"funcPath\" />\n      <option name=\"functionHostArguments\" />\n      <option name=\"hostJsonPath\" />\n      <option name=\"insightsName\" />\n      <option name=\"instrumentationKey\" />\n      <option name=\"javaVersion\" />\n      <option name=\"localSettingsJsonPath\" />\n      <option name=\"moduleName\" />\n      <option name=\"os\" />\n      <option name=\"pricingTier\" />\n      <option name=\"providerMap\">\n        <map />\n      </option>\n      <option name=\"region\" />\n      <option name=\"resourceGroup\" />\n      <option name=\"stagingFolder\" />\n      <option name=\"subscription\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration default=\"true\" type=\"JetRunConfigurationType\">\n      <module name=\"calidad-software-2025-grupo-7\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration default=\"true\" type=\"KotlinStandaloneScriptRunConfigurationType\">\n      <module name=\"calidad-software-2025-grupo-7\" />\n      <option name=\"filePath\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration default=\"true\" type=\"PythonConfigurationType\" factoryName=\"Python\">\n      <module name=\"calidad-software-2025-grupo-7\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <option name=\"SCRIPT_NAME\" value=\"\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration default=\"true\" type=\"Python.FlaskServer\">\n      <module name=\"calidad-software-2025-grupo-7\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration default=\"true\" type=\"Tox\" factoryName=\"Tox\">\n      <module name=\"calidad-software-2025-grupo-7\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <method v=\"2\" />\n    </configuration>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435\" />\n        <option value=\"bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"StructureViewState\">\n    <option name=\"selectedTab\" value=\"Logical\" />\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"3faef7ce-423f-4046-9de2-bc5042f3ec20\" name=\"Changes\" comment=\"\" />\n      <created>1747217419870</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1747217419870</updated>\n      <workItem from=\"1747217420980\" duration=\"104000\" />\n      <workItem from=\"1747217542439\" duration=\"1284000\" />\n      <workItem from=\"1747218843354\" duration=\"3264000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"test workflows 2\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747219741774</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747219741774</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable.\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747223376088</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747223376088</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success.\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747223843705</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747223843705</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747243453528</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747243453528</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"5\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"test workflows 2\" />\n    <MESSAGE value=\"add paths to ignore\" />\n    <MESSAGE value=\"Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable.\" />\n    <MESSAGE value=\"Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success.\" />\n    <MESSAGE value=\"Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 78d2558502d341bdeae6fa04919ba7bf4bc89ede)
++++ b/.idea/workspace.xml	(date 1747329938030)
+@@ -4,7 +4,7 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility.">
++    <list default="true" id="3faef7ce-423f-4046-9de2-bc5042f3ec20" name="Changes" comment="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency.">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -103,67 +103,6 @@
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+-    </configuration>
+-    <configuration default="true" type="JetRunConfigurationType">
+-      <module name="calidad-software-2025-grupo-7" />
+-      <method v="2">
+-        <option name="Make" enabled="true" />
+-      </method>
+-    </configuration>
+-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+-      <module name="calidad-software-2025-grupo-7" />
+-      <option name="filePath" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+-      <module name="calidad-software-2025-grupo-7" />
+-      <option name="ENV_FILES" value="" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="" />
+-      <option name="IS_MODULE_SDK" value="false" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="SCRIPT_NAME" value="" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration default="true" type="Python.FlaskServer">
+-      <module name="calidad-software-2025-grupo-7" />
+-      <option name="ENV_FILES" value="" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="" />
+-      <option name="IS_MODULE_SDK" value="false" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="launchJavascriptDebuger" value="false" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration default="true" type="Tox" factoryName="Tox">
+-      <module name="calidad-software-2025-grupo-7" />
+-      <option name="ENV_FILES" value="" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="" />
+-      <option name="IS_MODULE_SDK" value="false" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <method v="2" />
+     </configuration>
+   </component>
+   <component name="SharedIndexes">
+@@ -187,6 +126,10 @@
+       <workItem from="1747217420980" duration="104000" />
+       <workItem from="1747217542439" duration="1284000" />
+       <workItem from="1747218843354" duration="3264000" />
++      <workItem from="1747246254201" duration="340000" />
++      <workItem from="1747246668416" duration="776000" />
++      <workItem from="1747316618675" duration="585000" />
++      <workItem from="1747321056375" duration="825000" />
+     </task>
+     <task id="LOCAL-00001" summary="test workflows 2">
+       <option name="closed" value="true" />
+@@ -220,7 +163,23 @@
+       <option name="project" value="LOCAL" />
+       <updated>1747243453528</updated>
+     </task>
+-    <option name="localTasksCounter" value="5" />
++    <task id="LOCAL-00005" summary="Enable id-token:write permissions in workflow3.yml&#10;&#10;Added `id-token: write` permissions to the GitHub Actions workflow to support operations requiring identity tokens. This change ensures compatibility with services that authenticate via OIDC.">
++      <option name="closed" value="true" />
++      <created>1747246689652</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1747246689652</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency.">
++      <option name="closed" value="true" />
++      <created>1747316870725</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1747316870725</updated>
++    </task>
++    <option name="localTasksCounter" value="7" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -232,6 +191,8 @@
+     <MESSAGE value="Update Selenium dependency version to 4.32.0&#10;&#10;Replaced the placeholder variable with a specific version to ensure stability and consistency in testing. This prevents potential issues caused by changes in the referenced variable." />
+     <MESSAGE value="Add workflow3 for production deployment&#10;&#10;This workflow automates deploying to production on `main` branch pushes or manual triggers. It builds a Docker image, pushes it to Docker Hub, deploys it to Azure App Service, and runs a smoke test to verify deployment success." />
+     <MESSAGE value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
+-    <option name="LAST_COMMIT_MESSAGE" value="Refactor CI/CD workflow to separate build and deploy steps&#10;&#10;Reorganized the workflow by splitting the build and deploy stages into separate jobs. Updated the Docker image build process to use Maven and streamlined the image push to DockerHub. Deployment to Azure was refactored to use the 'az container create' command for improved flexibility." />
++    <MESSAGE value="Enable id-token:write permissions in workflow3.yml&#10;&#10;Added `id-token: write` permissions to the GitHub Actions workflow to support operations requiring identity tokens. This change ensures compatibility with services that authenticate via OIDC." />
++    <MESSAGE value="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency." />
++    <option name="LAST_COMMIT_MESSAGE" value="Update Docker authentication and Azure deployment settings&#10;&#10;Replaced Docker password authentication with token-based authentication for added security. Adjusted Azure container deployment parameters, including memory allocation and container naming conventions, to improve resource allocation and consistency." />
+   </component>
+ </project>
+\ No newline at end of file

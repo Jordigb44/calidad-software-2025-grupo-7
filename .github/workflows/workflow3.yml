@@ -1,0 +1,157 @@
+name: Workflow 3 - Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build, Push Docker Image
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Get version from pom.xml
+        id: version
+        shell: bash
+        run: |
+          set -e
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tr -d '\n')
+          [ -n "$VERSION" ] || { echo "No se pudo obtener la versión"; exit 1; }
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Generate Docker image
+        run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
+
+      - name: Push image to DockerHub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Delete container group if exists
+        run: |
+          az container delete \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --yes || true      # Not fail, if not exist
+
+      - name: 'Run az commands to deploy container '
+        run: |
+          az container create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --image ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} \
+            --registry-login-server index.docker.io \
+            --registry-username ${{ secrets.DOCKER_USERNAME }} \
+            --registry-password ${{ secrets.DOCKER_TOKEN }} \
+            --dns-name-label nitflex-production \
+            --ports 8080 \
+            --os-type Linux \
+            --cpu 1 \
+            --memory 1.5 \
+
+      - name: Get container URL
+        id: get-url
+        run: |
+          FQDN=$(az container show \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --query "ipAddress.fqdn" -o tsv)
+          echo "FQDN=$FQDN" >> $GITHUB_OUTPUT
+          echo "Application URL: http://$FQDN:8080"
+
+      - name: Run Smoke Test
+        run: |
+          URL="http://${{ steps.get-url.outputs.fqdn }}:8080"
+          ENDPOINTS=("/api/films/")
+
+          echo "➡️  Esperando a que los endpoints respondan…"
+
+          for endpoint in "${ENDPOINTS[@]}"; do
+            echo "🔍 Probando ${URL}${endpoint}"
+            success=false
+            for i in {1..10}; do
+              HTTP=$(curl --retry 2 --retry-delay 3 -s -o /dev/null -w "%{http_code}" "${URL}${endpoint}") || HTTP=000
+              if [ "$HTTP" -eq "200" ]; then
+                echo "✅ ${endpoint} OK tras $i intento(s)"
+                success=true
+                break
+              fi
+              echo "Intento $i: status=$HTTP. Reintentando en 5s…"
+              sleep 5
+            done
+            if [ "$success" = false ]; then
+              echo "❌ La app nunca respondió en ${endpoint} (último código: $HTTP)"
+              exit 1
+            fi
+          done
+
+          echo "🎉 Todos los endpoints respondieron correctamente"
+
+      # This Delete the new dockerimage created to this deploy, this is to avoid have many docker images innecessary
+      - name: Remove local image                   # 1. eliminar del runner
+        if: always()
+        run: |
+          docker rmi ${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }} || true
+
+      - name: Delete tag in Docker Hub
+        if: always()
+        env:
+          DOCKERHUB_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_PAT: ${{ secrets.DOCKER_TOKEN }}   # token/clave personal
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -e
+
+          # 1) Obtener JWT para la API de Hub
+          TOKEN=$(curl -s -H "Content-Type: application/json" \
+                    -d '{"username": "'"${DOCKERHUB_USER}"'", "password": "'"${DOCKERHUB_PAT}"'"}' \
+                    https://hub.docker.com/v2/users/login/ | jq -r .token)
+
+          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+            echo "No se pudo obtener el token JWT de Docker Hub"
+            exit 1
+          fi
+
+          # 2) Lanzar DELETE sobre la etiqueta
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
+                   -H "Authorization: JWT ${TOKEN}" \
+                   "https://hub.docker.com/v2/repositories/${DOCKERHUB_USER}/nitflex/tags/${IMAGE_TAG}/")
+
+          if [[ "$STATUS" == "204" ]]; then
+            echo "Imagen remota nitflex:${IMAGE_TAG} eliminada correctamente"
+          elif [[ "$STATUS" == "404" ]]; then
+            echo "La etiqueta ${IMAGE_TAG} no existe en Docker Hub"
+          else
+            echo "Fallo al eliminar la etiqueta; código HTTP: $STATUS"
+            exit 1
+          fi
+
+      # This Stop the new container just created after all test to avoid to use all credit
+      - name: Stop container group
+        if: always()
+        run: |
+          az container stop \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production

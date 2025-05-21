@@ -69,7 +69,7 @@ public class TestRest {
         return filmJson;
     }
 
-    // Method to create a default film for all tests, and validating it
+    // Method to create a default film for all  tests, and validating it
     private Response addFilm(String title, String synopsis, int releaseYear, String ageRating) {
         JSONObject filmJson = buildFilmJson(title, synopsis, releaseYear, ageRating);
 

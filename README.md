@@ -64,6 +64,6 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 # Practise 2
 ## Work Assignment
 
-## Steps
+## Steps 
 
 ## Workflow of nightly
