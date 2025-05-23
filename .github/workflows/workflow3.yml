@@ -85,33 +85,10 @@ jobs:
           echo "FQDN=$FQDN" >> $GITHUB_OUTPUT
           echo "Application URL: http://$FQDN:8080"
 
-      - name: Run Smoke Test
+      - name: Smoke Test on Staging
         run: |
-          URL="http://${{ steps.get-url.outputs.fqdn }}:8080"
-          ENDPOINTS=("/api/films/")
-
-          echo "➡️  Esperando a que los endpoints respondan…"
-
-          for endpoint in "${ENDPOINTS[@]}"; do
-            echo "🔍 Probando ${URL}${endpoint}"
-            success=false
-            for i in {1..10}; do
-              HTTP=$(curl --retry 2 --retry-delay 3 -s -o /dev/null -w "%{http_code}" "${URL}${endpoint}") || HTTP=000
-              if [ "$HTTP" -eq "200" ]; then
-                echo "✅ ${endpoint} OK tras $i intento(s)"
-                success=true
-                break
-              fi
-              echo "Intento $i: status=$HTTP. Reintentando en 5s…"
-              sleep 5
-            done
-            if [ "$success" = false ]; then
-              echo "❌ La app nunca respondió en ${endpoint} (último código: $HTTP)"
-              exit 1
-            fi
-          done
-
-          echo "🎉 Todos los endpoints respondieron correctamente"
+          npm install -g artillery
+          artillery run src/test/java/es/codeurjc/web/nitflex/artillery/smoke-test.yml
 
       # This Delete the new dockerimage created to this deploy, this is to avoid have many docker images innecessary
       - name: Remove local image                   # 1. eliminar del runner
