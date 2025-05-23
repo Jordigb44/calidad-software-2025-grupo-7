@@ -115,7 +115,8 @@ jobs:
 
       - name: Smoke Test on Staging
         run: |
-          # smoke test en carpeta artillery artillery run src/test/java/es/codeurjc/web/nitflex/artillery/¿?
+          npm install -g artillery
+          artillery run src/test/java/es/codeurjc/web/nitflex/artillery/smoke-test.yml
 
       - name: Run Load Test with Artillery
         run: |

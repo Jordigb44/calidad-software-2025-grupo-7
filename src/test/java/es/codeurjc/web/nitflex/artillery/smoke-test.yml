@@ -1,0 +1,16 @@
+config:
+  target: "http://nitflex-staging.westeurope.azurecontainer.io"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: Get Films - Smoke Test
+    flow:
+      - get:
+          url: "/api/films/"
+          expect:
+            - statusCode: 200
