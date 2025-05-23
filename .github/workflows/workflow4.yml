@@ -118,8 +118,15 @@ jobs:
 
       - name: Deploy to Azure (staging)
         run: |
-          az container delete --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name nitflex-staging --yes || true
-
+          # Eliminar el contenedor existente si existe
+          az container delete \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-staging \
+            --yes || true
+          
+          # Esperar unos segundos para asegurar que el contenedor se ha eliminado
+          sleep 30
+          
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name nitflex-staging \
