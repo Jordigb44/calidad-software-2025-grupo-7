@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-      - '.github/workflows/**'  
+      - '.github/workflows/**'
       - 'README.md'
 
 permissions:
@@ -38,6 +38,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Añade estos pasos antes de ejecutar las pruebas
+      - name: Setup Chrome (macOS)
+        if: runner.os == 'macOS' && matrix.browser == 'firefox'
+        run: |
+          brew install --cask firefox
+          echo "FIREFOX_BIN=/Applications/Firefox.app/Contents/MacOS/firefox" >> $GITHUB_ENV
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -46,6 +52,20 @@ jobs:
 
       - name: Set BROWSER env variable
         run: echo "BROWSER=${{ matrix.browser }}" >> $GITHUB_ENV
+
+      - name: Set browser environment
+        shell: bash
+        run: |
+          if [[ "${{ matrix.browser }}" == "firefox" && "${{ runner.os }}" == "macOS" ]]; then
+            echo "SELENIUM_BROWSER=firefox" >> $GITHUB_ENV
+            echo "MOZ_HEADLESS=1" >> $GITHUB_ENV
+            echo "FIREFOX_BIN=/Applications/Firefox.app/Contents/MacOS/firefox" >> $GITHUB_ENV
+          fi
+
+      - name: Setup Firefox (macOS)
+        if: matrix.os == 'macos-latest' && matrix.browser == 'firefox'
+        run: |
+          brew install --cask firefox
 
       - name: Run Selenium multibrowser test
         run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.TestSeleniumMultibrowser' test

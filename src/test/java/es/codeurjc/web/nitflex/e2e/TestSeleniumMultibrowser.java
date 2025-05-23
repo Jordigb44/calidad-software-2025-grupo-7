@@ -58,24 +58,24 @@ public class TestSeleniumMultibrowser {
         }
 
         String browser = System.getenv("BROWSER");
-
-        if ("firefox".equalsIgnoreCase(browser)) {
-            WebDriverManager.firefoxdriver().setup();
+        if (browser != null && browser.equals("firefox")) {
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
+            
+            String firefoxBin = System.getenv("FIREFOX_BIN");
+            if (firefoxBin != null && !firefoxBin.isEmpty()) {
+                options.setBinary(firefoxBin);
+            }
+            
             driver = new FirefoxDriver(options);
         } else {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
-            options.addArguments("--disable-gpu");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--remote-debugging-port=9222");
+            options.addArguments("--headless=new");
             driver = new ChromeDriver(options);
         }
-
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     @AfterEach
