@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-      - '.github/workflows/**'
+      - '.github/workflows/**'  
       - 'README.md'
 
 permissions:
@@ -19,6 +19,7 @@ jobs:
     name: Multibrowser Test
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
         include:
           - os: ubuntu-latest
