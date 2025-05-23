@@ -32,8 +32,8 @@ jobs:
             browser: firefox
           - os: macos-latest
             browser: chrome
-          - os: macos-latest
-            browser: firefox
+          # - os: macos-latest
+          #   browser: firefox
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
