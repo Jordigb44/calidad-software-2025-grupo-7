@@ -128,8 +128,8 @@ jobs:
             --yes || true
           
           # Esperar unos segundos para asegurar que el contenedor se ha eliminado
-          sleep 30
-          
+          sleep 5
+
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name nitflex-staging \
