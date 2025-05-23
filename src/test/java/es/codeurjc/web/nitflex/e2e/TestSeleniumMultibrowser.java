@@ -62,13 +62,9 @@ public class TestSeleniumMultibrowser {
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
             
-            // Configuración específica para macOS
-            String osName = System.getProperty("os.name").toLowerCase();
-            if (osName.contains("mac")) {
-                String firefoxBin = System.getenv("FIREFOX_BIN");
-                if (firefoxBin != null) {
-                    options.setBinary(firefoxBin);
-                }
+            String firefoxBin = System.getenv("FIREFOX_BIN");
+            if (firefoxBin != null && !firefoxBin.isEmpty()) {
+                options.setBinary(firefoxBin);
             }
             
             driver = new FirefoxDriver(options);
