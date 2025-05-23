@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   multibrowser:
-    name: Multibrowser Selenium Test
+    name: Multibrowser Test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

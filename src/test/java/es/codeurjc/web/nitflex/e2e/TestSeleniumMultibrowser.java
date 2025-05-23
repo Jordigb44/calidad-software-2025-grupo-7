@@ -17,9 +17,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import es.codeurjc.web.nitflex.model.User;
+import es.codeurjc.web.nitflex.repository.UserRepository;
+import es.codeurjc.web.nitflex.service.UserComponent;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -27,6 +31,12 @@ public class TestSeleniumMultibrowser {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserComponent userComponent;
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -41,6 +51,13 @@ public class TestSeleniumMultibrowser {
 
     @BeforeEach
     void setUp() {
+        if (userRepository.count() == 0) {
+            User user = new User();
+            user.setName("testUser");
+            user.setEmail("test@example.com");
+            userRepository.save(user);
+        }
+
         String browser = System.getenv("BROWSER");
 
         if ("firefox".equalsIgnoreCase(browser)) {
