@@ -34,11 +34,14 @@ jobs:
             browser: chrome
           - os: macos-latest
             browser: firefox
+          - os: windows-latest
+            browser: edge
+          - os: macos-latest
+            browser: safari   
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Añade estos pasos antes de ejecutar las pruebas
       - name: Setup Chrome (macOS)
         if: runner.os == 'macOS' && matrix.browser == 'firefox'
         run: |
