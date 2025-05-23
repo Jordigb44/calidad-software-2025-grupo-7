@@ -80,6 +80,9 @@ jobs:
       - name: Run System Tests (except multibrowser)
         run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
 
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+
       - name: Build Docker image
         run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/nitflex:${{ github.sha }}
 
