@@ -1,7 +1,6 @@
 package es.codeurjc.web.nitflex.e2e;
 
 import java.time.Duration;
-import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -68,8 +67,11 @@ public class TestSeleniumMultibrowser {
         } else {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless=new");
-            options.addArguments("--user-data-dir=/tmp/chrome-profile-" + UUID.randomUUID());
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--remote-debugging-port=9222");
             driver = new ChromeDriver(options);
         }
 
