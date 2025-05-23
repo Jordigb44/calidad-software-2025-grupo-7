@@ -42,24 +42,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Cache browsers
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/selenium
-            ~/Library/Application Support/Firefox
-            ~/Library/Caches/Firefox
-            ~/Library/Caches/Google/Chrome
-          key: ${{ runner.os }}-browsers-${{ matrix.browser }}-${{ hashFiles('**/pom.xml') }}
-
       - name: Setup Chrome (macOS)
         if: runner.os == 'macOS' && matrix.browser == 'firefox'
         run: |
@@ -98,38 +80,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.m2
-            target/
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml', '**/target/**') }}
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Cache npm packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: |
-            image=moby/buildkit:latest
-            network=host
 
       - name: Run Unit Tests
         run: mvn -Dtest='es.codeurjc.web.nitflex.unit.**.*' test
