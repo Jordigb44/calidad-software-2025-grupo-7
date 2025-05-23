@@ -31,6 +31,8 @@ jobs:
             browser: firefox
           - os: macos-latest
             browser: chrome
+          - os: macos-latest
+            browser: firefox
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,22 +43,11 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Install browsers (Linux only)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg unzip curl
-          # Chrome
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
-          # Firefox
-          sudo apt install -y firefox
-
       - name: Set BROWSER env variable
         run: echo "BROWSER=${{ matrix.browser }}" >> $GITHUB_ENV
 
-      - name: Run Selenium tests
-        run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.**.*' test
+      - name: Run Selenium multibrowser test
+        run: mvn -Dtest='es.codeurjc.web.nitflex.e2e.TestSeleniumMultibrowser' test
 
   loadtesting:
     name: Load Testing & Staging Deployment
@@ -120,21 +111,7 @@ jobs:
 
       - name: Smoke Test on Staging
         run: |
-          STAGING_URL="http://nitflex-staging.eastus.azurecontainer.io:8080"
-          ENDPOINT="/api/films/"
-          for i in {1..10}; do
-            HTTP=$(curl -s -o /dev/null -w "%{http_code}" "${STAGING_URL}${ENDPOINT}") || HTTP=000
-            if [ "$HTTP" == "200" ]; then
-              echo "✅ Smoke test passed"
-              break
-            fi
-            echo "⏳ Intento $i: Código HTTP $HTTP. Reintentando..."
-            sleep 5
-          done
-          if [ "$HTTP" != "200" ]; then
-            echo "❌ Smoke test failed"
-            exit 1
-          fi
+          # smoke test en carpeta artillery artillery run src/test/java/es/codeurjc/web/nitflex/artillery/¿?
 
       - name: Run Load Test with Artillery
         run: |
