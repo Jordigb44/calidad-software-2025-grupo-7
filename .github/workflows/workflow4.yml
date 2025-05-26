@@ -86,14 +86,6 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
       - name: Run Unit Tests
         run: mvn -Dtest='es.codeurjc.web.nitflex.unit.**.*' test
 
@@ -126,9 +118,6 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name nitflex-staging \
             --yes || true
-          
-          # Esperar unos segundos para asegurar que el contenedor se ha eliminado
-          sleep 5
 
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
@@ -152,13 +141,6 @@ jobs:
         run: |
           npm install -g artillery
           artillery run src/test/java/es/codeurjc/web/nitflex/artillery/load-test.yml
-
-      - name: Stop staging container
-        if: always()
-        run: |
-          az container stop \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name nitflex-staging
 
   tag-nightly:
     name: Tag Nightly Image
