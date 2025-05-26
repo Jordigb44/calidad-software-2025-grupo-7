@@ -289,10 +289,25 @@ public class TestSeleniumWebDriver {
 
         deleteFilm(newTitle);
     }
+  
+    @Test
+    @DisplayName("Cancel button from new film page navigates back to film list")
+    @Order(5)
+    void testCancelFromNewFilmForm() {
+        driver.get("http://localhost:" + port + "/films/new");
+
+        WebElement cancelButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Cancel']")));
+        cancelButton.click();
+
+        wait.until(ExpectedConditions.urlToBe("http://localhost:" + port + "/"));
+        WebElement createButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("create-film")));
+
+        assertTrue(createButton.isDisplayed(), "Expected to be on the homepage after canceling, but we are not.");
+    }
 
     @Test
     @DisplayName("Cuando se intenta crear una película con año anterior a 1895, se muestra error y no se crea la película")
-    @Order(5)
+    @Order(6)
     void testAddFilmWithInvalidYear() {
         // Navigate to the home page
         driver.get("http://localhost:" + port + "/");
