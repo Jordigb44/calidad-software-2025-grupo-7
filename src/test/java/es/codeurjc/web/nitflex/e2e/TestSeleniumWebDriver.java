@@ -289,4 +289,18 @@ public class TestSeleniumWebDriver {
 
         deleteFilm(newTitle);
     }
+
+    @Test
+    @DisplayName("Cancel button from new film page navigates back to film list")
+    void testCancelFromNewFilmForm() {
+        driver.get("http://localhost:" + port + "/films/new");
+
+        WebElement cancelButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Cancel']")));
+        cancelButton.click();
+
+        wait.until(ExpectedConditions.urlToBe("http://localhost:" + port + "/"));
+        WebElement createButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("create-film")));
+
+        assertTrue(createButton.isDisplayed(), "Expected to be on the homepage after canceling, but we are not.");
+    }
 }
