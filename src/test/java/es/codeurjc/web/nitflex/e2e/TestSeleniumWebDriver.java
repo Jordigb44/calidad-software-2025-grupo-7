@@ -1,14 +1,13 @@
 package es.codeurjc.web.nitflex.e2e;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -26,7 +25,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import es.codeurjc.web.nitflex.model.User;
 import es.codeurjc.web.nitflex.repository.UserRepository;
-import es.codeurjc.web.nitflex.service.UserComponent;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestSeleniumWebDriver {
 
@@ -35,9 +33,6 @@ public class TestSeleniumWebDriver {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserComponent userComponent;
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -69,7 +64,7 @@ public class TestSeleniumWebDriver {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-allow-origins=*");
 
-        // For 
+        // For
         options.addArguments("--user-data-dir=/tmp/chrome-profile-" + UUID.randomUUID());
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -100,6 +95,7 @@ public class TestSeleniumWebDriver {
         synopsisInput.sendKeys(description);
     
         WebElement releaseYearInput = driver.findElement(By.name("releaseYear"));
+        releaseYearInput.clear();
         releaseYearInput.sendKeys(releaseYear);
     
         WebElement ageRatingInput = driver.findElement(By.name("ageRating"));
@@ -302,5 +298,44 @@ public class TestSeleniumWebDriver {
         WebElement createButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("create-film")));
 
         assertTrue(createButton.isDisplayed(), "Expected to be on the homepage after canceling, but we are not.");
+    }
+
+    @Test
+    @DisplayName("Cuando se intenta crear una película con año anterior a 1895, se muestra error y no se crea la película")
+    @Order(5)
+    void testAddFilmWithInvalidYear() {
+        // Navigate to the home page
+        driver.get("http://localhost:" + port + "/");
+
+        //GIVEN
+        String expectedErrorMessage = "The release year must be greater than or equal to 1895";
+        wait.until(ExpectedConditions.urlContains("/"));
+
+        //WHEN
+        addFilm("Película Test Año Inválido", FILM_DESCRIPTION, "1894", "+12", null);
+
+        // Verificar que estamos en la página de error y que el mensaje es correcto
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("message")));
+        WebElement errorMessageElement = driver.findElement(By.id("message"));
+        assertEquals(expectedErrorMessage, errorMessageElement.getText().trim(),
+                "El mensaje de error no coincide con el esperado");
+
+        // Verificar que el botón "All Films" está presente
+        assertTrue(driver.findElement(By.id("all-films")).isDisplayed(),
+                "El botón 'All Films' debería estar visible");
+
+        //THEN
+        // Navegar a la página principal
+        driver.findElement(By.id("all-films")).click();
+        wait.until(ExpectedConditions.urlContains("/"));
+        
+        // Verificar que la película no aparece en la lista
+        List<WebElement> filmTitles = driver.findElements(
+            By.xpath("//a[contains(@class, 'film-title')]"));
+        
+        boolean filmExists = filmTitles.stream()
+            .anyMatch(element -> element.getText().equals("Película Test Año Inválido"));
+        
+        assertFalse(filmExists, "La película con año inválido no debería aparecer en la lista");
     }
 }

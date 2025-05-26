@@ -191,4 +191,26 @@ public class TestUnit {
         assertEquals("Film not found with id: " + fictionalId, ex.getMessage());
         verify(filmRepository, never()).deleteById(anyLong());
     }
+
+
+    @Test
+    @DisplayName("Cuando se guarda una película con un año anterior a 1895, NO se guarda en el repositorio y se lanza una excepción")
+    void testSaveFilmWithInvalidYear() {
+        //GIVEN
+        CreateFilmRequest invalidFilm = new CreateFilmRequest(
+            "Película antigua",
+            "Una película muy antigua",
+            1894,  // Año inválido
+            "+12"
+        );
+
+        //WHEN & THEN
+        // Verificar que se lanza la excepción
+        assertThrows(IllegalArgumentException.class, () -> {
+            filmService.save(invalidFilm);
+        }, "The release year must be greater than or equal to 1895");
+
+        // Verificar que no se llamó al método save del repositorio
+        verify(filmRepository, never()).save(any(Film.class));
+    }
 }

@@ -67,6 +67,11 @@ public class FilmService {
 		if (film.title() == null || film.title().isEmpty()) {
 			throw new IllegalArgumentException("The title is empty");
 		}
+		// Añadir validación del año
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
+		}
+
 		Film newFilm = filmMapper.toDomain(film);
 		newFilm.setPosterFile(imageField);
 		return filmMapper.toDTO(filmRepository.save(newFilm));
@@ -83,6 +88,7 @@ public class FilmService {
 		return this.save(film, (Blob) null);
 	}
 
+
 	public FilmDTO update(long filmId, FilmSimpleDTO film) {
 		return this.update(filmId, film, null);
 	}
@@ -90,6 +96,10 @@ public class FilmService {
 	public FilmDTO update(long filmId, FilmSimpleDTO film, MultipartFile imageField) {
 		Film toUpdateFilm = filmRepository.findById(filmId)
 				.orElseThrow(() -> new FilmNotFoundException(filmId));
+		// Añadir validación del año en el update
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
+		}
 		toUpdateFilm.setTitle(film.title());
 		toUpdateFilm.setSynopsis(film.synopsis());
 		toUpdateFilm.setReleaseYear(film.releaseYear());
