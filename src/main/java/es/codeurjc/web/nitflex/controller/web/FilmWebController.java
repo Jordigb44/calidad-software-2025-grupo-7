@@ -99,8 +99,10 @@ public class FilmWebController {
 			newFilm = filmService.save(film, imageField);
 		}catch(IllegalArgumentException e){
 			model.addAttribute("error", true);
-			model.addAttribute("message", e.getMessage());
-			return "error";
+			model.addAttribute("errors", List.of(e.getMessage()));
+			model.addAttribute("action", "/films/new");
+			model.addAttribute("film", film);
+			return "filmForm";
 		}
 		
 		return "redirect:/films/" + newFilm.id();
