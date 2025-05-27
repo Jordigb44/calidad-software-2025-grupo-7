@@ -261,6 +261,135 @@ After merging into `main`, the following workflows were triggered:
 
 
 
+- **[STEP 3 - Elinee Nathalie Freites Muñoz]**
+### 🛠️ Fix Implemented
+- **fixes were focused only the ones that were not going to affect deppendencys or the architecture of the website, in order to change things that updgrade the cuality of the code**
+
+- SonarQube analysis was incorporated, replacing string literals with constants to improve maintainability and flexibility. Notably, this change was applied to most of the string literals that were heavily used throughout the codebase. This is one of the many improvements implemented throughout the codebase.
+  ```java
+  @ControllerAdvice(basePackages = "es.codeurjc.web.nitflex.controller.web")
+  public class WebErrorHandler {
+	  public static final String MESSAGE = "message";
+
+    /**
+	 * When a 'FilmNotFound' exception occurs, the following method is executed
+	 * @param ex
+	 * @return a view with a message indicating the error
+	 */
+	@ExceptionHandler({FilmNotFoundException.class, IllegalArgumentException.class, BindException.class})
+    public ModelAndView handleException(Exception ex){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(MESSAGE);
+		modelAndView.addObject("error", true);
+
+		if(ex instanceof MethodArgumentNotValidException manvExp){
+			modelAndView.addObject(MESSAGE, manvExp.getFieldError().getDefaultMessage());
+		}else{
+			modelAndView.addObject(MESSAGE, ex.getMessage());
+		}
+
+        return modelAndView;
+  ```
+- This was the before: Previous implementation required modifying the literal string value in three different places to update a single message.. Refactored to use a constant, allowing message updates from a single location.
+  ```java
+  
+  @ControllerAdvice(basePackages = "es.codeurjc.web.nitflex.controller.web")
+  public class WebErrorHandler {
+
+    /**
+	 * When a 'FilmNotFound' exception occurs, the following method is executed
+	 * @param ex
+	 * @return a view with a message indicating the error
+	 */
+	@ExceptionHandler({FilmNotFoundException.class, IllegalArgumentException.class, BindException.class})
+    public ModelAndView handleException(Exception ex){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("message");
+		modelAndView.addObject("error", true);
+
+		if(ex instanceof MethodArgumentNotValidException manvExp){
+			modelAndView.addObject("message", manvExp.getFieldError().getDefaultMessage());
+		}else{
+			modelAndView.addObject("message", ex.getMessage());
+		}
+
+        return modelAndView;
+    }
+  ```
+- SonarQube analysis made necessary to delete the unused local variable fnfExp because violates clean code principles (dead code adds unnecessary complexity) and improving code maintainability.
+  ```java
+  @ControllerAdvice(basePackages = "es.codeurjc.web.nitflex.controller.rest")
+  public class RestErrorHandler {
+
+    /**
+     * When a 'FilmNotFound' exception occurs, the following method is executed
+     * 
+     * @param ex
+     * @return a view with a message indicating the error
+     */
+    @ExceptionHandler({ FilmNotFoundException.class, IllegalArgumentException.class, BindException.class })
+    public ResponseEntity<?> handleException(Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException manvExp) {
+            return ResponseEntity.badRequest().body(manvExp.getFieldError().getDefaultMessage());
+        } else if (ex instanceof FilmNotFoundException) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+  ```
+  -This was the before: Even harmless or looking small, it adds some weight to the code, even could make it hard to understand it's purpose:
+  ``` java
+  @ControllerAdvice(basePackages = "es.codeurjc.web.nitflex.controller.rest")
+  public class RestErrorHandler {
+
+    /**
+     * When a 'FilmNotFound' exception occurs, the following method is executed
+     * 
+     * @param ex
+     * @return a view with a message indicating the error
+     */
+    @ExceptionHandler({ FilmNotFoundException.class, IllegalArgumentException.class, BindException.class })
+    public ResponseEntity<?> handleException(Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException manvExp) {
+            return ResponseEntity.badRequest().body(manvExp.getFieldError().getDefaultMessage());
+        } else if (ex instanceof FilmNotFoundException fnfExp) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+  ```
+
+
+
+
+### 🔧 Git Commands Used
+The following Git commands were used throughout the fixing and analysis of the refactoring:
+```bash
+# Create a new branch (This branch was created in the beggining of the proyect)
+git checkout -b refactoring-1
+# Stage and commit the changes
+git add .
+#git revert -m to reverse changes to before pull request
+git revert -m 1  30d4217
+```
+A pull request was opened on GitHub from `refactoring-1` to `main`, reviewed, and approved. After approval, the branch was succesfully merged.
+```bash
+# Switch to the main branch
+git checkout main
+# Merge the fix branch
+git merge refactoring-1
+# Push the updated main branch to GitHub
+git push origin main
+```
+### ⚙️ Triggered Workflows
+Once updating all changes from CodeSmells corrections, no workflow was trigered. But workflow 3 and 4 were trigered for other reasons, to fix little mistakes for pom's version to make a new pull request that includes the right version.
+
+### 🌍 Sonarqube code analysis 
+![image](https://github.com/user-attachments/assets/5253ed7c-ecce-4e5f-9fd2-aad396546f5e)
 
 
 # 🧪 Workflow 4 - Nightly Testing & Staging Deployment
