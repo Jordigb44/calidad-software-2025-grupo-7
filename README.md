@@ -12,7 +12,8 @@
 https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 # 🔗 Azure Production URL
-# TODO
+[Nitflex staging](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
+[Nitflex production](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
 
 ## 🖥️ Screenshots
 # TODO
@@ -149,55 +150,59 @@ The Docker image built during this process is published on Docker Hub with the c
 
 
 # 🧪 Workflow 4 - Nightly Testing & Staging Deployment
-Este workflow se encarga de ejecutar pruebas exhaustivas, construir y desplegar la aplicación **Nitflex** cada noche, y etiquetar la imagen Docker como `nitflex-nightly` y la fecha cuando se desplegó la imagen.
+This workflow runs exhaustive tests, builds and deploys the **Nitflex** application nightly, and tags the Docker image as `nitflex-nightly` along with the deployment date.
 ---
-## 🚀 ¿Cuándo se ejecuta?
-Este workflow se lanza automáticamente en los siguientes casos:
-- ⏰ **Cada noche a las 2:00 AM UTC** (`cron: '0 2 * * *'`)
-- 🧑‍💻 **Manual** mediante `workflow_dispatch` (desde GitHub Actions)
-- ✅ **Al hacer push en `main`**, excepto si solo cambian:
+
+## 🚀 When does it run?
+This workflow is triggered automatically in the following cases:
+
+- ⏰ **Every night at 2:00 AM UTC** (`cron: '0 2 * * *'`)
+- 🧑‍💻 **Manually** via `workflow_dispatch` (from GitHub Actions)
+- ✅ **On push to `main`**, except when only the following files change:
   - `.github/workflows/**`
   - `README.md`
 ---
 
-## 🔧 ¿Qué hace este workflow?
-### 1. `multibrowser` – Prueba E2E en múltiples navegadores
-Ejecuta pruebas con Selenium en los siguientes entornos:
-
-| Sistema Operativo | Navegadores |
-|-------------------|-------------|
-| Ubuntu            | Chrome, Firefox |
-| Windows           | Chrome, Firefox, Edge |
-| macOS             | Chrome, Firefox, Safari |
-👉 Ejecuta la clase: `TestSeleniumMultibrowser`
+## 🔧 What does this workflow do?
+### 1. `multibrowser` – E2E Testing on Multiple Browsers
+Runs Selenium tests in the following environments:
+| Operating System | Browsers              |
+|------------------|------------------------|
+| Ubuntu           | Chrome, Firefox        |
+| Windows          | Chrome, Firefox, Edge  |
+| macOS            | Chrome, Firefox, Safari |
+👉 Executes the class: `TestSeleniumMultibrowser`
 ---
 
-### 2. `loadtesting` – Test y despliegue en Azure (Staging)
-Realiza las siguientes acciones:
-- ✅ Ejecuta pruebas:
-  - Unitarias: `es.codeurjc.web.nitflex.unit.**.*`
-  - Integración: `es.codeurjc.web.nitflex.integration.**.*`
-  - Sistema (excepto multibrowser): `es.codeurjc.web.nitflex.e2e.**.*`
-- 🐳 Construye y sube la imagen Docker etiquetada con el commit SHA (`${{ github.sha }}`)
-- ☁️ Despliega automáticamente en Azure Container Instances (staging)
-- 📈 Ejecuta pruebas con Artillery:
+### 2. `loadtesting` – Testing and Deployment to Azure (Staging)
+Performs the following steps:
+- ✅ Runs tests:
+  - Unit tests: `es.codeurjc.web.nitflex.unit.**.*`
+  - Integration tests: `es.codeurjc.web.nitflex.integration.**.*`
+  - System tests (excluding multibrowser): `es.codeurjc.web.nitflex.e2e.**.*`
+- 🐳 Builds and pushes the Docker image tagged with the commit SHA (`${{ github.sha }}`)
+- ☁️ Automatically deploys to Azure Container Instances (staging)
+- 📈 Runs Artillery tests:
   - Smoke test: `artillery/smoke-test.yml`
-  - Carga: `artillery/load-test.yml`
+  - Load test: `artillery/load-test.yml`
 ---
 
-### 3. `tag-nightly` – Etiquetado de imagen como nitflex-nightly
-Si los jobs anteriores finalizan correctamente:
-- 🔄 Hace `pull` de la imagen Docker generada (`${{ github.sha }}`)
-- 🏷 La vuelve a etiquetar como: `nitflex:nightly-YYYY-MM-DD`
-- 📤 La sube nuevamente a Docker Hub
+### 3. `tag-nightly` – Tag Docker Image as nitflex-nightly
+
+If the previous jobs complete successfully:
+
+- 🔄 Pulls the Docker image generated with `${{ github.sha }}`
+- 🏷 Retags it as: `nitflex:nightly-YYYY-MM-DD`
+- 📤 Pushes it again to Docker Hub
 ---
 
-## 🔗 Última ejecución del workflow
+## 🔗 Last Workflow Execution
+
 TODO
 ---
 
-## 📦 Artefactos generados
-- 🔧 Imagen Docker: `docker.io/<jordigb44243>/nitflex:nightly-YYYY-MM-DD????????????????` TODO
-- ☁️ Contenedor en Azure: `https://nitflex-staging??????????????????` TODO
-- 📄 No se generan artefactos `.zip` o `.jar`, ya que el resultado es la imagen desplegable.
----
+## 📦 Generated Artifacts
+- 🔧 Docker Image: `docker.io/<jordigb44243>/nitflex:nightly-YYYY-MM-DD????????????????` TODO
+- ☁️ Azure Container: `https://nitflex-staging??????????????????` TODO
+- 📄 No `.zip` or `.jar` artifacts are generated, as the deliverable is the deployable Docker image.
+
