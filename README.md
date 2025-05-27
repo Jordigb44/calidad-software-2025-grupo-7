@@ -21,10 +21,6 @@ https://github.com/Jordigb44/calidad-software-2025-grupo-7
   
 - ☁️ Contenedor en Azure Nitflex Staging: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
 
-## 🖥️ Screenshots
-**Azure Portal** 
-**Nitflex-staging** https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/nitflex_production_1_1_2.png
-
 # Practise 1
 ## Olga Chubinova Bortsova
 | Commit | Description |
@@ -168,7 +164,7 @@ Once merged into `main`, the following workflows were automatically triggered by
 - ✅ [Workflow 4](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252613498)
 
 ### 🐳 Docker Image
-The Docker image built during this process is published on Docker Hub with the corresponding tag was deleted because the Workflow (before) always deleted the image but we can found the command in the action:
+The Docker image built during this process is published to Docker Hub with the corresponding tag. However, in earlier versions of the workflow, the image was automatically deleted at the end, so it wasn't retained in the repository. Nevertheless, the command used to build the image can still be found in the GitHub Actions logs:
 - [chubi0l/nitflex:1.0.1(workflow3)](mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=***/nitflex:f1295070b0a260e5a510307cd92fda39682c1bcc)
 - [chubi0l/nitflex:1.0.1(workflow4)](mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=***/nitflex:f1295070b0a260e5a510307cd92fda39682c1bcc)
 
