@@ -398,6 +398,66 @@ Once updating all changes from CodeSmells corrections, no workflow was trigered.
 ### 🌍 Sonarqube code analysis 
 ![image](https://github.com/user-attachments/assets/5253ed7c-ecce-4e5f-9fd2-aad396546f5e)
 
+- **[STEP 4 - Andrea Garrobo guzmán]**
+### 🛠️ Fix Implemented
+- In DatabaseInitializer.java, the calls to the images corresponding to the movie covers were made through local images (imageUtils.localImageToBlob("images/…")), and what happened was that when deploying to Azure, those local paths didn't exist, which caused the covers to not load.
+
+ImageUtils.java was reviewed and it was detected that the already implemented method (remoteImageToBlob(String imageUrl)) transforms a remote image into a Blob, and the DatabaseInitializer.java method that saved the movies was updated.
+  ```html
+private FilmDTO saveFilmWithURLImage(CreateFilmRequest film, String imageUrl) throws IOException {
+    return filmService.save(film, imageUtils.remoteImageToBlob(imageUrl));
+}
+  ```
+- Then, once this method was updated, all the URLs of the local image covers were replaced with a public URL. In our case, we took them from Wikimedia.
+  ```html
+// Before 
+"images/op.jpg"
+
+// After
+"[(https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg)](https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg)"
+
+  ```
+- This route update ensures that the cover images of the website deployed in Azure are visible as shown in the following image.
+![Image](https://github.com/user-attachments/assets/03c8c794-0a4c-4f1b-9714-95d00b7907a4)
+
+### 🔧 Git Commands Used
+During the development and integration of the fix-2 solution, the following Git commands were used to properly manage the workflow:
+```bash
+# Create a new branch (This branch was created in the beggining of the proyect)
+git checkout -b fix-2
+# Stage and commit the changes
+git add .
+git commit -m "fix: Load images from URL in DatabaseInitializer"
+# Push the branch to GitHub
+git push origin fix-2
+```
+🔁 A pull request was opened on GitHub from the fix-2 branch to main, where it was successfully reviewed, approved, and merged.
+```bash
+# Switch to the main branch
+git checkout main
+# Merge the fix branch
+git merge fix-2
+# Push the updated main branch to GitHub
+git push origin main
+```
+### ⚙️ Triggered Workflows
+Merging fix-2 into main automatically triggered the following workflows via GitHub Actions:
+- ✅ [Workflow 2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252109117)
+- ✅ [Workflow 3](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252259279)
+
+### 🐳 Docker Image
+The generated Docker image was published to DockerHub with the appropriate tag, but it was deleted at the end of the workflow due to automatic cleanup. However, you can check the command used and the tag in the GitHub Actions logs:
+- [chubi0l/nitflex:1.1.2(workflow3)](mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=***/nitflex:f1295070b0a260e5a510307cd92fda39682c1bcc)
+
+
+### 🌍 Staging Deployment
+The application was successfully deployed to Azure as a container in Azure Container Instances:
+🔗 URL en producción:
+http://nitflex-production.westeurope.azurecontainer.io:8080
+
+📸 Screenshot of the application running with remote images:
+![Image](https://github.com/user-attachments/assets/03c8c794-0a4c-4f1b-9714-95d00b7907a4)
+
 
 # 🧪 Workflow 4 - Nightly Testing & Staging Deployment
 This workflow runs exhaustive tests, builds and deploys the **Nitflex** application nightly, and tags the Docker image as `nitflex-nightly` along with the deployment date.
