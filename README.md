@@ -18,7 +18,7 @@ https://github.com/Jordigb44/calidad-software-2025-grupo-7
 - ☁️ Contenedor en Azure Nitflex Production Version 1.1.2: [`nitflex-production.spaincentral.azurecontainer.io:8080`](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
   - Imagen del portal de azure: [Portal Azure](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/azure_portal_nitflex_production_1_1_2.png)
   - Imagen de la aplicación: [Nitflex production 1.1.2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/nitflex_production_1_1_2.png)
-  
+
 - ☁️ Contenedor en Azure Nitflex Staging: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
 
 ## 🖥️ Screenshots
@@ -106,9 +106,6 @@ The following outlines the contribution of each team member to the project:
   - I was responsible for fix task 2.
     - It was detected that the DatabaseInitializer was not using the correct method to load images, which caused the sample movies to appear without a photo when deployed on Azure, as it attempted to load images       from the local file system.
     - To resolve this issue, I modified the class to load images from a URL instead, using the methods provided by ImageUtils.
-
-
-
 
 ## 🔄 Steps Followed
 The following outlines the steps followed to apply the fix for the Cancel button issue and deploy it using GitHub Flow and CI/CD pipelines.
@@ -267,6 +264,10 @@ After merging into `main`, the following workflows were triggered:
 
 #### 🌍 Feature Verification
 ![Year Validation Error](captures/year-validation-error.png)
+
+#### Images
+- [Docker Image](https://hub.docker.com/layers/jordigb44243/nitflex/ad396a2ef49766f3b7d42eb636be1f1975061afe/images/sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
+- [Deploy Image](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/capturesnitflex_production_sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6.png)
 
 
 
