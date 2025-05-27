@@ -412,11 +412,12 @@ private FilmDTO saveFilmWithURLImage(CreateFilmRequest film, String imageUrl) th
   ```html
 // Before 
 "images/op.jpg"
-
+ ```
+  ```html
 // After
-"[(https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg)](https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg)"
-
+"(https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg)"
   ```
+
 - This route update ensures that the cover images of the website deployed in Azure are visible as shown in the following image.
 ![Image](https://github.com/user-attachments/assets/03c8c794-0a4c-4f1b-9714-95d00b7907a4)
 
@@ -452,8 +453,8 @@ The generated Docker image was published to DockerHub with the appropriate tag, 
 
 ### 🌍 Staging Deployment
 The application was successfully deployed to Azure as a container in Azure Container Instances:
-🔗 URL en producción:
-http://nitflex-production.westeurope.azurecontainer.io:8080
+- 🔗 URL en producción:
+[http://nitflex-production.westeurope.azurecontainer.io:8080](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
 
 📸 Screenshot of the application running with remote images:
 ![Image](https://github.com/user-attachments/assets/03c8c794-0a4c-4f1b-9714-95d00b7907a4)
