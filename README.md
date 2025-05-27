@@ -9,7 +9,7 @@
 | **Jordi Guix Betancor**    | j.guix.2023@alumnos.urjc.es | jordigb44 |
 
 # 🔗 Github Repository URL 
-https://github.com/chubi0l/calidad-software-2025-grupo-7
+https://github.com/Jordigb44/calidad-software-2025-grupo-7
 
 # 🔗 Azure Production URL
 **Production:** http://nitflex-production.spaincentral.azurecontainer.io:8080
@@ -22,43 +22,43 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 ## Olga Chubinova Bortsova
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/3e2a27ec50f6b3e2d26b0e7de6682be611e268f3) | Task 1 (Test Unitario) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/2e0db2f91bc79ae81d9f9a14c2b4bce2573f8f8f) | Task 2 (Test de Integración con BBDD) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/32d73e8df0a5648f16f3258ca3f65c101027aa11) | Task 3 (Test de sistemas web - Selenium) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/699e5f397d67ed7f3564f4c3cf5c5fa62923b90e) | Task 4 (Test de sistemas Rest) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/173509a46e60b805e0cac953f8ccfa67cf0f1183) | Artillery Test | 
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/3e2a27ec50f6b3e2d26b0e7de6682be611e268f3) | Task 1 (Test Unitario) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/2e0db2f91bc79ae81d9f9a14c2b4bce2573f8f8f) | Task 2 (Test de Integración con BBDD) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/32d73e8df0a5648f16f3258ca3f65c101027aa11) | Task 3 (Test de sistemas web - Selenium) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/699e5f397d67ed7f3564f4c3cf5c5fa62923b90e) | Task 4 (Test de sistemas Rest) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/173509a46e60b805e0cac953f8ccfa67cf0f1183) | Artillery Test | 
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
 
 
 ## Jordi Guix Betancor
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/9d0b562343c25d3fc28510d0c53e1421e060d88e) | Task 2 (Test Unitario) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c5111c44b52609500c805e5c2011185ba06e72ba) | Task 3 (Test de Integración con BBDD) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/93c66c3c998597beb8c929101113c8a2f38b5c02) | Task 4 (Test de sistemas web - Selenium) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/8385d76cf56c417ae3491401a8cdda3c9fd5b35d) | Task 1 (Test de sistemas Rest) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c56167eafc2af5cb146dc0b7a5ca416099b9d5b2) | Artillery Test |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/9d0b562343c25d3fc28510d0c53e1421e060d88e) | Task 2 (Test Unitario) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/c5111c44b52609500c805e5c2011185ba06e72ba) | Task 3 (Test de Integración con BBDD) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/93c66c3c998597beb8c929101113c8a2f38b5c02) | Task 4 (Test de sistemas web - Selenium) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/8385d76cf56c417ae3491401a8cdda3c9fd5b35d) | Task 1 (Test de sistemas Rest) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/c56167eafc2af5cb146dc0b7a5ca416099b9d5b2) | Artillery Test |
 
 
 ## Elinee Nathalie freites Muñoz
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 4 Ttest Unitario |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 1 (Test de Integración con BBDD) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/9c167b09bd6799bc8a6116c03d8233fbda1458f2) | Task 2 (Test de sistemas web - Selenium) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ed49dc75f653b9581d2e726d446a50de4a569a52) | Task 3 (Test de sistemas Rest) |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 4 Ttest Unitario |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 1 (Test de Integración con BBDD) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/9c167b09bd6799bc8a6116c03d8233fbda1458f2) | Task 2 (Test de sistemas web - Selenium) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/ed49dc75f653b9581d2e726d446a50de4a569a52) | Task 3 (Test de sistemas Rest) |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
 
 ## Andrea Garrobo Guzmán
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/890668abfe9d13d21e79e9cad564e2a55a721b85) | Task 3 - Test Unit |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/5747d956b66760d1c5b4bb4aa71b5691cf753600) | Task 4 - Test Integration |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c438b79a41a8b54aa19f814adb34b3e4770983ae) | Task 1 - Selenium Web Test |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ac2a3b51c9cad6a2cf9206b64af91dd894af59d2) | Task 2 - Test  rest |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/890668abfe9d13d21e79e9cad564e2a55a721b85) | Task 3 - Test Unit |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/5747d956b66760d1c5b4bb4aa71b5691cf753600) | Task 4 - Test Integration |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/c438b79a41a8b54aa19f814adb34b3e4770983ae) | Task 1 - Selenium Web Test |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/ac2a3b51c9cad6a2cf9206b64af91dd894af59d2) | Task 2 - Test  rest |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
+| [Link](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
 
 
 
@@ -156,9 +156,9 @@ git push origin main
 ```
 ### ⚙️ Triggered Workflows
 Once merged into `main`, the following workflows were automatically triggered by GitHub Actions:
-- ✅ [Workflow 2](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252109117)
-- ✅ [Workflow 3](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252259279)
-- ✅ [Workflow 4](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252613498)
+- ✅ [Workflow 2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252109117)
+- ✅ [Workflow 3](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252259279)
+- ✅ [Workflow 4](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15252613498)
 
 ### 🐳 Docker Image
 The Docker image built during this process is published on Docker Hub with the corresponding tag:
@@ -248,13 +248,13 @@ Note: During the push, I did a ```git revert 5ab7daf``` since my first push hadn
 
 #### ⚙️ Triggered Workflows
 Before merging into `main`, the following workflows were triggered:
-- ✅ [Workflow 2](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253443133)
+- ✅ [Workflow 2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15253443133)
 
-- [Revert](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/665ebf3d0f192ef66cb69befee4099592019ebfd)
+- [Revert](https://github.com/Jordigb44/calidad-software-2025-grupo-7/commit/665ebf3d0f192ef66cb69befee4099592019ebfd)
 
 After merging into `main`, the following workflows were triggered:
-- ✅ [Workflow 3](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551300)
-- ✅ [Workflow 4](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551302)
+- ✅ [Workflow 3](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15253551300)
+- ✅ [Workflow 4](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15253551302)
 
 #### 🌍 Feature Verification
 ![Year Validation Error](captures/year-validation-error.png)
