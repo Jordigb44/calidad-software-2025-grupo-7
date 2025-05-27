@@ -34,6 +34,8 @@ import jakarta.validation.Valid;
 @Controller
 public class FilmWebController {
 
+	private static final String REDIRECT_FILMS = "redirect:/films/";
+
 	@Autowired
 	private FilmService filmService;
 
@@ -43,8 +45,8 @@ public class FilmWebController {
 	@Autowired
 	private ReviewService reviewService;
 
-	public static final String message = "message";
-	public static final String error = "error";
+	public static final String MESSAGE = "message";
+	public static final String ERROR = "error";
 
 	
 	@GetMapping("/")
@@ -77,9 +79,9 @@ public class FilmWebController {
 		if(op.isPresent()) {
 			filmService.delete(id);
 			FilmDTO removedFilm = op.get();
-			model.addAttribute(error, false);
-			model.addAttribute(message, "Film '"+removedFilm.title()+"' deleted");
-			return message;
+			model.addAttribute(ERROR, false);
+			model.addAttribute(MESSAGE, "Film '"+removedFilm.title()+"' deleted");
+			return MESSAGE;
 		}else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found");
 		}
@@ -102,14 +104,14 @@ public class FilmWebController {
 		try{
 			newFilm = filmService.save(film, imageField);
 		}catch(IllegalArgumentException e){
-			model.addAttribute(error, true);
+			model.addAttribute(ERROR, true);
 			model.addAttribute("errors", List.of(e.getMessage()));
 			model.addAttribute("action", "/films/new");
 			model.addAttribute("film", film);
 			return "filmForm";
 		}
 		
-		return "redirect:/films/" + newFilm.id();
+		return REDIRECT_FILMS + newFilm.id();
 	}
 	
 	@GetMapping("/films/{id}/edit")
@@ -131,12 +133,12 @@ public class FilmWebController {
 	@PostMapping("/films/{id}/edit")
 	public String editFilmProcess(Model model, @PathVariable long id, FilmSimpleDTO film, MultipartFile imageField) {
 
-		FilmDTO updatedFilm = null;
+		FilmDTO updatedFilm = null; 
 
 		try{
 			updatedFilm = filmService.update(id, film, imageField);
 		}catch(ResponseStatusException e){
-			model.addAttribute(error, true);
+			model.addAttribute(ERROR, true);
 			model.addAttribute("errors", List.of(e.getReason()));
 			model.addAttribute("action", "/films/"+id+"/edit");
 			model.addAttribute("film", film);
@@ -145,7 +147,7 @@ public class FilmWebController {
 
 		model.addAttribute("film", updatedFilm);
 		
-		return "redirect:/films/" + film.id();
+		return REDIRECT_FILMS + film.id();
 	}
 
 	@GetMapping("/films/{id}/poster")
@@ -164,25 +166,25 @@ public class FilmWebController {
 	@PostMapping("/films/{filmId}/reviews")
 	public String addReview(@PathVariable long filmId, @Valid CreateReviewRequest review) {
 		FilmDTO film = reviewService.addReview(filmId, review);
-		return "redirect:/films/" + film.id();
+		return REDIRECT_FILMS + film.id();
 	}
 
 	@PostMapping("/films/{filmId}/reviews/{reviewId}/remove")
 	public String removeReview(@PathVariable long filmId, @PathVariable long reviewId) {
 		FilmDTO film = reviewService.deleteReview(filmId, reviewId);
-		return "redirect:/films/" + film.id();
+		return REDIRECT_FILMS + film.id();
 	}
 
 	@PostMapping("/films/{filmId}/addFavorite")
 	public String addFavorite(@PathVariable long filmId) {
 		favoriteFilmService.addToFavorites(filmId);
-		return "redirect:/films/" + filmId;
+		return REDIRECT_FILMS + filmId;
 	}
 
 	@PostMapping("/films/{filmId}/removeFavorite")
 	public String removeFavorite(@PathVariable long filmId) {
 		favoriteFilmService.removeFromFavorites(filmId);
-		return "redirect:/films/" + filmId;
+		return REDIRECT_FILMS + filmId;
 	}
 
 }
