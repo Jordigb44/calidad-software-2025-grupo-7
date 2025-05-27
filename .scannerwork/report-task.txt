@@ -1,0 +1,6 @@
+projectKey=calidad-software-2025-grupo-7
+serverUrl=http://localhost:9000
+serverVersion=25.5.0.107428
+dashboardUrl=http://localhost:9000/dashboard?id=calidad-software-2025-grupo-7
+ceTaskId=ac2ced40-8734-4c76-a22d-54b400f97681
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ac2ced40-8734-4c76-a22d-54b400f97681

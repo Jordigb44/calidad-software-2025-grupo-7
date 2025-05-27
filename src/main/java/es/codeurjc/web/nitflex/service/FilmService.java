@@ -44,14 +44,14 @@ public class FilmService {
 		return filmRepository.findById(id).map(filmMapper::toDTO);
 	}
 
-	public InputStream getPosterFile(long id) {
+	public InputStream getPosterFile(long id) throws SQLException {
 		Film film = filmRepository.findById(id)
 				.orElseThrow(() -> new FilmNotFoundException(id));
 		Blob blob = film.getPosterFile();
 		try {
 			return blob.getBinaryStream();
 		} catch (SQLException e) {
-			throw new RuntimeException("Error getting image from database", e);
+			throw new SQLException("Error getting image from database", e);
 		}
 	}
 
@@ -66,6 +66,10 @@ public class FilmService {
 	public FilmDTO save(CreateFilmRequest film, Blob imageField) {
 		if (film.title() == null || film.title().isEmpty()) {
 			throw new IllegalArgumentException("The title is empty");
+		}
+		// Añadir validación del año
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
 		}
 		Film newFilm = filmMapper.toDomain(film);
 		newFilm.setPosterFile(imageField);
@@ -97,6 +101,10 @@ public class FilmService {
 		if (imageField != null && imageField.getSize() > 0) {
 			Blob blobImage = imageUtils.multiPartFileImageToBlob(imageField);
 			toUpdateFilm.setPosterFile(blobImage);
+		}
+		// Añadir validación del año en el update
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
 		}
 		return filmMapper.toDTO(filmRepository.save(toUpdateFilm));
 	}
