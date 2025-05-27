@@ -168,9 +168,6 @@ The Docker image built during this process is published on Docker Hub with the c
 ![Cancel Button Working](captures/) TODO
 
 
-
-
-
 - **[STEP 2 - Jordi Guix Betancor]**
 #### 🛠️ Feature Implemented (feature-1)
 - Added year validation in `FilmService.java`:
