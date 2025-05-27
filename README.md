@@ -90,15 +90,23 @@ The following outlines the contribution of each team member to the project:
     - Maintaining consistency across the application
 
 - **[Elinee Nathalie freites Muñoz]**
-  -
+  - I have collaborated in workflows 1, 2, and 3. Additionally, I was responsible for refactoring task 1, which consisted of using SonarQube locally to identify code smells.
+    - Following the guidelines provided by the tool, I corrected each detected code smell, making a separate commit for each correction in the corresponding branch.
+    - Info-level code smells were ignored.
+    - In the pull request, I documented which code smells were not fixed because they were considered false positives.
+
 - **[Andrea Garrobo Guzmán]**
-  -
+  - I was responsible for fix task 2.
+    - It was detected that the DatabaseInitializer was not using the correct method to load images, which caused the sample movies to appear without a photo when deployed on Azure, as it attempted to load images       from the local file system.
+    - To resolve this issue, I modified the class to load images from a URL instead, using the methods provided by ImageUtils.
+
+
 
 
 ## 🔄 Steps Followed
 The following outlines the steps followed to apply the fix for the Cancel button issue and deploy it using GitHub Flow and CI/CD pipelines.
 
-- **[Olga Chubinova Bortsova]**
+- **[STEP 1 - Olga Chubinova Bortsova]**
 ### 🛠️ Fix Implemented
 - In the movie creation template (`filmForm.html`), the Cancel button originally redirected to a non-functional path:
   ```html
@@ -160,57 +168,11 @@ The Docker image built during this process is published on Docker Hub with the c
 ![Cancel Button Working](captures/) TODO
 
 
-# 🧪 Workflow 4 - Nightly Testing & Staging Deployment
-This workflow runs exhaustive tests, builds and deploys the **Nitflex** application nightly, and tags the Docker image as `nitflex-nightly` along with the deployment date.
----
-
-## 🚀 When does it run?
-This workflow is triggered automatically in the following cases:
-
-- ⏰ **Every night at 2:00 AM UTC** (`cron: '0 2 * * *'`)
-- 🧑‍💻 **Manually** via `workflow_dispatch` (from GitHub Actions)
-- ✅ **On push to `main`**, except when only the following files change:
-  - `.github/workflows/**`
-  - `README.md`
----
-
-## 🔧 What does this workflow do?
-### 1. `multibrowser` – E2E Testing on Multiple Browsers
-Runs Selenium tests in the following environments:
-| Operating System | Browsers              |
-|------------------|------------------------|
-| Ubuntu           | Chrome, Firefox        |
-| Windows          | Chrome, Firefox, Edge  |
-| macOS            | Chrome, Firefox, Safari |
-
-👉 Executes the class: `TestSeleniumMultibrowser`
----
-
-### 2. `loadtesting` – Testing and Deployment to Azure (Staging)
-Performs the following steps:
-- ✅ Runs tests:
-  - Unit tests: `es.codeurjc.web.nitflex.unit.**.*`
-  - Integration tests: `es.codeurjc.web.nitflex.integration.**.*`
-  - System tests (excluding multibrowser): `es.codeurjc.web.nitflex.e2e.**.*`
-- 🐳 Builds and pushes the Docker image tagged with the commit SHA (`${{ github.sha }}`)
-- ☁️ Automatically deploys to Azure Container Instances (staging)
-- 📈 Runs Artillery tests:
-  - Smoke test: `artillery/smoke-test.yml`
-  - Load test: `artillery/load-test.yml`
----
-
-### 3. `tag-nightly` – Etiquetado de imagen como nitflex-nightly
-Si los jobs anteriores finalizan correctamente:
-- 🔄 Hace `pull` de la imagen Docker generada (`${{ github.sha }}`)
-- 🏷 La vuelve a etiquetar como: `nitflex:nightly-YYYY-MM-DD`
-- 📤 La sube nuevamente a Docker Hub
----
 
 
-## Task 3: Collaborative development with GitFlow
-### Imprement of feature-1
-- **[Jordi Guix Betancor]**
-#### 🛠️ Feature Implemented
+
+- **[STEP 2 - Jordi Guix Betancor]**
+#### 🛠️ Feature Implemented (feature-1)
 - Added year validation in `FilmService.java`:
   ```java
   public FilmDTO save(CreateFilmRequest film, Blob imageField) {
@@ -299,6 +261,58 @@ After merging into `main`, the following workflows were triggered:
 
 #### 🌍 Feature Verification
 ![Year Validation Error](captures/year-validation-error.png)
+
+
+
+
+
+# 🧪 Workflow 4 - Nightly Testing & Staging Deployment
+This workflow runs exhaustive tests, builds and deploys the **Nitflex** application nightly, and tags the Docker image as `nitflex-nightly` along with the deployment date.
+---
+
+## 🚀 When does it run?
+This workflow is triggered automatically in the following cases:
+
+- ⏰ **Every night at 2:00 AM UTC** (`cron: '0 2 * * *'`)
+- 🧑‍💻 **Manually** via `workflow_dispatch` (from GitHub Actions)
+- ✅ **On push to `main`**, except when only the following files change:
+  - `.github/workflows/**`
+  - `README.md`
+---
+
+## 🔧 What does this workflow do?
+### 1. `multibrowser` – E2E Testing on Multiple Browsers
+Runs Selenium tests in the following environments:
+| Operating System | Browsers              |
+|------------------|------------------------|
+| Ubuntu           | Chrome, Firefox        |
+| Windows          | Chrome, Firefox, Edge  |
+| macOS            | Chrome, Firefox, Safari |
+
+👉 Executes the class: `TestSeleniumMultibrowser`
+---
+
+### 2. `loadtesting` – Testing and Deployment to Azure (Staging)
+Performs the following steps:
+- ✅ Runs tests:
+  - Unit tests: `es.codeurjc.web.nitflex.unit.**.*`
+  - Integration tests: `es.codeurjc.web.nitflex.integration.**.*`
+  - System tests (excluding multibrowser): `es.codeurjc.web.nitflex.e2e.**.*`
+- 🐳 Builds and pushes the Docker image tagged with the commit SHA (`${{ github.sha }}`)
+- ☁️ Automatically deploys to Azure Container Instances (staging)
+- 📈 Runs Artillery tests:
+  - Smoke test: `artillery/smoke-test.yml`
+  - Load test: `artillery/load-test.yml`
+---
+
+### 3. `tag-nightly` – Etiquetado de imagen como nitflex-nightly
+Si los jobs anteriores finalizan correctamente:
+- 🔄 Hace `pull` de la imagen Docker generada (`${{ github.sha }}`)
+- 🏷 La vuelve a etiquetar como: `nitflex:nightly-YYYY-MM-DD`
+- 📤 La sube nuevamente a Docker Hub
+---
+
+
 
 
 ## 🔗 Última ejecución del workflow
