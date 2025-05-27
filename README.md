@@ -99,6 +99,7 @@ The following outlines the contribution of each team member to the project:
     - In the pull request, I documented which code smells were not fixed because they were considered false positives.
 
 - **[Andrea Garrobo Guzmán]**
+- I have collaborated on the workflows slightly
   - I was responsible for fix task 2.
     - It was detected that the DatabaseInitializer was not using the correct method to load images, which caused the sample movies to appear without a photo when deployed on Azure, as it attempted to load images       from the local file system.
     - To resolve this issue, I modified the class to load images from a URL instead, using the methods provided by ImageUtils.
