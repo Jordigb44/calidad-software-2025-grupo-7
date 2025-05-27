@@ -42,6 +42,10 @@ public class FilmWebController {
 
 	@Autowired
 	private ReviewService reviewService;
+
+	public static final String message = "message";
+	public static final String error = "error";
+
 	
 	@GetMapping("/")
 	public String showFilms(Model model) {
@@ -73,9 +77,9 @@ public class FilmWebController {
 		if(op.isPresent()) {
 			filmService.delete(id);
 			FilmDTO removedFilm = op.get();
-			model.addAttribute("error", false);
-			model.addAttribute("message", "Film '"+removedFilm.title()+"' deleted");
-			return "message";
+			model.addAttribute(error, false);
+			model.addAttribute(message, "Film '"+removedFilm.title()+"' deleted");
+			return message;
 		}else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found");
 		}
@@ -98,7 +102,7 @@ public class FilmWebController {
 		try{
 			newFilm = filmService.save(film, imageField);
 		}catch(IllegalArgumentException e){
-			model.addAttribute("error", true);
+			model.addAttribute(error, true);
 			model.addAttribute("errors", List.of(e.getMessage()));
 			model.addAttribute("action", "/films/new");
 			model.addAttribute("film", film);
@@ -132,7 +136,7 @@ public class FilmWebController {
 		try{
 			updatedFilm = filmService.update(id, film, imageField);
 		}catch(ResponseStatusException e){
-			model.addAttribute("error", true);
+			model.addAttribute(error, true);
 			model.addAttribute("errors", List.of(e.getReason()));
 			model.addAttribute("action", "/films/"+id+"/edit");
 			model.addAttribute("film", film);
