@@ -16,7 +16,8 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 **Staging** http://nitflex-staging.spaincentral.azurecontainer.io:8080
 
 ## 🖥️ Screenshots
-# TODO
+![Azure Panel 1.1.2](captures/newFilm.png)
+[Deployed application](https://hub.docker.com/layers/jordigb44243/nitflex/1.1.2/images/sha256-1fe3ce2ccec4125ddb98c8bbd61cec1c01d6145aace9aca83adf7682ea6adb73)
 
 # Practise 1
 ## Olga Chubinova Bortsova
@@ -162,11 +163,12 @@ Once merged into `main`, the following workflows were automatically triggered by
 
 ### 🐳 Docker Image
 The Docker image built during this process is published on Docker Hub with the corresponding tag:
-- [chubi0l/nitflex:1.0.1](https://hub.docker.com/) TODO
+- [chubi0l/nitflex:1.0.1](https://hub.docker.com/)
 
 ### 🌍 Staging Deployment
-![Cancel Button Working](captures/) TODO
-
+Before it appeared a error screen because it didn't found the id of the film (because it wasn't created yet, so now it redirects directly to the main page)
+![Cancel Button when creating a new film](captures/mainPage.png)
+![Redirecting to the main page](captures/newFilm.png)
 
 - **[STEP 2 - Jordi Guix Betancor]**
 #### 🛠️ Feature Implemented (feature-1)
@@ -438,11 +440,8 @@ Si los jobs anteriores finalizan correctamente:
 - 📤 La sube nuevamente a Docker Hub
 ---
 
-
-
-
-## 🔗 Última ejecución del workflow
-TODO
+## 🔗 Última ejecución del workflow 4 (nighlty)
+[Nightly](https://github.com/Jordigb44/calidad-software-2025-grupo-7/actions/runs/15265743990)
 ---
 
 ## 📦 Artefactos generados
