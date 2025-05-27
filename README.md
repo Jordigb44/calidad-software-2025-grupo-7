@@ -267,6 +267,7 @@ After merging into `main`, the following workflows were triggered:
 
 #### Images
 - [Docker Image](https://hub.docker.com/layers/jordigb44243/nitflex/ad396a2ef49766f3b7d42eb636be1f1975061afe/images/sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
+  Note: When the docker image was generated, the tag name wasn´t change to set manually to pom version.
 - [Deploy Image](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/capturesnitflex_production_sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6.png)
 
 
