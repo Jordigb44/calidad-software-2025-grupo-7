@@ -83,7 +83,7 @@ public class DatabaseInitializer {
 		}
 	}
 
-	private FilmDTO saveFilmWithURLImage(CreateFilmRequest film, String localpath) {
+	private FilmDTO saveFilmWithURLImage(CreateFilmRequest film, String localpath) throws IOException {
 		return filmService.save(film, imageUtils.localImageToBlob(localpath));
 	}
 

@@ -44,14 +44,14 @@ public class FilmService {
 		return filmRepository.findById(id).map(filmMapper::toDTO);
 	}
 
-	public InputStream getPosterFile(long id) throws SQLException {
+	public InputStream getPosterFile(long id) {
 		Film film = filmRepository.findById(id)
 				.orElseThrow(() -> new FilmNotFoundException(id));
 		Blob blob = film.getPosterFile();
 		try {
 			return blob.getBinaryStream();
 		} catch (SQLException e) {
-			throw new SQLException("Error getting image from database", e);
+			throw new RuntimeException("Error getting image from database", e);
 		}
 	}
 

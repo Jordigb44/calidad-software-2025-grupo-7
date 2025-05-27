@@ -91,7 +91,8 @@ window['PR_normalizedHtml']
 
 /** browser detection. @extern @returns false if not IE, otherwise the major version. */
 window['_pr_isIE6'] = function () {
-  const ieVersion = navigator?.userAgent?.match(/\bMSIE ([678])\./);
+  var ieVersion = navigator && navigator.userAgent &&
+      navigator.userAgent.match(/\bMSIE ([678])\./);
   ieVersion = ieVersion ? +ieVersion[1] : false;
   window['_pr_isIE6'] = function () { return ieVersion; };
   return ieVersion;

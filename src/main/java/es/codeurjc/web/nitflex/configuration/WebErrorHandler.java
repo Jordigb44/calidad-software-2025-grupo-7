@@ -10,7 +10,6 @@ import es.codeurjc.web.nitflex.service.exceptions.FilmNotFoundException;
 
 @ControllerAdvice(basePackages = "es.codeurjc.web.nitflex.controller.web")
 public class WebErrorHandler {
-	public static final String MESSAGE = "message";
 
     /**
 	 * When a 'FilmNotFound' exception occurs, the following method is executed
@@ -20,13 +19,13 @@ public class WebErrorHandler {
 	@ExceptionHandler({FilmNotFoundException.class, IllegalArgumentException.class, BindException.class})
     public ModelAndView handleException(Exception ex){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(MESSAGE);
+        modelAndView.setViewName("message");
 		modelAndView.addObject("error", true);
 
 		if(ex instanceof MethodArgumentNotValidException manvExp){
-			modelAndView.addObject(MESSAGE, manvExp.getFieldError().getDefaultMessage());
+			modelAndView.addObject("message", manvExp.getFieldError().getDefaultMessage());
 		}else{
-			modelAndView.addObject(MESSAGE, ex.getMessage());
+			modelAndView.addObject("message", ex.getMessage());
 		}
 
         return modelAndView;
