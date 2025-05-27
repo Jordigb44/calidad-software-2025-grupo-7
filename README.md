@@ -100,7 +100,7 @@ The following outlines the steps followed to apply the fix for the Cancel button
 
 - **[Olga Chubinova Bortsova]**
 ### 🛠️ Fix Implemented
-- In the movie creation template (`filForm.html`), the Cancel button originally redirected to a non-functional path:
+- In the movie creation template (`filmForm.html`), the Cancel button originally redirected to a non-functional path:
   ```html
   <button class="ui button" onclick="location.href='/films/{{film.id}}'; return false;">Cancel</button>
   ```
@@ -182,6 +182,7 @@ Runs Selenium tests in the following environments:
 | Ubuntu           | Chrome, Firefox        |
 | Windows          | Chrome, Firefox, Edge  |
 | macOS            | Chrome, Firefox, Safari |
+
 👉 Executes the class: `TestSeleniumMultibrowser`
 ---
 
