@@ -11,15 +11,15 @@
 # 🔗 Github Repository URL 
 https://github.com/Jordigb44/calidad-software-2025-grupo-7
 
-# 🔗 Azure Production URL
+# 🔗 Azure Production URL and Screenshots
 **Production:** http://nitflex-production.spaincentral.azurecontainer.io:8080
 **Staging** http://nitflex-staging.spaincentral.azurecontainer.io:8080
 
-- ☁️ Contenedor en Azure Nitflex Production Version 1.1.2: [`nitflex-production.spaincentral.azurecontainer.io:8080`](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
-  - Imagen del portal de azure: [Portal Azure](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/azure_portal_nitflex_production_1_1_2.png)
-  - Imagen de la aplicación: [Nitflex production 1.1.2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/nitflex_production_1_1_2.png)
+- ☁️ Azure Nitflex Production Container Version 1.1.2: [`nitflex-production.spaincentral.azurecontainer.io:8080`](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
+  - Image of Azure Portal: [Portal Azure](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/azure_portal_nitflex_production_1_1_2.png)
+  - Image aplication: [Nitflex production 1.1.2](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/nitflex_production_1_1_2.png)
 
-- ☁️ Contenedor en Azure Nitflex Staging: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
+- ☁️ Azure Nitflex Staging Container: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
 
 # Practise 1
 ## Olga Chubinova Bortsova
@@ -167,8 +167,8 @@ The Docker image built during this process is published to Docker Hub with the c
 
 ### 🌍 Staging Deployment
 Before it appeared a error screen because it didn't found the id of the film (because it wasn't created yet, so now it redirects directly to the main page)
-![Cancel Button when creating a new film](captures/mainPage.png)
-![Redirecting to the main page](captures/newFilm.png)
+![Cancel Button when creating a new film](captures/newFilm.png)
+![Redirecting to the main page](captures/mainPage.png)
 
 - **[STEP 2 - Jordi Guix Betancor]**
 #### 🛠️ Feature Implemented (feature-1)
