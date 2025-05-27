@@ -12,8 +12,8 @@
 https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 # 🔗 Azure Production URL
-[Nitflex staging](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
-[Nitflex production](http://nitflex-production.spaincentral.azurecontainer.io:8080/)
+**Production:** http://nitflex-production.spaincentral.azurecontainer.io:8080
+**Staging** http://nitflex-staging.spaincentral.azurecontainer.io:8080
 
 ## 🖥️ Screenshots
 # TODO
@@ -75,7 +75,20 @@ The following outlines the contribution of each team member to the project:
   - Fully organized and wrote the **project readme**.
 
 - **[Jordi Guix Betancor]**
-  -
+  - Actively contributed to the implementation and configuration of the **four GitHub Actions workflows**
+  - Responsible for **feature-1**, which involved:
+    - Implementing validation for movie release year (must be >= 1895)
+    - Adding error handling and user notification when invalid year is entered
+    - Creating unit tests to verify year validation logic
+    - Implementing Selenium E2E tests to ensure proper error display
+    - Following the GitHub Flow model for feature development
+    - Ensuring proper error messages display in the frontend
+  - The implementation included:
+    - Adding validation in FilmService
+    - Creating comprehensive test coverage
+    - Handling error display in the web interface
+    - Maintaining consistency across the application
+
 - **[Elinee Nathalie freites Muñoz]**
   -
 - **[Andrea Garrobo Guzmán]**
@@ -145,8 +158,6 @@ The Docker image built during this process is published on Docker Hub with the c
 
 ### 🌍 Staging Deployment
 ![Cancel Button Working](captures/) TODO
- 
-
 
 
 # 🧪 Workflow 4 - Nightly Testing & Staging Deployment
@@ -187,22 +198,114 @@ Performs the following steps:
   - Load test: `artillery/load-test.yml`
 ---
 
-### 3. `tag-nightly` – Tag Docker Image as nitflex-nightly
-
-If the previous jobs complete successfully:
-
-- 🔄 Pulls the Docker image generated with `${{ github.sha }}`
-- 🏷 Retags it as: `nitflex:nightly-YYYY-MM-DD`
-- 📤 Pushes it again to Docker Hub
+### 3. `tag-nightly` – Etiquetado de imagen como nitflex-nightly
+Si los jobs anteriores finalizan correctamente:
+- 🔄 Hace `pull` de la imagen Docker generada (`${{ github.sha }}`)
+- 🏷 La vuelve a etiquetar como: `nitflex:nightly-YYYY-MM-DD`
+- 📤 La sube nuevamente a Docker Hub
 ---
 
-## 🔗 Last Workflow Execution
 
+## Task 3: Collaborative development with GitFlow
+### Imprement of feature-1
+- **[Jordi Guix Betancor]**
+#### 🛠️ Feature Implemented
+- Added year validation in `FilmService.java`:
+  ```java
+  public FilmDTO save(CreateFilmRequest film, Blob imageField) {
+      if (film.releaseYear() < 1895) {
+          throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
+      }
+      // ...existing code...
+  }
+  ```
+
+- Added unit test to verify the validation:
+  ```java
+  @Test
+  @DisplayName("Cuando se guarda una película con un año anterior a 1895, NO se guarda en el repositorio y se lanza una excepción")
+  void testSaveFilmWithInvalidYear() {
+      //GIVEN
+      CreateFilmRequest invalidFilm = new CreateFilmRequest(
+          "Película antigua", 
+          "Una película muy antigua", 
+          1894,  // Año inválido
+          "+12"
+      );
+
+      //WHEN & THEN
+      assertThrows(IllegalArgumentException.class, () -> {
+          filmService.save(invalidFilm);
+      }, "The release year must be greater than or equal to 1895");
+
+      verify(filmRepository, never()).save(any(Film.class));
+  }
+  ```
+
+- Added Selenium E2E test to verify error display:
+  ```java
+  @Test
+  @DisplayName("Cuando se intenta crear una película con año anterior a 1895, se muestra error y no se crea la película")
+  void testAddFilmWithInvalidYear() {
+      // ...setup code...
+      addFilm("Película Test Año Inválido", FILM_DESCRIPTION, "1894", "+12", null);
+      
+      WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("message")));
+      assertEquals("The release year must be greater than or equal to 1895", 
+          errorMessage.getText().trim());
+  }
+  ```
+
+- Modified error handling in `FilmWebController.java`:
+  ```java
+  @PostMapping("/films/new")
+  public String newFilmProcess(CreateFilmRequest film, MultipartFile imageField, Model model) {
+      FilmDTO newFilm = null;
+      try {
+          newFilm = filmService.save(film, imageField);
+      } catch(IllegalArgumentException e) {
+          model.addAttribute("error", true);
+          model.addAttribute("message", e.getMessage());
+          return "error";
+      }
+      return "redirect:/films/" + newFilm.id();
+  }
+  ```
+
+#### 🔧 Git Commands Used
+```bash
+# Create feature branch
+git checkout -b feature-1
+
+# Stage and commit changes
+git add .
+git commit -m "feat: add validation for movie release year (>= 1895)"
+
+# Push to GitHub
+git push origin feature-1
+```
+Note: During the psuh, I did a ```git revert 5ab7daf``` since my first push hadn't selected the feature-1 branch, so it was pushed to the main branch. To fix the error, I had to run that command to restore the main branch to its previous state before incorporating my incorrect commit.
+
+#### ⚙️ Triggered Workflows
+Before merging into `main`, the following workflows were triggered:
+- ✅ [Workflow 2](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253443133)
+
+- [Revert](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/665ebf3d0f192ef66cb69befee4099592019ebfd)
+
+After merging into `main`, the following workflows were triggered:
+- ✅ [Workflow 3](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551300)
+- ✅ [Workflow 4](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551302)
+
+#### 🌍 Feature Verification
+![Year Validation Error](captures/year-validation-error.png)
+
+
+## 🔗 Última ejecución del workflow
 TODO
 ---
 
-## 📦 Generated Artifacts
-- 🔧 Docker Image: `docker.io/<jordigb44243>/nitflex:nightly-YYYY-MM-DD????????????????` TODO
-- ☁️ Azure Container: `https://nitflex-staging??????????????????` TODO
-- 📄 No `.zip` or `.jar` artifacts are generated, as the deliverable is the deployable Docker image.
-
+## 📦 Artefactos generados
+- 🔧 Imagen Docker: `docker pull jordigb44243/nitflex:nightly-2025-05-26` TODO
+- ☁️ Contenedor en Azure: `http://nitflex-staging??????????????????` TODO
+- 📄 No se generan artefactos `.zip` o `.jar`, ya que el resultado es la imagen desplegable.
+---

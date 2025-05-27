@@ -89,3 +89,18 @@ jobs:
         run: |
           npm install -g artillery
           artillery run src/test/java/es/codeurjc/web/nitflex/artillery/smoke-test.yml
+      
+      - name: Deploy to Azure (production)
+        run: |
+          # Eliminar el contenedor existente si existe
+          az container delete \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
+            --yes || true
+          
+          # Esperar unos segundos para asegurar que el contenedor se ha eliminado
+          sleep 5
+          
+          az container create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name nitflex-production \
