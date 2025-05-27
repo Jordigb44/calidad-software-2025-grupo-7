@@ -21,7 +21,7 @@ public class RestErrorHandler {
     public ResponseEntity<?> handleException(Exception ex) {
         if (ex instanceof MethodArgumentNotValidException manvExp) {
             return ResponseEntity.badRequest().body(manvExp.getFieldError().getDefaultMessage());
-        } else if (ex instanceof FilmNotFoundException fnfExp) {
+        } else if (ex instanceof FilmNotFoundException) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.badRequest().body(ex.getMessage());
