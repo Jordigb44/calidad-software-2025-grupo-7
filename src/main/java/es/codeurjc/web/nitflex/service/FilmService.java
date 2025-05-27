@@ -67,6 +67,10 @@ public class FilmService {
 		if (film.title() == null || film.title().isEmpty()) {
 			throw new IllegalArgumentException("The title is empty");
 		}
+		// Añadir validación del año
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
+		}
 		Film newFilm = filmMapper.toDomain(film);
 		newFilm.setPosterFile(imageField);
 		return filmMapper.toDTO(filmRepository.save(newFilm));
@@ -97,6 +101,10 @@ public class FilmService {
 		if (imageField != null && imageField.getSize() > 0) {
 			Blob blobImage = imageUtils.multiPartFileImageToBlob(imageField);
 			toUpdateFilm.setPosterFile(blobImage);
+		}
+		// Añadir validación del año en el update
+		if (film.releaseYear() < 1895) {
+			throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
 		}
 		return filmMapper.toDTO(filmRepository.save(toUpdateFilm));
 	}

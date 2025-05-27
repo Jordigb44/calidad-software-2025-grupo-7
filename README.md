@@ -12,7 +12,8 @@
 https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 # 🔗 Azure Production URL
-# TODO
+**Production:** http://nitflex-production.spaincentral.azurecontainer.io:8080
+**Staging** http://nitflex-staging.spaincentral.azurecontainer.io:8080
 
 ## 🖥️ Screenshots
 # TODO
@@ -42,7 +43,7 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 ## Elinee Nathalie freites Muñoz
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 4 Ttest Unitario) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 4 Ttest Unitario |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/d02c718f579ca7fb7334026434a3a0699ec909d2) | Task 1 (Test de Integración con BBDD) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/9c167b09bd6799bc8a6116c03d8233fbda1458f2) | Task 2 (Test de sistemas web - Selenium) |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ed49dc75f653b9581d2e726d446a50de4a569a52) | Task 3 (Test de sistemas Rest) |
@@ -52,9 +53,9 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 ## Andrea Garrobo Guzmán
 | Commit | Description |
 | :----: | :---------: |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/890668abfe9d13d21e79e9cad564e2a55a721b85) | Task 3 -  Test Unit) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/890668abfe9d13d21e79e9cad564e2a55a721b85) | Task 3 - Test Unit |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/5747d956b66760d1c5b4bb4aa71b5691cf753600) | Task 4 - Test Integration |
-| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c438b79a41a8b54aa19f814adb34b3e4770983ae) | Task 1 - Selenium Web Test) |
+| [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/c438b79a41a8b54aa19f814adb34b3e4770983ae) | Task 1 - Selenium Web Test |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ac2a3b51c9cad6a2cf9206b64af91dd894af59d2) | Task 2 - Test  rest |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/08112a0fe91c256cc689d05092f377fc94ec1254) | Artillery Test |
 | [Link](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/ffc8b3d180b915db0f5df23d8d262ce2e9ab02dd) | Cobertura Jacoco |
@@ -62,57 +63,250 @@ https://github.com/chubi0l/calidad-software-2025-grupo-7
 
 
 # Practise 2
-Por limitaciones del entorno GitHub Actions, no se ejecutan pruebas reales en Edge y Safari. El job multibrowser cubre Chrome y Firefox sobre Linux, Windows y macOS, cumpliendo el criterio de validación cruzada multiplataforma.
+## 👥 Task Assignment
+The following outlines the contribution of each team member to the project:
+- **[Olga Chubinova Bortsova]**
+  - Actively contributed to the implementation and configuration of the **four GitHub Actions workflows**:
+  - Also implemented the Smoke Test and the Selenium Test for the multibrowser
+  - Responsible for **fix-1**, which involved:
+    - Fixing the malfunction of the **"Cancel"** button on the "Create New Movie" page (it was not returning to the "All Movies" page).
+    - Adding a **regression test using Selenium** to verify that users can successfully navigate back to the list of all movies.
+    - Simulating the development and maintenance of the Nitflex application using the **existing CI workflows** and following the **GitHub Flow** development model.
+  - Fully organized and wrote the **project readme**.
 
-## Work Assignment
+- **[Jordi Guix Betancor]**
+  - Actively contributed to the implementation and configuration of the **four GitHub Actions workflows**
+  - Responsible for **feature-1**, which involved:
+    - Implementing validation for movie release year (must be >= 1895)
+    - Adding error handling and user notification when invalid year is entered
+    - Creating unit tests to verify year validation logic
+    - Implementing Selenium E2E tests to ensure proper error display
+    - Following the GitHub Flow model for feature development
+    - Ensuring proper error messages display in the frontend
+  - The implementation included:
+    - Adding validation in FilmService
+    - Creating comprehensive test coverage
+    - Handling error display in the web interface
+    - Maintaining consistency across the application
 
-## Steps 
+- **[Elinee Nathalie freites Muñoz]**
+  -
+- **[Andrea Garrobo Guzmán]**
+  -
 
-# 🌙 Workflow 4 - Nightly Testing & Staging Deployment
 
-Este workflow se ejecuta cada noche a las **2:00 AM UTC** (o manualmente mediante `workflow_dispatch`) y realiza validaciones completas del sistema en distintos navegadores y entornos.
+## 🔄 Steps Followed
+The following outlines the steps followed to apply the fix for the Cancel button issue and deploy it using GitHub Flow and CI/CD pipelines.
 
+- **[Olga Chubinova Bortsova]**
+### 🛠️ Fix Implemented
+- In the movie creation template (`filmForm.html`), the Cancel button originally redirected to a non-functional path:
+  ```html
+  <button class="ui button" onclick="location.href='/films/{{film.id}}'; return false;">Cancel</button>
+  ```
+- This was changed to:
+  ```html
+  <button class="ui button" onclick="location.href='/'; return false;">Cancel</button>
+  ```
+  This update ensures the Cancel button correctly redirects users back to the **home page**, where the list of films is displayed.
+
+- A **Selenium regression test** was added to an existing test class to verify this behavior:
+  ```java
+  @Test
+  @DisplayName("Cancel button from new film page navigates back to film list")
+  void testCancelFromNewFilmForm() {
+      driver.get("http://localhost:" + port + "/films/new");
+
+      WebElement cancelButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Cancel']")));
+      cancelButton.click();
+
+      wait.until(ExpectedConditions.urlToBe("http://localhost:" + port + "/"));
+      WebElement createButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("create-film")));
+
+      assertTrue(createButton.isDisplayed(), "Expected to be on the homepage after canceling, but we are not.");
+  }
+  ```
+### 🔧 Git Commands Used
+The following Git commands were used throughout the development and deployment of the fix:
+```bash
+# Create a new branch (This branch was created in the beggining of the proyect)
+git checkout -b fix-1
+# Stage and commit the changes
+git add .
+git commit -m "cancel button in new film form fixed"
+# Push the branch to GitHub
+git push origin fix-1
+```
+A pull request was opened on GitHub from `fix-1` to `main`, reviewed, and approved. After approval, the branch was succesfully merged.
+```bash
+# Switch to the main branch
+git checkout main
+# Merge the fix branch
+git merge fix-1
+# Push the updated main branch to GitHub
+git push origin main
+```
+### ⚙️ Triggered Workflows
+Once merged into `main`, the following workflows were automatically triggered by GitHub Actions:
+- ✅ [Workflow 2](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252109117)
+- ✅ [Workflow 3](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252259279)
+- ✅ [Workflow 4](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15252613498)
+
+### 🐳 Docker Image
+The Docker image built during this process is published on Docker Hub with the corresponding tag:
+- [chubi0l/nitflex:1.0.1](https://hub.docker.com/) TODO
+
+### 🌍 Staging Deployment
+![Cancel Button Working](captures/) TODO
+
+
+# 🧪 Workflow 4 - Nightly Testing & Staging Deployment
+This workflow runs exhaustive tests, builds and deploys the **Nitflex** application nightly, and tags the Docker image as `nitflex-nightly` along with the deployment date.
 ---
 
-## 🛠️ ¿Qué hace?
+## 🚀 When does it run?
+This workflow is triggered automatically in the following cases:
 
-### 🔹 `multibrowser`
-Ejecuta pruebas de sistema con Selenium sobre:
+- ⏰ **Every night at 2:00 AM UTC** (`cron: '0 2 * * *'`)
+- 🧑‍💻 **Manually** via `workflow_dispatch` (from GitHub Actions)
+- ✅ **On push to `main`**, except when only the following files change:
+  - `.github/workflows/**`
+  - `README.md`
+---
 
-- **Navegadores:** Chrome y Firefox  
-- **Sistemas Operativos:** Linux, Windows y macOS  
-- **Qué se prueba:**  
-  - Crear una nueva película desde la interfaz  
-  - Verificar que aparecen el título, el año y la sinopsis
+## 🔧 What does this workflow do?
+### 1. `multibrowser` – E2E Testing on Multiple Browsers
+Runs Selenium tests in the following environments:
+| Operating System | Browsers              |
+|------------------|------------------------|
+| Ubuntu           | Chrome, Firefox        |
+| Windows          | Chrome, Firefox, Edge  |
+| macOS            | Chrome, Firefox, Safari |
 
-### 🔹 `loadtesting`
-Despliega automáticamente la aplicación en **Azure (staging)** y realiza:
+👉 Executes the class: `TestSeleniumMultibrowser`
+---
 
-- ✅ Pruebas unitarias  
-- ✅ Pruebas de integración  
-- ✅ Pruebas de sistema (excepto multibrowser)  
-- ✅ Construcción y publicación de imagen Docker `nitflex:<SHA>`  
-- ✅ Despliegue en Azure con nombre `nitflex-staging`  
-- ✅ **Smoke test** de `/api/films/`  
-- ✅ Prueba de carga con [Artillery](https://www.artillery.io/)  
-- ✅ Detención del contenedor al finalizar
+### 2. `loadtesting` – Testing and Deployment to Azure (Staging)
+Performs the following steps:
+- ✅ Runs tests:
+  - Unit tests: `es.codeurjc.web.nitflex.unit.**.*`
+  - Integration tests: `es.codeurjc.web.nitflex.integration.**.*`
+  - System tests (excluding multibrowser): `es.codeurjc.web.nitflex.e2e.**.*`
+- 🐳 Builds and pushes the Docker image tagged with the commit SHA (`${{ github.sha }}`)
+- ☁️ Automatically deploys to Azure Container Instances (staging)
+- 📈 Runs Artillery tests:
+  - Smoke test: `artillery/smoke-test.yml`
+  - Load test: `artillery/load-test.yml`
+---
 
-### 🔹 `tag-nightly`
-Si los dos jobs anteriores finalizan correctamente, este job:
+### 3. `tag-nightly` – Etiquetado de imagen como nitflex-nightly
+Si los jobs anteriores finalizan correctamente:
+- 🔄 Hace `pull` de la imagen Docker generada (`${{ github.sha }}`)
+- 🏷 La vuelve a etiquetar como: `nitflex:nightly-YYYY-MM-DD`
+- 📤 La sube nuevamente a Docker Hub
+---
 
-- Extrae la imagen con SHA
-- La etiqueta como `nightly-YYYY-MM-DD`
-- La publica en DockerHub
 
+## Task 3: Collaborative development with GitFlow
+### Imprement of feature-1
+- **[Jordi Guix Betancor]**
+#### 🛠️ Feature Implemented
+- Added year validation in `FilmService.java`:
+  ```java
+  public FilmDTO save(CreateFilmRequest film, Blob imageField) {
+      if (film.releaseYear() < 1895) {
+          throw new IllegalArgumentException("The release year must be greater than or equal to 1895");
+      }
+      // ...existing code...
+  }
+  ```
+
+- Added unit test to verify the validation:
+  ```java
+  @Test
+  @DisplayName("Cuando se guarda una película con un año anterior a 1895, NO se guarda en el repositorio y se lanza una excepción")
+  void testSaveFilmWithInvalidYear() {
+      //GIVEN
+      CreateFilmRequest invalidFilm = new CreateFilmRequest(
+          "Película antigua", 
+          "Una película muy antigua", 
+          1894,  // Año inválido
+          "+12"
+      );
+
+      //WHEN & THEN
+      assertThrows(IllegalArgumentException.class, () -> {
+          filmService.save(invalidFilm);
+      }, "The release year must be greater than or equal to 1895");
+
+      verify(filmRepository, never()).save(any(Film.class));
+  }
+  ```
+
+- Added Selenium E2E test to verify error display:
+  ```java
+  @Test
+  @DisplayName("Cuando se intenta crear una película con año anterior a 1895, se muestra error y no se crea la película")
+  void testAddFilmWithInvalidYear() {
+      // ...setup code...
+      addFilm("Película Test Año Inválido", FILM_DESCRIPTION, "1894", "+12", null);
+      
+      WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("message")));
+      assertEquals("The release year must be greater than or equal to 1895", 
+          errorMessage.getText().trim());
+  }
+  ```
+
+- Modified error handling in `FilmWebController.java`:
+  ```java
+  @PostMapping("/films/new")
+  public String newFilmProcess(CreateFilmRequest film, MultipartFile imageField, Model model) {
+      FilmDTO newFilm = null;
+      try {
+          newFilm = filmService.save(film, imageField);
+      } catch(IllegalArgumentException e) {
+          model.addAttribute("error", true);
+          model.addAttribute("message", e.getMessage());
+          return "error";
+      }
+      return "redirect:/films/" + newFilm.id();
+  }
+  ```
+
+#### 🔧 Git Commands Used
+```bash
+# Create feature branch
+git checkout -b feature-1
+
+# Stage and commit changes
+git add .
+git commit -m "feat: add validation for movie release year (>= 1895)"
+
+# Push to GitHub
+git push origin feature-1
+```
+Note: During the psuh, I did a ```git revert 5ab7daf``` since my first push hadn't selected the feature-1 branch, so it was pushed to the main branch. To fix the error, I had to run that command to restore the main branch to its previous state before incorporating my incorrect commit.
+
+#### ⚙️ Triggered Workflows
+Before merging into `main`, the following workflows were triggered:
+- ✅ [Workflow 2](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253443133)
+
+- [Revert](https://github.com/chubi0l/calidad-software-2025-grupo-7/commit/665ebf3d0f192ef66cb69befee4099592019ebfd)
+
+After merging into `main`, the following workflows were triggered:
+- ✅ [Workflow 3](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551300)
+- ✅ [Workflow 4](https://github.com/chubi0l/calidad-software-2025-grupo-7/actions/runs/15253551302)
+
+#### 🌍 Feature Verification
+![Year Validation Error](captures/year-validation-error.png)
+
+
+## 🔗 Última ejecución del workflow
+TODO
 ---
 
 ## 📦 Artefactos generados
-
-- Imagen Docker:
-  ```bash
-  docker pull <tu_usuario>/nitflex:<SHA>
-  docker pull <tu_usuario>/nitflex:nightly-YYYY-MM-DD
-
-
-
-
+- 🔧 Imagen Docker: [`docker pull jordigb44243/nitflex:nightly-2025-05-26`](https://hub.docker.com/repository/docker/jordigb44243/nitflex/tags/nightly-2025-05-26/sha256:6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
+- ☁️ Contenedor en Azure: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
+- 📄 No se generan artefactos `.zip` o `.jar`, ya que el resultado es la imagen desplegable.
+---
