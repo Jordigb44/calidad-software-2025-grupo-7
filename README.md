@@ -448,7 +448,7 @@ TODO
 ## 📦 Artefactos generados
 - 🔧 Imagen Docker: [`docker pull jordigb44243/nitflex:nightly-2025-05-26`](https://hub.docker.com/layers/jordigb44243/nitflex/nightly-2025-05-26/images/sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
 - ☁️ Contenedor en Azure Nitflex Production Version 1.1.2: [`nitflex-production.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
-  - Imagen del portal de azure: ()
+  - Imagen del portal de azure: [Portal Azure](https://github.com/Jordigb44/calidad-software-2025-grupo-7/blob/main/captures/azure_portal_nitflex_production_1_1_2.png)
 - ☁️ Contenedor en Azure Nitflex Staging: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
 - 📄 No se generan artefactos `.zip` o `.jar`, ya que el resultado es la imagen desplegable.
 ---
