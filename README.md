@@ -285,7 +285,7 @@ git commit -m "feat: add validation for movie release year (>= 1895)"
 # Push to GitHub
 git push origin feature-1
 ```
-Note: During the psuh, I did a ```git revert 5ab7daf``` since my first push hadn't selected the feature-1 branch, so it was pushed to the main branch. To fix the error, I had to run that command to restore the main branch to its previous state before incorporating my incorrect commit.
+Note: During the push, I did a ```git revert 5ab7daf``` since my first push hadn't selected the feature-1 branch, so it was pushed to the main branch. To fix the error, I had to run that command to restore the main branch to its previous state before incorporating my incorrect commit.
 
 #### ⚙️ Triggered Workflows
 Before merging into `main`, the following workflows were triggered:
@@ -306,7 +306,7 @@ TODO
 ---
 
 ## 📦 Artefactos generados
-- 🔧 Imagen Docker: [`docker pull jordigb44243/nitflex:nightly-2025-05-26`](https://hub.docker.com/repository/docker/jordigb44243/nitflex/tags/nightly-2025-05-26/sha256:6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
+- 🔧 Imagen Docker: [`docker pull jordigb44243/nitflex:nightly-2025-05-26`](https://hub.docker.com/layers/jordigb44243/nitflex/nightly-2025-05-26/images/sha256-6a678dd6ee44035b25a5bf6d141a8d203eac1574d7539142afd7b99eea7a01b6)
 - ☁️ Contenedor en Azure: [`nitflex-staging.spaincentral.azurecontainer.io:8080`](http://nitflex-staging.spaincentral.azurecontainer.io:8080/)
 - 📄 No se generan artefactos `.zip` o `.jar`, ya que el resultado es la imagen desplegable.
 ---
