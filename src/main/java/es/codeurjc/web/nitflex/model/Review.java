@@ -36,7 +36,7 @@ public class Review {
     private Film film;
 
     @CreationTimestamp
-    private Date created_at;
+    private Date createdAt;
 
     public Review(){
         this.id = 0L;
@@ -72,8 +72,8 @@ public class Review {
         this.score = score;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
     public User getUser() {
